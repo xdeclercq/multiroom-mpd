@@ -16,4 +16,7 @@ addons:
     notification_email: xavier_declercq@yahoo.fr
     build_command_prepend: "./gradlew clean"
     build_command:   "./gradlew build -x test"
-    branch_pattern: coverity_scan
+    branch_pattern:
+
+after_success:
+  - ./gradlew jacocoTestReport coveralls
