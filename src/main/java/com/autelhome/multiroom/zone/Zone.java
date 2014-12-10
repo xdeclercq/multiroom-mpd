@@ -1,7 +1,5 @@
 package com.autelhome.multiroom.zone;
 
-import com.sun.istack.internal.NotNull;
-
 /**
  * Represents a zone.
  *
@@ -12,7 +10,6 @@ import com.sun.istack.internal.NotNull;
 public class Zone implements Comparable<Zone>
 {
 
-    @NotNull
     private final String name;
 
     /**
