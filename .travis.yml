@@ -1,0 +1,19 @@
+language: java
+jdk:
+  - oraclejdk8
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "3KyR7GuLgg1S0WZ0jMXn8jWi+7M6BORMIDx6DsM49nj/9KoTN2bWIAVA92ei9nmeJqub5CHpnJR/T9XeHQKRgRamLOb5E0d3gYwBtbFwfAf28oqdofGlwJaaqY5V3BZXxqw+euTnC17/UG1LagTykTtcVyZOhlJl+3cx81ky0uc="
+
+addons:
+  coverity_scan:
+    project:
+      name: "xdeclercq/multiroom-mpd"
+      description: "Multiroom MPD"
+    notification_email: xavier_declercq@yahoo.fr
+    build_command_prepend: "./gradlew clean"
+    build_command:   "./gradlew build -x test"
+    branch_pattern: coverity_scan
