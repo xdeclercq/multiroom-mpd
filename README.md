@@ -1,4 +1,4 @@
-autelhome
-=========
+multiroom-mpd
+=============
 
-Automated Electronic Home
+Cheap multroom solution with mpd.
