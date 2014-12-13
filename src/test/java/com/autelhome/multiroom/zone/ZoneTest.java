@@ -8,6 +8,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 import static org.hamcrest.number.OrderingComparison.lessThan;
+import static org.junit.Assert.assertNotEquals;
 
 public class ZoneTest {
 
@@ -25,26 +26,35 @@ public class ZoneTest {
     public void shouldBeEqual() throws Exception {
         Zone zone1 = new Zone("Kitchen");
         Zone zone2 = new Zone("Kitchen");
+        Zone zone3 = new Zone(null);
+        Zone zone4 = new Zone(null);
 
         assertThat(zone1, equalTo(zone1));
         assertThat(zone1, equalTo(zone2));
+        assertThat(zone3, equalTo(zone4));
     }
 
     @Test
     public void shouldNotBeEqual() throws Exception {
         Zone zone1 = new Zone("Kitchen");
         Zone zone2 = new Zone("Bathroom");
+        Zone zone3 = new Zone(null);
 
         assertThat(zone1, not(equalTo(zone2)));
         assertThat(zone1, not(equalTo((Zone) null)));
+        assertThat(zone3, not(equalTo(zone1)));
+        assertNotEquals(zone1, " ");
     }
 
     @Test
     public void hashCodeShouldBeTheSame() throws Exception {
         int hashCode1 = new Zone("Kitchen").hashCode();
         int hashCode2 = new Zone("Kitchen").hashCode();
+        int hashCode3 = new Zone(null).hashCode();
+        int hashCode4 = new Zone(null).hashCode();
 
         assertThat(hashCode1, equalTo(hashCode2));
+        assertThat(hashCode3, equalTo(hashCode4));
     }
 
     @Test

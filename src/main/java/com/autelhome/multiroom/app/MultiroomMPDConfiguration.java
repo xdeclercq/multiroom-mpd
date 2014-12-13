@@ -8,7 +8,7 @@ import io.dropwizard.Configuration;
 /**
  * Configuration of the application.
  *
- * @author xavier
+ * @author xdeclercq
  */
 public class MultiroomMPDConfiguration extends Configuration
 {
