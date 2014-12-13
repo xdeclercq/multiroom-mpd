@@ -16,7 +16,7 @@ public class ZonesConfiguration extends HashSet<ZoneConfiguration>
     /**
      * Returns the sorted set of zones.
      *
-     * @return the sorted set of zones.
+     * @return the sorted set of {@link Zone}s.
      */
     public SortedSet<Zone> toZones()
     {

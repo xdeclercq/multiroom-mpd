@@ -36,7 +36,7 @@ public class ZoneTest {
         Zone zone2 = new Zone("Bathroom");
 
         assertThat(zone1, not(equalTo(zone2)));
-        assertThat(zone1, not(equalTo(null)));
+        assertThat(zone1, not(equalTo((Zone) null)));
     }
 
     @Test
