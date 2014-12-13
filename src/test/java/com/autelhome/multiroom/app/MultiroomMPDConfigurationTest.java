@@ -42,7 +42,7 @@ public class MultiroomMPDConfigurationTest {
                 new ConfigurationFactory<>(MultiroomMPDConfiguration.class, validator, Jackson.newObjectMapper(), "dw");
 
 
-        MultiroomMPDConfiguration actual = factory.build(new File(Resources.getResource("fixtures/configuration.yml").toURI()));
+        MultiroomMPDConfiguration actual = factory.build(new File(Resources.getResource(MultiroomMPDConfigurationTest.class, "configuration.yml").toURI()));
 
         assertThat(actual.getZonesConfiguration(), equalTo(expected));
     }
