@@ -12,10 +12,21 @@ import static org.hamcrest.number.OrderingComparison.lessThan;
 public class ZoneTest {
 
     @Test
+    public void getName() throws Exception {
+        String expected = "My Zone";
+        Zone zone = new Zone(expected);
+
+        String actual = zone.getName();
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
     public void shouldBeEqual() throws Exception {
         Zone zone1 = new Zone("Kitchen");
         Zone zone2 = new Zone("Kitchen");
 
+        assertThat(zone1, equalTo(zone1));
         assertThat(zone1, equalTo(zone2));
     }
 
