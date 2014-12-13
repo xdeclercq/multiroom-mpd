@@ -1,0 +1,7 @@
+zones:
+  -
+    name: Kitchen
+    mpdPort: 6600
+  -
+    name: Bathroom
+    mpdPort: 6601
