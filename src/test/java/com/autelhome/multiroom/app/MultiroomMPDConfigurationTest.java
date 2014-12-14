@@ -36,13 +36,11 @@ public class MultiroomMPDConfigurationTest {
         expected.add(new ZoneConfiguration("Kitchen", 6600));
         expected.add(new ZoneConfiguration("Bathroom", 6601));
 
-
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         final ConfigurationFactory<MultiroomMPDConfiguration> factory =
                 new ConfigurationFactory<>(MultiroomMPDConfiguration.class, validator, Jackson.newObjectMapper(), "dw");
 
-
-        MultiroomMPDConfiguration actual = factory.build(new File(Resources.getResource(MultiroomMPDConfigurationTest.class, "configuration.yml").toURI()));
+        MultiroomMPDConfiguration actual = factory.build(new File(Resources.getResource(getClass(), "configuration.yml").toURI()));
 
         assertThat(actual.getZonesConfiguration(), equalTo(expected));
     }
