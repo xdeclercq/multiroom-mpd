@@ -10,9 +10,9 @@ import java.net.URI;
 import java.util.Collection;
 
 /**
- * {@link StandardRepresentationFactory} for zones.
+ * {@link StandardRepresentationFactory} for {@link Zone}s.
  *
- * @author xavier
+ * @author xdeclercq
  */
 public class ZonesRepresentationFactory extends StandardRepresentationFactory
 {
@@ -24,7 +24,7 @@ public class ZonesRepresentationFactory extends StandardRepresentationFactory
      * Constructor.
      *
      * @param uriInfo the {@link UriInfo} related to the request
-     * @param zoneRepresentationFactory an {@link ZoneRepresentationFactory} instance.
+     * @param zoneRepresentationFactory an {@link ZoneRepresentationFactory} instance
      */
     @Inject
     public ZonesRepresentationFactory(final UriInfo uriInfo, final ZoneRepresentationFactory zoneRepresentationFactory)
@@ -39,7 +39,7 @@ public class ZonesRepresentationFactory extends StandardRepresentationFactory
      * @param zones the {@link Zone}s
      * @return a new {@link Representation} of the zones
      */
-    public Representation newRepresentation(Collection<Zone> zones)
+    public Representation newRepresentation(final Collection<Zone> zones)
     {
         UriBuilder selfUriBuilder = uriInfo.getRequestUriBuilder();
         URI self = selfUriBuilder.path("/zones").build();
