@@ -23,7 +23,7 @@ public class ZoneRepresentationFactory extends StandardRepresentationFactory
      * @param uriInfo the {@link UriInfo} related to the request
      */
     @Inject
-    public ZoneRepresentationFactory(UriInfo uriInfo)
+    public ZoneRepresentationFactory(final UriInfo uriInfo)
     {
         this.uriInfo = uriInfo;
     }
@@ -34,7 +34,7 @@ public class ZoneRepresentationFactory extends StandardRepresentationFactory
      * @param zone a zone
      * @return a new {@link Representation} of the zone
      */
-    public Representation newRepresentation(Zone zone)
+    public Representation newRepresentation(final Zone zone)
     {
         URI self = uriInfo.getRequestUriBuilder().build();
         Representation representation = newRepresentation(self)

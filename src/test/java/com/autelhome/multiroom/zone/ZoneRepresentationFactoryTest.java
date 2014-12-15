@@ -15,25 +15,22 @@ import static org.mockito.Mockito.when;
 public class ZoneRepresentationFactoryTest {
 
     private final UriInfo uriInfo = mock(UriInfo.class);
+    private final ZoneRepresentationFactory testSubject = new ZoneRepresentationFactory(uriInfo);
 
     @Test
     public void newRepresentation() throws Exception {
-        StandardRepresentationFactory representationFactory = new StandardRepresentationFactory();
-        String expected = representationFactory
+        final StandardRepresentationFactory representationFactory = new StandardRepresentationFactory();
+        final String expected = representationFactory
                 .newRepresentation(URI.create("/zones"))
                 .withProperty("name", "myZone")
                 .toString(RepresentationFactory.HAL_JSON);
 
-        ZoneRepresentationFactory zoneRepresentationFactory = new ZoneRepresentationFactory(uriInfo);
-
-        final Zone zone = new Zone("myZone");
 
         when(uriInfo.getRequestUriBuilder()).thenReturn(UriBuilder.fromPath("/zones"));
 
-        String actual = zoneRepresentationFactory.newRepresentation(zone).toString(RepresentationFactory.HAL_JSON);
+        final Zone zone = new Zone("myZone");
+        final String actual = testSubject.newRepresentation(zone).toString(RepresentationFactory.HAL_JSON);
 
         assertThat(actual).isEqualTo(expected);
-
-
     }
 }

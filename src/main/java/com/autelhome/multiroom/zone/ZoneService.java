@@ -20,7 +20,7 @@ public class ZoneService
      * @param zonesConfiguration the {@link ZonesConfiguration}
      */
     @Inject
-    public ZoneService(ZonesConfiguration zonesConfiguration)
+    public ZoneService(final ZonesConfiguration zonesConfiguration)
     {
         this.zonesConfiguration = zonesConfiguration;
     }
