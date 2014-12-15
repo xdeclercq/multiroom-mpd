@@ -34,14 +34,15 @@ public class ZonesRepresentationFactoryTest {
 
         final String expected = representationFactory
                 .newRepresentation(URI.create("/zones"))
-                .withRepresentation("zone", zone1Representation)
-                .withRepresentation("zone", zone2Representation)
+                .withNamespace("mr", "/docs/rels/{rel}")
+                .withRepresentation("mr:zone", zone1Representation)
+                .withRepresentation("mr:zone", zone2Representation)
                 .toString(RepresentationFactory.HAL_JSON);
 
         Zone zone1 = new Zone("zone1");
         Zone zone2 = new Zone("zone2");
 
-        when(uriInfo.getRequestUriBuilder()).thenReturn(UriBuilder.fromPath("/zones"));
+        when(uriInfo.getRequestUriBuilder()).thenReturn(UriBuilder.fromPath("/"), UriBuilder.fromPath("/"));
         when(zoneRepresentationFactory.newRepresentation(zone1)).thenReturn(zone1Representation);
         when(zoneRepresentationFactory.newRepresentation(zone2)).thenReturn(zone2Representation);
 

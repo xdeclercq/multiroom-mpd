@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
 
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Collection;
@@ -40,11 +41,16 @@ public class ZonesRepresentationFactory extends StandardRepresentationFactory
      */
     public Representation newRepresentation(Collection<Zone> zones)
     {
-        URI self = uriInfo.getRequestUriBuilder().build();
-        Representation representation = newRepresentation(self);
+        UriBuilder selfUriBuilder = uriInfo.getRequestUriBuilder();
+        URI self = selfUriBuilder.path("/zones").build();
+
+        UriBuilder mrNamespaceUriBuilder = uriInfo.getRequestUriBuilder();
+        String mrNamespace = mrNamespaceUriBuilder.path("docs/rels/{rel}").build().getPath();
+
+        Representation representation = newRepresentation(self).withNamespace("mr", mrNamespace);
 
         zones.forEach(
-                (zone) -> representation.withRepresentation("zone", zoneRepresentationFactory.newRepresentation(zone))
+                (zone) -> representation.withRepresentation("mr:zone", zoneRepresentationFactory.newRepresentation(zone))
         );
 
         return representation;
