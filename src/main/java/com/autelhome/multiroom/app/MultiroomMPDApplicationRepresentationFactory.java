@@ -20,7 +20,7 @@ public class MultiroomMPDApplicationRepresentationFactory extends StandardRepres
     /**
      * Constructor.
      *
-     * @param uriInfo the {@link UriInfo} related to the request.
+     * @param uriInfo the {@link UriInfo} related to the request
      */
     @Inject
     public MultiroomMPDApplicationRepresentationFactory(UriInfo uriInfo)

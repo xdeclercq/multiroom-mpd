@@ -7,7 +7,7 @@ import java.util.SortedSet;
 /**
  * Service to manage {@link Zone}s.
  *
- * @author xavier
+ * @author xdeclercq
  */
 public class ZoneService
 {

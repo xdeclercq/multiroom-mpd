@@ -10,7 +10,6 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class ZoneServiceTest {
 
-    private ZonesConfiguration zonesConfiguration;
     private ZoneService testSubject;
 
     @Before
