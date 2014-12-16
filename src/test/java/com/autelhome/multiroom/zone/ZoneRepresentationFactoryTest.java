@@ -26,7 +26,7 @@ public class ZoneRepresentationFactoryTest {
                 .toString(RepresentationFactory.HAL_JSON);
 
 
-        when(uriInfo.getRequestUriBuilder()).thenReturn(UriBuilder.fromPath("/zones"));
+        when(uriInfo.getBaseUriBuilder()).thenReturn(UriBuilder.fromPath("/"));
 
         final Zone zone = new Zone("myZone");
         final String actual = testSubject.newRepresentation(zone).toString(RepresentationFactory.HAL_JSON);

@@ -38,8 +38,9 @@ public class MultiroomMPDApplication extends Application<MultiroomMPDConfigurati
         GuiceBundle<MultiroomMPDConfiguration> guiceBundle = guiceBuilder
                 .addModule(new MultiroomMPDModule())
                 .enableAutoConfig(
+                        "com.autelhome.multiroom.util",
                         "com.autelhome.multiroom.app",
-                        "com.autelhome.multiroom.util")
+                        "com.autelhome.multiroom.zone")
                 .setConfigClass(MultiroomMPDConfiguration.class)
                 .build();
 
