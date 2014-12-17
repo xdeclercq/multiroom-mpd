@@ -26,6 +26,13 @@ public class MultiroomMPDApplication extends Application<MultiroomMPDConfigurati
 
     /**
      * Constructor.
+     */
+    public MultiroomMPDApplication() {
+        this(GuiceBundle.<MultiroomMPDConfiguration>newBuilder());
+    }
+
+    /**
+     * Constructor.
      *
      * @param guiceBundleBuilder a {@link GuiceBundle.Builder<MultiroomMPDConfiguration>} instance
      */
