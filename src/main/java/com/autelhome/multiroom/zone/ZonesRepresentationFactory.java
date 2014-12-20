@@ -1,13 +1,12 @@
 package com.autelhome.multiroom.zone;
 
-import com.autelhome.multiroom.util.URIDecoder;
+import com.autelhome.multiroom.util.MultiroomNamespaceResolver;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.Collection;
 
@@ -19,25 +18,25 @@ import java.util.Collection;
 public class ZonesRepresentationFactory extends StandardRepresentationFactory
 {
 
-    public static final String DOCS_RELS_REL = "/docs/rels/{rel}";
+
 
     private final UriInfo uriInfo;
     private final ZoneRepresentationFactory zoneRepresentationFactory;
-    private final URIDecoder uriDecoder;
+    private final MultiroomNamespaceResolver multiroomNamespaceResolver;
 
     /**
      * Constructor.
      *
      * @param uriInfo the {@link UriInfo} related to the request
      * @param zoneRepresentationFactory an {@link ZoneRepresentationFactory} instance
-     * @param uriDecoder a {@link URIDecoder} instance
+     * @param multiroomNamespaceResolver a {@link MultiroomNamespaceResolver} instance
      */
     @Inject
-    public ZonesRepresentationFactory(final UriInfo uriInfo, final ZoneRepresentationFactory zoneRepresentationFactory, final URIDecoder uriDecoder)
+    public ZonesRepresentationFactory(final UriInfo uriInfo, final ZoneRepresentationFactory zoneRepresentationFactory, MultiroomNamespaceResolver multiroomNamespaceResolver)
     {
         this.uriInfo = uriInfo;
         this.zoneRepresentationFactory = zoneRepresentationFactory;
-        this.uriDecoder = uriDecoder;
+        this.multiroomNamespaceResolver = multiroomNamespaceResolver;
     }
 
     /**
@@ -51,17 +50,10 @@ public class ZonesRepresentationFactory extends StandardRepresentationFactory
         UriBuilder selfUriBuilder = uriInfo.getBaseUriBuilder();
         URI self = selfUriBuilder.path(ZoneResource.class).build();
 
-        UriBuilder mrNamespaceUriBuilder = uriInfo.getBaseUriBuilder();
-
         final Representation representation = newRepresentation(self);
 
-        try {
-            final String mrNamespace  = uriDecoder.decode(mrNamespaceUriBuilder.path(DOCS_RELS_REL).build());
-            representation.withNamespace("mr", mrNamespace);
-        } catch (UnsupportedEncodingException e) {
-            throw new ZoneException("Unable to decode URI", e);
-        }
-
+        final String mrNamespace  = multiroomNamespaceResolver.resolve();
+        representation.withNamespace("mr", mrNamespace);
 
         zones.forEach(
                 (zone) -> representation.withRepresentation("mr:zone", zoneRepresentationFactory.newRepresentation(zone))

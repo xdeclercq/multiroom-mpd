@@ -1,7 +1,7 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.util.HalJsonMessageBodyWriter;
-import com.autelhome.multiroom.util.URIDecoder;
+import com.autelhome.multiroom.util.MultiroomNamespaceResolver;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
@@ -23,8 +23,8 @@ public class ZoneResourceTest {
     private ZoneService zoneService = mock(ZoneService.class);
     private final UriInfo uriInfo = mock(UriInfo.class);
     private ZoneRepresentationFactory zoneRepresentationFactory = new ZoneRepresentationFactory(uriInfo);
-    private URIDecoder uriDecoder = mock(URIDecoder.class);
-    private ZonesRepresentationFactory zonesRepresentationFactory = new ZonesRepresentationFactory(uriInfo, zoneRepresentationFactory, uriDecoder);
+    private MultiroomNamespaceResolver multiroomNamespaceResolver = mock(MultiroomNamespaceResolver.class);
+    private ZonesRepresentationFactory zonesRepresentationFactory = new ZonesRepresentationFactory(uriInfo, zoneRepresentationFactory, multiroomNamespaceResolver);
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
@@ -46,7 +46,7 @@ public class ZoneResourceTest {
         UriBuilder zone1UriBuilder = UriBuilder.fromPath("/");
         UriBuilder zone2UriBuilder = UriBuilder.fromPath("/");
         when(uriInfo.getBaseUriBuilder()).thenReturn(selfUriBuilder, mrNamespaceUriBuilder, zone1UriBuilder, zone2UriBuilder);
-        when(uriDecoder.decode(UriBuilder.fromPath(ZonesRepresentationFactory.DOCS_RELS_REL).build())).thenReturn(ZonesRepresentationFactory.DOCS_RELS_REL);
+        when(multiroomNamespaceResolver.resolve()).thenReturn("/docs/rels/{rel}");
 
         String actual = resources.client().resource("/zones").accept(RepresentationFactory.HAL_JSON).get(String.class);
 

@@ -1,6 +1,7 @@
 package com.autelhome.multiroom.app;
 
 import com.autelhome.multiroom.util.HalJsonMessageBodyWriter;
+import com.autelhome.multiroom.util.MultiroomNamespaceResolver;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
@@ -18,7 +19,8 @@ import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 public class MultiroomMPDApplicationResourceTest {
 
     private final UriInfo uriInfo = mock(UriInfo.class);
-    private final MultiroomMPDApplicationRepresentationFactory multiroomMPDApplicationRepresentationFactory = new MultiroomMPDApplicationRepresentationFactory(uriInfo);
+    private MultiroomNamespaceResolver multiroomNamespaceResolver = mock(MultiroomNamespaceResolver.class);
+    private final MultiroomMPDApplicationRepresentationFactory multiroomMPDApplicationRepresentationFactory = new MultiroomMPDApplicationRepresentationFactory(uriInfo, multiroomNamespaceResolver);
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
@@ -31,7 +33,8 @@ public class MultiroomMPDApplicationResourceTest {
         String expected = Resources.toString(Resources.getResource(getClass(), "application.json"), Charsets.UTF_8);
 
         final UriBuilder uriBuilder = UriBuilder.fromUri("/");
-        when(uriInfo.getRequestUriBuilder()).thenReturn(uriBuilder);
+        when(uriInfo.getBaseUriBuilder()).thenReturn(uriBuilder);
+        when(multiroomNamespaceResolver.resolve()).thenReturn("http://localhost/docs/{rel}");
 
         String actual = resources.client().resource("/").accept(RepresentationFactory.HAL_JSON).get(String.class);
 
