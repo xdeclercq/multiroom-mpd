@@ -60,7 +60,7 @@ public class ZoneConfiguration
         if (mpdPort != that.mpdPort) {
             return false;
         }
-        if (name != null ? !name.equals(that.name) : that.name != null) {
+        if (name == null ? that.name != null : !name.equals(that.name)) {
             return false;
         }
 

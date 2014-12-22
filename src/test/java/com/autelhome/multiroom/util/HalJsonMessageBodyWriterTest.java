@@ -5,7 +5,6 @@ import com.theoryinpractise.halbuilder.api.ReadableRepresentation;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
-import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
@@ -22,12 +21,7 @@ import static org.mockito.Mockito.verify;
 public class HalJsonMessageBodyWriterTest {
 
     private static final MediaType MEDIA_TYPE_HAL_JSON = new MediaType("application", "hal+json");
-    private HalJsonMessageBodyWriter testSubject = new HalJsonMessageBodyWriter();
-
-    @Before
-    public void setUp() throws Exception {
-
-    }
+    private final HalJsonMessageBodyWriter testSubject = new HalJsonMessageBodyWriter();
 
     @Test
     public void isWriteableShouldReturnTrue() throws Exception {

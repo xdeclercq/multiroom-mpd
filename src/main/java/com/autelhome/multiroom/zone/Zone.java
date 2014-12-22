@@ -41,7 +41,7 @@ public class Zone implements Comparable<Zone>
 
         final Zone zone = (Zone) o;
 
-        if (name != null ? !name.equals(zone.name) : zone.name != null)
+        if (name == null ? zone.name != null : !name.equals(zone.name))
         {
             return false;
         }

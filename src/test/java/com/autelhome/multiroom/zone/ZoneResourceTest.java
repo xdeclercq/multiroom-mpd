@@ -20,11 +20,11 @@ import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
 public class ZoneResourceTest {
 
-    private ZoneService zoneService = mock(ZoneService.class);
+    private final ZoneService zoneService = mock(ZoneService.class);
     private final UriInfo uriInfo = mock(UriInfo.class);
-    private ZoneRepresentationFactory zoneRepresentationFactory = new ZoneRepresentationFactory(uriInfo);
-    private MultiroomNamespaceResolver multiroomNamespaceResolver = mock(MultiroomNamespaceResolver.class);
-    private ZonesRepresentationFactory zonesRepresentationFactory = new ZonesRepresentationFactory(uriInfo, zoneRepresentationFactory, multiroomNamespaceResolver);
+    private final ZoneRepresentationFactory zoneRepresentationFactory = new ZoneRepresentationFactory(uriInfo);
+    private final MultiroomNamespaceResolver multiroomNamespaceResolver = mock(MultiroomNamespaceResolver.class);
+    private final ZonesRepresentationFactory zonesRepresentationFactory = new ZonesRepresentationFactory(uriInfo, zoneRepresentationFactory, multiroomNamespaceResolver);
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()

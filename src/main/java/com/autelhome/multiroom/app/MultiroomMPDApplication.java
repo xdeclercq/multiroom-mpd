@@ -12,7 +12,7 @@ import io.dropwizard.setup.Environment;
  */
 public class MultiroomMPDApplication extends Application<MultiroomMPDConfiguration> {
 
-    private GuiceBundle.Builder<MultiroomMPDConfiguration> guiceBuilder;
+    private final GuiceBundle.Builder<MultiroomMPDConfiguration> guiceBuilder;
 
     /**
      * Entry point of the application.
@@ -58,6 +58,8 @@ public class MultiroomMPDApplication extends Application<MultiroomMPDConfigurati
     public void run(final MultiroomMPDConfiguration configuration, final Environment environment) throws Exception {
         environment.getApplicationContext().setContextPath("/multiroom-mpd");
         environment.jersey().setUrlPattern("/api/*");
+
+
     }
 
 }

@@ -9,7 +9,7 @@ import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 
-public class MultirromMPDApplicationResourceIntegrationTest {
+public class MultiroomMPDApplicationResourceIntegrationTest {
 
 	@Rule
 	public final DropwizardAppRule<MultiroomMPDConfiguration> rule =

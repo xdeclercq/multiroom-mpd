@@ -8,6 +8,8 @@ package com.autelhome.multiroom.zone;
 public class ZoneException extends RuntimeException
 {
 
+    private static final long serialVersionUID = 6545137027994052669L;
+
     /**
      * Constructs a new player exception with the specified detail message and
      * cause.

@@ -12,7 +12,7 @@ public class BaseRepresentationFactory extends StandardRepresentationFactory {
 	/**
 	 * Constructor.
 	 */
-	public BaseRepresentationFactory() {
+	protected BaseRepresentationFactory() {
 		withFlag(COALESCE_ARRAYS);
 	}
 }

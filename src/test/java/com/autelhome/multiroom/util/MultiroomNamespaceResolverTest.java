@@ -15,8 +15,8 @@ import static org.mockito.Mockito.when;
 
 public class MultiroomNamespaceResolverTest {
 
-    private UriInfo uriInfo = mock(UriInfo.class);
-    private URIDecoder uriDecoder = mock(URIDecoder.class);
+    private final UriInfo uriInfo = mock(UriInfo.class);
+    private final URIDecoder uriDecoder = mock(URIDecoder.class);
     private final MultiroomNamespaceResolver testSubject = new MultiroomNamespaceResolver(uriInfo, uriDecoder);
 
     @Test
@@ -33,7 +33,6 @@ public class MultiroomNamespaceResolverTest {
     @Test(expected = ZoneException.class)
     public void resolveShouldThrowZoneExceptionWhenURIDecoderThrowsException() throws Exception {
         when(uriInfo.getBaseUriBuilder()).thenReturn(UriBuilder.fromPath("/base/uri/"));
-        String expected = "/base/uri/docs/rels/{rel}";
         when(uriDecoder.decode(UriBuilder.fromPath("/base/uri/docs/rels/{rel}").build())).thenThrow(new UnsupportedEncodingException("unsupported"));
 
         testSubject.resolve();

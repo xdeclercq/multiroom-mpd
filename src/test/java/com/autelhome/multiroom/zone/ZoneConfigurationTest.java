@@ -62,7 +62,7 @@ public class ZoneConfigurationTest {
         assertThat(zoneConfiguration1, not(equalTo(zoneConfiguration2)));
         assertThat(zoneConfiguration1, not(equalTo(zoneConfiguration3)));
         assertThat(zoneConfiguration2, not(equalTo(zoneConfiguration3)));
-        assertThat(zoneConfiguration1, not(equalTo((ZoneConfiguration) null)));
+        assertThat(zoneConfiguration1, not(equalTo(null)));
         assertThat(zoneConfiguration4, not(equalTo(zoneConfiguration1)));
         assertNotEquals(zoneConfiguration1, " ");
     }

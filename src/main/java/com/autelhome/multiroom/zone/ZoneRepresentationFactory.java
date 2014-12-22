@@ -39,9 +39,8 @@ public class ZoneRepresentationFactory extends BaseRepresentationFactory
     public Representation newRepresentation(final Zone zone)
     {
         URI self = uriInfo.getBaseUriBuilder().path(ZoneResource.class).build();
-        Representation representation = newRepresentation(self)
+        return newRepresentation(self)
                 .withProperty("name", zone.getName());
-        return representation;
     }
 
 }

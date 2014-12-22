@@ -19,7 +19,7 @@ import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 public class MultiroomMPDApplicationResourceTest {
 
     private final UriInfo uriInfo = mock(UriInfo.class);
-    private MultiroomNamespaceResolver multiroomNamespaceResolver = mock(MultiroomNamespaceResolver.class);
+    private final MultiroomNamespaceResolver multiroomNamespaceResolver = mock(MultiroomNamespaceResolver.class);
     private final MultiroomMPDApplicationRepresentationFactory multiroomMPDApplicationRepresentationFactory = new MultiroomMPDApplicationRepresentationFactory(uriInfo, multiroomNamespaceResolver);
 
     @Rule

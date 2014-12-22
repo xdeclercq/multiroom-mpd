@@ -15,7 +15,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class MultiroomNamespaceResolver {
 
-    public static final String DOCS_RELS_REL = "/docs/rels/{rel}";
+    private static final String DOCS_RELS_REL = "/docs/rels/{rel}";
 
     private final UriInfo uriInfo;
     private final URIDecoder uriDecoder;

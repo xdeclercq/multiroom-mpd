@@ -41,7 +41,7 @@ public class ZoneTest {
         Zone zone3 = new Zone(null);
 
         assertThat(zone1, not(equalTo(zone2)));
-        assertThat(zone1, not(equalTo((Zone) null)));
+        assertThat(zone1, not(equalTo(null)));
         assertThat(zone3, not(equalTo(zone1)));
         assertNotEquals(zone1, " ");
     }
