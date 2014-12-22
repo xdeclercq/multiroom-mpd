@@ -69,8 +69,8 @@ public class ZoneConfigurationTest {
 
     @Test
     public void hashCodeShoulBeTheSame() throws Exception {
-        int hashCode1 = new ZoneConfiguration("room1", 6487).hashCode();
-        int hashCode2 = new ZoneConfiguration("room1", 6487).hashCode();
+        int hashCode1 = new ZoneConfiguration("room3", 6487).hashCode();
+        int hashCode2 = new ZoneConfiguration("room3", 6487).hashCode();
         int hashCode3 = new ZoneConfiguration(null, 6487).hashCode();
         int hashCode4 = new ZoneConfiguration(null, 6487).hashCode();
 
@@ -80,9 +80,9 @@ public class ZoneConfigurationTest {
 
     @Test
     public void hashCodeShouldNotBeTheSame() throws Exception {
-        int hashCode1 = new ZoneConfiguration("room1", 6487).hashCode();
-        int hashCode2 = new ZoneConfiguration("room2", 6487).hashCode();
-        int hashCode3 = new ZoneConfiguration("room1", 6488).hashCode();
+        int hashCode1 = new ZoneConfiguration("room4", 6487).hashCode();
+        int hashCode2 = new ZoneConfiguration("room5", 6487).hashCode();
+        int hashCode3 = new ZoneConfiguration("room4", 6488).hashCode();
 
         assertThat(hashCode1, not(equalTo(hashCode2)));
         assertThat(hashCode1, not(equalTo(hashCode3)));

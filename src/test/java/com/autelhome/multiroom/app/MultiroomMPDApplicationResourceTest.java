@@ -1,7 +1,7 @@
 package com.autelhome.multiroom.app;
 
-import com.autelhome.multiroom.util.HalJsonMessageBodyWriter;
-import com.autelhome.multiroom.util.MultiroomNamespaceResolver;
+import com.autelhome.multiroom.hal.HalJsonMessageBodyWriter;
+import com.autelhome.multiroom.hal.MultiroomNamespaceResolver;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;

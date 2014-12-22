@@ -1,5 +1,6 @@
-package com.autelhome.multiroom.util;
+package com.autelhome.multiroom.hal;
 
+import com.autelhome.multiroom.util.URIDecoder;
 import com.autelhome.multiroom.zone.ZoneException;
 import com.google.inject.Inject;
 

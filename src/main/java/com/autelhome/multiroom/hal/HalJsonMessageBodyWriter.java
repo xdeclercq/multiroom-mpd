@@ -1,5 +1,6 @@
-package com.autelhome.multiroom.util;
+package com.autelhome.multiroom.hal;
 
+import com.google.common.base.Charsets;
 import com.theoryinpractise.halbuilder.api.ReadableRepresentation;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 
@@ -42,6 +43,6 @@ public class HalJsonMessageBodyWriter implements MessageBodyWriter
     public void writeTo(Object o, Class aClass, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap multivaluedMap, OutputStream outputStream) throws IOException, WebApplicationException
     {
         ReadableRepresentation representation = (ReadableRepresentation) o;
-        representation.toString(mediaType.toString(), new OutputStreamWriter(outputStream));
+        representation.toString(mediaType.toString(), new OutputStreamWriter(outputStream, Charsets.UTF_8));
     }
 }

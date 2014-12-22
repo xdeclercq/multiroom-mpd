@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
  */
 public class ZonesConfiguration extends HashSet<ZoneConfiguration>
 {
+    private static final long serialVersionUID = -4108852752779949992L;
 
     /**
      * Returns the sorted set of zones.

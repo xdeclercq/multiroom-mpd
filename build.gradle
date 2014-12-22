@@ -1,6 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'pmd'
+apply plugin: 'findbugs'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -32,8 +34,6 @@ dependencies {
     testCompile 'com.jayway.restassured:rest-assured:2.4.0'
 }
 
-
-
 jacoco {
     toolVersion = "0.7.1.201405082137"
 }
@@ -44,4 +44,21 @@ jacocoTestReport {
         html.enabled = true
         csv.enabled = false
     }
+}
+
+findbugs {
+    toolVersion = "3.0.0"
+    effort = 'max'
+    reportLevel = 'low'
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+pmd {
+    ruleSetFiles = files("config/pmd/ruleset.xml")
 }

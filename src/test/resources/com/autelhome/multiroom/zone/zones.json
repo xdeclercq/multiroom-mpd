@@ -1,12 +1,10 @@
 {
   "_links": {
-    "curies": [
-      {
+    "curies": {
         "href": "/docs/rels/{rel}",
         "name": "mr",
         "templated": true
-      }
-    ],
+    },
     "self": {
       "href": "/zones"
     }

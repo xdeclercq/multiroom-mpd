@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.util;
 
+import com.autelhome.multiroom.hal.HalJsonMessageBodyWriter;
 import com.theoryinpractise.halbuilder.api.ReadableRepresentation;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.verify;
 
 public class HalJsonMessageBodyWriterTest {
 
+    private static final MediaType MEDIA_TYPE_HAL_JSON = new MediaType("application", "hal+json");
     private HalJsonMessageBodyWriter testSubject = new HalJsonMessageBodyWriter();
 
     @Before
@@ -29,7 +31,7 @@ public class HalJsonMessageBodyWriterTest {
 
     @Test
     public void isWriteableShouldReturnTrue() throws Exception {
-        boolean actual = testSubject.isWriteable(ReadableRepresentation.class, null, null, new MediaType("application", "hal+json"));
+        boolean actual = testSubject.isWriteable(ReadableRepresentation.class, null, null, MEDIA_TYPE_HAL_JSON);
         assertThat(actual).isTrue();
     }
 
@@ -41,7 +43,7 @@ public class HalJsonMessageBodyWriterTest {
 
     @Test
     public void isWriteableWithWrongClassShouldReturnFalse() throws Exception {
-        boolean actual = testSubject.isWriteable(String.class, null, null, new MediaType("application", "hal+json"));
+        boolean actual = testSubject.isWriteable(String.class, null, null, MEDIA_TYPE_HAL_JSON);
         assertThat(actual).isFalse();
     }
 
@@ -51,7 +53,7 @@ public class HalJsonMessageBodyWriterTest {
         Representation representation = representationFactory.newRepresentation(URI.create("/test"));
         long expected = representation.toString(RepresentationFactory.HAL_JSON).length();
 
-        long actual = testSubject.getSize(representation, null, null, null, new MediaType("application", "hal+json"));
+        long actual = testSubject.getSize(representation, null, null, null, MEDIA_TYPE_HAL_JSON);
         
         assertThat(actual).isEqualTo(expected);
     }
@@ -62,7 +64,7 @@ public class HalJsonMessageBodyWriterTest {
 
         final OutputStream outputStream = mock(OutputStream.class);
 
-        testSubject.writeTo(representation, null, null, null, new MediaType("application", "hal+json"), null, outputStream);
+        testSubject.writeTo(representation, null, null, null, MEDIA_TYPE_HAL_JSON, null, outputStream);
 
         verify(representation).toString(anyString(), any(OutputStreamWriter.class));
     }

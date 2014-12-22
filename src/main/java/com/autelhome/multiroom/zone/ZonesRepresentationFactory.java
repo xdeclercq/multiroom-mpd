@@ -1,6 +1,7 @@
 package com.autelhome.multiroom.zone;
 
-import com.autelhome.multiroom.util.MultiroomNamespaceResolver;
+import com.autelhome.multiroom.hal.BaseRepresentationFactory;
+import com.autelhome.multiroom.hal.MultiroomNamespaceResolver;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
@@ -15,11 +16,8 @@ import java.util.Collection;
  *
  * @author xdeclercq
  */
-public class ZonesRepresentationFactory extends StandardRepresentationFactory
+public class ZonesRepresentationFactory extends BaseRepresentationFactory
 {
-
-
-
     private final UriInfo uriInfo;
     private final ZoneRepresentationFactory zoneRepresentationFactory;
     private final MultiroomNamespaceResolver multiroomNamespaceResolver;
@@ -34,6 +32,7 @@ public class ZonesRepresentationFactory extends StandardRepresentationFactory
     @Inject
     public ZonesRepresentationFactory(final UriInfo uriInfo, final ZoneRepresentationFactory zoneRepresentationFactory, MultiroomNamespaceResolver multiroomNamespaceResolver)
     {
+        super();
         this.uriInfo = uriInfo;
         this.zoneRepresentationFactory = zoneRepresentationFactory;
         this.multiroomNamespaceResolver = multiroomNamespaceResolver;
@@ -52,7 +51,7 @@ public class ZonesRepresentationFactory extends StandardRepresentationFactory
 
         final Representation representation = newRepresentation(self);
 
-        final String mrNamespace  = multiroomNamespaceResolver.resolve();
+        final String mrNamespace = multiroomNamespaceResolver.resolve();
         representation.withNamespace("mr", mrNamespace);
 
         zones.forEach(

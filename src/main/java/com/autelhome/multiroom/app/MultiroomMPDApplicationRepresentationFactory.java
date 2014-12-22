@@ -1,6 +1,7 @@
 package com.autelhome.multiroom.app;
 
-import com.autelhome.multiroom.util.MultiroomNamespaceResolver;
+import com.autelhome.multiroom.hal.BaseRepresentationFactory;
+import com.autelhome.multiroom.hal.MultiroomNamespaceResolver;
 import com.autelhome.multiroom.zone.ZoneResource;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
@@ -14,7 +15,7 @@ import java.net.URI;
  *
  * @author xdeclercq
  */
-public class MultiroomMPDApplicationRepresentationFactory extends StandardRepresentationFactory
+public class MultiroomMPDApplicationRepresentationFactory extends BaseRepresentationFactory
 {
 
     private final UriInfo uriInfo;
@@ -29,9 +30,9 @@ public class MultiroomMPDApplicationRepresentationFactory extends StandardRepres
     @Inject
     public MultiroomMPDApplicationRepresentationFactory(final UriInfo uriInfo, final MultiroomNamespaceResolver multiroomNamespaceResolver)
     {
+        super();
         this.uriInfo = uriInfo;
         this.multiroomNamespaceResolver = multiroomNamespaceResolver;
-        withFlag(COALESCE_ARRAYS);
     }
 
     @Override

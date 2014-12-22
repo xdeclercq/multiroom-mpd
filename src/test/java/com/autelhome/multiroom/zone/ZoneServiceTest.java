@@ -1,6 +1,5 @@
 package com.autelhome.multiroom.zone;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.SortedSet;
@@ -10,10 +9,9 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class ZoneServiceTest {
 
-    private ZoneService testSubject;
+    private final ZoneService testSubject;
 
-    @Before
-    public void setUp() throws Exception {
+    public ZoneServiceTest() {
         ZonesConfiguration zonesConfiguration = new ZonesConfiguration();
         zonesConfiguration.add(new ZoneConfiguration("Kitchen", 4564));
         zonesConfiguration.add(new ZoneConfiguration("Bedroom", 1456));

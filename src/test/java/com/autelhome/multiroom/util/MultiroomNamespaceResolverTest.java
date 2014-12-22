@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.util;
 
+import com.autelhome.multiroom.hal.MultiroomNamespaceResolver;
 import com.autelhome.multiroom.zone.ZoneException;
 import org.junit.Test;
 

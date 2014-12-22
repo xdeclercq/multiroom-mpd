@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.zone;
 
+import com.autelhome.multiroom.hal.BaseRepresentationFactory;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
@@ -12,7 +13,7 @@ import java.net.URI;
  *
  * @author xavier
  */
-public class ZoneRepresentationFactory extends StandardRepresentationFactory
+public class ZoneRepresentationFactory extends BaseRepresentationFactory
 {
 
     private final UriInfo uriInfo;
@@ -25,6 +26,7 @@ public class ZoneRepresentationFactory extends StandardRepresentationFactory
     @Inject
     public ZoneRepresentationFactory(final UriInfo uriInfo)
     {
+        super();
         this.uriInfo = uriInfo;
     }
 

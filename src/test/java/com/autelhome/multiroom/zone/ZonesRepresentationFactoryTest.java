@@ -1,6 +1,6 @@
 package com.autelhome.multiroom.zone;
 
-import com.autelhome.multiroom.util.MultiroomNamespaceResolver;
+import com.autelhome.multiroom.hal.MultiroomNamespaceResolver;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
@@ -27,6 +27,7 @@ public class ZonesRepresentationFactoryTest {
         final StandardRepresentationFactory representationFactory = new StandardRepresentationFactory();
 
         final Representation zone1Representation = representationFactory
+                .withFlag(StandardRepresentationFactory.COALESCE_ARRAYS)
                 .newRepresentation(URI.create("/zones/zone1"))
                 .withProperty("name", "zone1");
 
