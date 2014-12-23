@@ -6,7 +6,7 @@ apply plugin: 'findbugs'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-version = '1.0'
+version = '0.1.0'
 
 buildscript {
     repositories {
@@ -24,6 +24,8 @@ repositories {
 
 dependencies {
     compile 'io.dropwizard:dropwizard-core:0.7.1'
+    compile 'io.dropwizard:dropwizard-assets:0.7.1'
+    compile 'io.dropwizard:dropwizard-views:0.7.1'
     compile 'com.hubspot.dropwizard:dropwizard-guice:0.7.1'
     compile 'com.theoryinpractise:halbuilder-standard:4.0.1'
     testCompile 'junit:junit:4.11'

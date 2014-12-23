@@ -1,12 +1,9 @@
 package com.autelhome.multiroom.hal;
 
-import com.autelhome.multiroom.util.URIDecoder;
-import com.autelhome.multiroom.zone.ZoneException;
 import com.google.inject.Inject;
 
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import java.io.UnsupportedEncodingException;
+import java.net.URI;
 
 /**
  * Resolves the 'mr' namespace URL.
@@ -15,22 +12,19 @@ import java.io.UnsupportedEncodingException;
  */
 public class MultiroomNamespaceResolver {
 
-    private static final String DOCS_RELS_REL = "/docs/rels/{rel}";
+    private static final String DOCS_RELS_REL = "/docs/#/relations/{rel}";
 
     private final UriInfo uriInfo;
-    private final URIDecoder uriDecoder;
 
     /**
      * Constructor.
      *
      * @param uriInfo the {@link UriInfo} related to the request
-     * @param uriDecoder an {@link URIDecoder} instance
      */
     @Inject
-    public MultiroomNamespaceResolver(final UriInfo uriInfo, final URIDecoder uriDecoder)
+    public MultiroomNamespaceResolver(final UriInfo uriInfo)
     {
         this.uriInfo = uriInfo;
-        this.uriDecoder = uriDecoder;
     }
 
     /**
@@ -39,14 +33,10 @@ public class MultiroomNamespaceResolver {
      * @return the 'mr' namespace URL.
      */
     public String resolve() {
-        UriBuilder mrNamespaceUriBuilder = uriInfo.getBaseUriBuilder();
 
-        try {
-            return uriDecoder.decode(mrNamespaceUriBuilder.path(DOCS_RELS_REL).build());
-        } catch (UnsupportedEncodingException e) {
-            throw new ZoneException("Unable to decode URI", e);
-        }
+        final URI baseUri = uriInfo.getBaseUri();
 
+        return String.format("http://%s:%d/multiroom-mpd/docs/#/relations/{rel}", baseUri.getHost(), baseUri.getPort());
     }
 
 }

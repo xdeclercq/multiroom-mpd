@@ -20,7 +20,7 @@ public class MultiroomMPDApplicationResourceIntegrationTest {
 	public void get() throws Exception {
 
 		String url = String.format("http://localhost:%d/multiroom-mpd/api/", rule.getLocalPort());
-		String docsUrl = String.format("http://localhost:%d/multiroom-mpd/api/docs/rels/{rel}", rule.getLocalPort());
+		String docsUrl = String.format("http://localhost:%d/multiroom-mpd/docs/#/relations/{rel}", rule.getLocalPort());
 		String zonesUrl = String.format("http://localhost:%d/multiroom-mpd/api/zones", rule.getLocalPort());
 
 		when().get(url)

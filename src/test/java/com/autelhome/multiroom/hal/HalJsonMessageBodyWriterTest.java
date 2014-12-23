@@ -1,6 +1,5 @@
-package com.autelhome.multiroom.util;
+package com.autelhome.multiroom.hal;
 
-import com.autelhome.multiroom.hal.HalJsonMessageBodyWriter;
 import com.theoryinpractise.halbuilder.api.ReadableRepresentation;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;

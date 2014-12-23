@@ -22,7 +22,7 @@ public class ZoneResourceTest {
 
     private final ZoneService zoneService = mock(ZoneService.class);
     private final UriInfo uriInfo = mock(UriInfo.class);
-    private final ZoneRepresentationFactory zoneRepresentationFactory = new ZoneRepresentationFactory(uriInfo);
+    private final ZoneRepresentationFactory zoneRepresentationFactory = new ZoneRepresentationFactory();
     private final MultiroomNamespaceResolver multiroomNamespaceResolver = mock(MultiroomNamespaceResolver.class);
     private final ZonesRepresentationFactory zonesRepresentationFactory = new ZonesRepresentationFactory(uriInfo, zoneRepresentationFactory, multiroomNamespaceResolver);
 
@@ -43,9 +43,7 @@ public class ZoneResourceTest {
         when(zoneService.getAll()).thenReturn(zones);
         UriBuilder selfUriBuilder = UriBuilder.fromPath("/");
         UriBuilder mrNamespaceUriBuilder = UriBuilder.fromPath("/");
-        UriBuilder zone1UriBuilder = UriBuilder.fromPath("/");
-        UriBuilder zone2UriBuilder = UriBuilder.fromPath("/");
-        when(uriInfo.getBaseUriBuilder()).thenReturn(selfUriBuilder, mrNamespaceUriBuilder, zone1UriBuilder, zone2UriBuilder);
+        when(uriInfo.getBaseUriBuilder()).thenReturn(selfUriBuilder, mrNamespaceUriBuilder);
         when(multiroomNamespaceResolver.resolve()).thenReturn("/docs/rels/{rel}");
 
         String actual = resources.client().resource("/zones").accept(RepresentationFactory.HAL_JSON).get(String.class);

@@ -23,8 +23,7 @@ import java.lang.reflect.Type;
  */
 @Provider
 @Produces({RepresentationFactory.HAL_JSON})
-public class HalJsonMessageBodyWriter implements MessageBodyWriter
-{
+public class HalJsonMessageBodyWriter implements MessageBodyWriter {
 
     private static final MediaType HAL_JSON_TYPE = new MediaType("application", "hal+json");
 

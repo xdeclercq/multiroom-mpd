@@ -12,19 +12,9 @@
   "_embedded": {
     "mr:zone": [
       {
-        "_links": {
-          "self": {
-            "href": "/zones"
-          }
-        },
         "name": "Bedroom"
       },
       {
-        "_links": {
-          "self": {
-            "href": "/zones"
-          }
-        },
         "name": "Kitchen"
       }
     ]

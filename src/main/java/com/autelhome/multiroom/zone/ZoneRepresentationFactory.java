@@ -5,9 +5,6 @@ import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
 
-import javax.ws.rs.core.UriInfo;
-import java.net.URI;
-
 /**
  * {@link StandardRepresentationFactory} for a {@link Zone}.
  *
@@ -16,18 +13,13 @@ import java.net.URI;
 public class ZoneRepresentationFactory extends BaseRepresentationFactory
 {
 
-    private final UriInfo uriInfo;
-
     /**
      * Constructor.
-     *
-     * @param uriInfo the {@link UriInfo} related to the request
      */
     @Inject
-    public ZoneRepresentationFactory(final UriInfo uriInfo)
+    public ZoneRepresentationFactory()
     {
         super();
-        this.uriInfo = uriInfo;
     }
 
     /**
@@ -38,8 +30,7 @@ public class ZoneRepresentationFactory extends BaseRepresentationFactory
      */
     public Representation newRepresentation(final Zone zone)
     {
-        URI self = uriInfo.getBaseUriBuilder().path(ZoneResource.class).build();
-        return newRepresentation(self)
+        return newRepresentation()
                 .withProperty("name", zone.getName());
     }
 

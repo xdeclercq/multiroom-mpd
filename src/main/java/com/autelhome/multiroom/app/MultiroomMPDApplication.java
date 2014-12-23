@@ -2,6 +2,7 @@ package com.autelhome.multiroom.app;
 
 import com.hubspot.dropwizard.guice.GuiceBundle;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -52,14 +53,15 @@ public class MultiroomMPDApplication extends Application<MultiroomMPDConfigurati
                 .build();
 
         bootstrap.addBundle(guiceBundle);
+
+        bootstrap.addBundle(new AssetsBundle());
+        bootstrap.addBundle(new AssetsBundle("/docs", "/docs", "index.html", "docs"));
     }
 
     @Override
     public void run(final MultiroomMPDConfiguration configuration, final Environment environment) throws Exception {
         environment.getApplicationContext().setContextPath("/multiroom-mpd");
         environment.jersey().setUrlPattern("/api/*");
-
-
     }
 
 }

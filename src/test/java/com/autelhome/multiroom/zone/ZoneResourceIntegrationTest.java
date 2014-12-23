@@ -22,7 +22,7 @@ public class ZoneResourceIntegrationTest {
 	public void get() throws Exception {
 
 		String url = String.format("http://localhost:%d/multiroom-mpd/api/zones", rule.getLocalPort());
-		String docsUrl = String.format("http://localhost:%d/multiroom-mpd/api/docs/rels/{rel}", rule.getLocalPort());
+		String docsUrl = String.format("http://localhost:%d/multiroom-mpd/docs/#/relations/{rel}", rule.getLocalPort());
 
 		when().get(url)
 			.then().assertThat()
