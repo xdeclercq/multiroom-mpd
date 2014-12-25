@@ -1,0 +1,22 @@
+{
+  "_links": {
+    "curies": {
+        "href": "/docs/rels/{rel}",
+        "name": "mr",
+        "templated": true
+    },
+    "self": {
+      "href": "/zones"
+    }
+  },
+  "_embedded": {
+    "mr:zone": [
+      {
+        "name": "Bedroom"
+      },
+      {
+        "name": "Kitchen"
+      }
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+<div class="panel">
+  <h3>Resource 'zones'</h3>
+
+  <p>List of zones.</p>
+  <p>Embeds representations of <a ui-sref="root.resources.details({ name: 'zone' })">zone</a> resources.</p>
+
+  <h4>Links</h4>
+  <div class="row">
+    <div class="large-3 medium-3 columns">
+      <p>Relation</p>
+    </div>
+    <div class="large-3 medium-3 columns">
+      <p>Description</p>
+    </div>
+    <div class="large-3 medium-3 columns">
+      <p>Methods</p>
+    </div>
+    <div class="large-3 medium-3 columns">
+      <p>Templated</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="large-3 medium-3 columns">
+      <p>self</p>
+    </div>
+    <div class="large-3 medium-3 columns">
+      <p>The list of zones in your multiroom-mpd application.</p>
+    </div>
+    <div class="large-3 medium-3 columns">
+      <p>GET</p>
+    </div>
+    <div class="large-3 medium-3 columns">
+      <p>No.</p>
+    </div>
+  </div>
+
+  <h4>Example</h4>
+  <pre>
+{
+  "_links": {
+    "curies": {
+        "href": "http://localhost:8080/multiroom-mpd/docs/#/relations/{rel}",
+        "name": "mr",
+        "templated": true
+    },
+    "self": {
+      "href": "http://localhost:8080/multiroom-mpd/api/zones"
+    }
+  },
+  "_embedded": {
+    "mr:zone": [
+      {
+        "name": "Bedroom"
+      },
+      {
+        "name": "Kitchen"
+      }
+    ]
+  }
+}
+  </pre>
+</div>

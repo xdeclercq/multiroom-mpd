@@ -1,0 +1,15 @@
+server:
+  type: simple
+  applicationContextPath: /multiroom-mpd
+  adminContextPath: /admin
+  connector:
+    type: http
+    port: 8080
+
+zones:
+  -
+    name: Kitchen
+    mpdPort: 6600
+  -
+    name: Bathroom
+    mpdPort: 6601

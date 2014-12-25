@@ -1,0 +1,15 @@
+{
+  "_links": {
+    "curies": {
+      "href": "http://localhost/docs/{rel}",
+      "name": "mr",
+      "templated": true
+    },
+    "self": {
+      "href": "/"
+    },
+    "mr:zones": {
+      "href": "/zones"
+    }
+  }
+}
