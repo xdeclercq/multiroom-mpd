@@ -43,8 +43,8 @@ public class ZoneResource
      */
     @GET
     public Response get() {
-        SortedSet<Zone> zones = zoneService.getAll();
-        Representation representation = zonesRepresentationFactory.newRepresentation(zones);
+        final SortedSet<Zone> zones = zoneService.getAll();
+        final Representation representation = zonesRepresentationFactory.newRepresentation(zones);
         return Response.ok(representation).build();
     }
 }

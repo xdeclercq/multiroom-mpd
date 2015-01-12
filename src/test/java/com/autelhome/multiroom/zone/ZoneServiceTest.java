@@ -12,7 +12,7 @@ public class ZoneServiceTest {
     private final ZoneService testSubject;
 
     public ZoneServiceTest() {
-        ZonesConfiguration zonesConfiguration = new ZonesConfiguration();
+        final ZonesConfiguration zonesConfiguration = new ZonesConfiguration();
         zonesConfiguration.add(new ZoneConfiguration("Kitchen", 4564));
         zonesConfiguration.add(new ZoneConfiguration("Bedroom", 1456));
         testSubject = new ZoneService(zonesConfiguration);
@@ -20,11 +20,11 @@ public class ZoneServiceTest {
 
     @Test
     public void getAll() throws Exception {
-        SortedSet<Zone> expected = new TreeSet<>();
+        final SortedSet<Zone> expected = new TreeSet<>();
         expected.add(new Zone("Kitchen"));
         expected.add(new Zone("Bedroom"));
-        
-        SortedSet<Zone> actual = testSubject.getAll();
+
+        final SortedSet<Zone> actual = testSubject.getAll();
 
         assertThat(actual).isEqualTo(expected);
     }

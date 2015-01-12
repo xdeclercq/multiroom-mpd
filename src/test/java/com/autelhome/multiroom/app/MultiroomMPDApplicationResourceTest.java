@@ -30,13 +30,13 @@ public class MultiroomMPDApplicationResourceTest {
 
     @Test
     public void get() throws Exception {
-        String expected = Resources.toString(Resources.getResource(getClass(), "application.json"), Charsets.UTF_8);
+        final String expected = Resources.toString(Resources.getResource(getClass(), "application.json"), Charsets.UTF_8);
 
         final UriBuilder uriBuilder = UriBuilder.fromUri("/");
         when(uriInfo.getBaseUriBuilder()).thenReturn(uriBuilder);
         when(multiroomNamespaceResolver.resolve()).thenReturn("http://localhost/docs/{rel}");
 
-        String actual = resources.client().resource("/").accept(RepresentationFactory.HAL_JSON).get(String.class);
+        final String actual = resources.client().resource("/").accept(RepresentationFactory.HAL_JSON).get(String.class);
 
         assertEquals(expected, actual, true);
     }

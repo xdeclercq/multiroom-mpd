@@ -35,7 +35,7 @@ public class ZonesRepresentationFactoryTest {
                 .newRepresentation(URI.create("/zones/zone2"))
                 .withProperty("name", "zone2");
 
-        String mrNamespace = "/docs/rels/{rel}";
+        final String mrNamespace = "/docs/rels/{rel}";
 
         final String expected = representationFactory
                 .newRepresentation(URI.create("/zones"))
@@ -44,15 +44,15 @@ public class ZonesRepresentationFactoryTest {
                 .withRepresentation("mr:zone", zone2Representation)
                 .toString(RepresentationFactory.HAL_JSON);
 
-        Zone zone1 = new Zone("zone1");
-        Zone zone2 = new Zone("zone2");
+        final Zone zone1 = new Zone("zone1");
+        final Zone zone2 = new Zone("zone2");
 
         when(uriInfo.getBaseUriBuilder()).thenReturn(UriBuilder.fromPath("/"), UriBuilder.fromPath("/"));
         when(zoneRepresentationFactory.newRepresentation(zone1)).thenReturn(zone1Representation);
         when(zoneRepresentationFactory.newRepresentation(zone2)).thenReturn(zone2Representation);
         when(multiroomNamespaceResolver.resolve()).thenReturn(mrNamespace);
 
-        String actual = testSubject.newRepresentation(Arrays.asList(zone1, zone2)).toString(RepresentationFactory.HAL_JSON);
+        final String actual = testSubject.newRepresentation(Arrays.asList(zone1, zone2)).toString(RepresentationFactory.HAL_JSON);
 
         assertThat(actual).isEqualTo(expected);
     }

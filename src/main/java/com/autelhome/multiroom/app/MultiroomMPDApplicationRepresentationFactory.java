@@ -38,11 +38,11 @@ public class MultiroomMPDApplicationRepresentationFactory extends BaseRepresenta
     @Override
     public Representation newRepresentation()
     {
-        URI self = uriInfo.getBaseUriBuilder().path(MultiroomMPDApplicationResource.class).build();
+        final URI self = uriInfo.getBaseUriBuilder().path(MultiroomMPDApplicationResource.class).build();
 
-        String mrNamespace = multiroomNamespaceResolver.resolve();
+        final String mrNamespace = multiroomNamespaceResolver.resolve();
 
-        URI zonesURI = uriInfo.getBaseUriBuilder().path(ZoneResource.class).build();
+        final URI zonesURI = uriInfo.getBaseUriBuilder().path(ZoneResource.class).build();
 
         return newRepresentation(self)
                 .withNamespace("mr", mrNamespace)

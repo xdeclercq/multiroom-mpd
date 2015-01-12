@@ -30,7 +30,7 @@ public class ZonesRepresentationFactory extends BaseRepresentationFactory
      * @param multiroomNamespaceResolver a {@link MultiroomNamespaceResolver} instance
      */
     @Inject
-    public ZonesRepresentationFactory(final UriInfo uriInfo, final ZoneRepresentationFactory zoneRepresentationFactory, MultiroomNamespaceResolver multiroomNamespaceResolver)
+    public ZonesRepresentationFactory(final UriInfo uriInfo, final ZoneRepresentationFactory zoneRepresentationFactory, final MultiroomNamespaceResolver multiroomNamespaceResolver)
     {
         super();
         this.uriInfo = uriInfo;
@@ -46,8 +46,8 @@ public class ZonesRepresentationFactory extends BaseRepresentationFactory
      */
     public Representation newRepresentation(final Collection<Zone> zones)
     {
-        UriBuilder selfUriBuilder = uriInfo.getBaseUriBuilder();
-        URI self = selfUriBuilder.path(ZoneResource.class).build();
+        final UriBuilder selfUriBuilder = uriInfo.getBaseUriBuilder();
+        final URI self = selfUriBuilder.path(ZoneResource.class).build();
 
         final Representation representation = newRepresentation(self);
 

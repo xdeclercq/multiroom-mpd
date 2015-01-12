@@ -11,6 +11,7 @@
 
     <rule ref="rulesets/java/clone.xml" />
     <rule ref="rulesets/java/finalizers.xml" />
+    <rule ref="rulesets/java/design.xml" />
     <rule ref="rulesets/java/imports.xml">
       <exclude name="TooManyStaticImports" />
     </rule>
@@ -21,5 +22,13 @@
         <exclude name="UseIndexOfChar" />
     </rule>
     <rule ref="rulesets/java/basic.xml" />
+    <rule ref="rulesets/java/naming.xml">
+        <exclude name="ShortVariable" />
+        <exclude name="LongVariable" />
+        <exclude name="ShortClassName" />
+    </rule>
+    <rule ref="rulesets/java/optimizations.xml">
+        <exclude name="UseStringBufferForStringAppends" />
+    </rule>
 
 </ruleset>

@@ -17,7 +17,7 @@ public class MultiroomMPDModuleTest {
         expected.add(new ZoneConfiguration("Bedroom", 5678));
         final MultiroomMPDConfiguration configuration = new MultiroomMPDConfiguration(expected);
 
-        ZonesConfiguration actual = testSubject.getZonesConfiguration(configuration);
+        final ZonesConfiguration actual = testSubject.getZonesConfiguration(configuration);
 
         assertThat(actual).isEqualTo(expected);
     }

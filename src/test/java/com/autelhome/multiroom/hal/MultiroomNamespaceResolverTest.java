@@ -17,9 +17,9 @@ public class MultiroomNamespaceResolverTest {
     @Test
     public void resolve() throws Exception {
         when(uriInfo.getBaseUri()).thenReturn(URI.create("http://myserver:1234/api/"));
-        String expected = "http://myserver:1234/multiroom-mpd/docs/#/relations/{rel}";
+        final String expected = "http://myserver:1234/multiroom-mpd/docs/#/relations/{rel}";
 
-        String actual = testSubject.resolve();
+        final String actual = testSubject.resolve();
 
         assertThat(actual).isEqualTo(expected);
     }

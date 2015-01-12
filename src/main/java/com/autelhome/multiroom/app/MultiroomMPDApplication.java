@@ -43,7 +43,7 @@ public class MultiroomMPDApplication extends Application<MultiroomMPDConfigurati
 
     @Override
     public void initialize(final Bootstrap<MultiroomMPDConfiguration> bootstrap) {
-        GuiceBundle<MultiroomMPDConfiguration> guiceBundle = guiceBuilder
+        final GuiceBundle<MultiroomMPDConfiguration> guiceBundle = guiceBuilder
                 .addModule(new MultiroomMPDModule())
                 .enableAutoConfig(
                         "com.autelhome.multiroom.hal",

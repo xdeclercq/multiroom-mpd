@@ -23,7 +23,7 @@ public class MultiroomMPDModule extends AbstractModule {
      * @return the zones configuration
      */
     @Provides
-    public ZonesConfiguration getZonesConfiguration(MultiroomMPDConfiguration configuration) {
+    public ZonesConfiguration getZonesConfiguration(final MultiroomMPDConfiguration configuration) {
         return configuration.getZonesConfiguration();
     }
 }

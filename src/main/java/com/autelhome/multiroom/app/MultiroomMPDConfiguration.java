@@ -20,7 +20,7 @@ public class MultiroomMPDConfiguration extends Configuration
      * @param zonesConfiguration the {@link ZonesConfiguration}
      */
     @JsonCreator
-    public MultiroomMPDConfiguration(@JsonProperty("zones") ZonesConfiguration zonesConfiguration)
+    public MultiroomMPDConfiguration(@JsonProperty("zones") final ZonesConfiguration zonesConfiguration)
     {
         this.zonesConfiguration = zonesConfiguration;
     }

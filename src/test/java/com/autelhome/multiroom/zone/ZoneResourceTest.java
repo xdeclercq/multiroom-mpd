@@ -34,19 +34,19 @@ public class ZoneResourceTest {
 
     @Test
     public void get() throws Exception {
-        String expected = Resources.toString(Resources.getResource(getClass(), "zones.json"), Charsets.UTF_8);
+        final String expected = Resources.toString(Resources.getResource(getClass(), "zones.json"), Charsets.UTF_8);
 
-        SortedSet<Zone> zones = new TreeSet<>();
+        final SortedSet<Zone> zones = new TreeSet<>();
         zones.add(new Zone("Kitchen"));
         zones.add(new Zone("Bedroom"));
 
         when(zoneService.getAll()).thenReturn(zones);
-        UriBuilder selfUriBuilder = UriBuilder.fromPath("/");
-        UriBuilder mrNamespaceUriBuilder = UriBuilder.fromPath("/");
+        final UriBuilder selfUriBuilder = UriBuilder.fromPath("/");
+        final UriBuilder mrNamespaceUriBuilder = UriBuilder.fromPath("/");
         when(uriInfo.getBaseUriBuilder()).thenReturn(selfUriBuilder, mrNamespaceUriBuilder);
         when(multiroomNamespaceResolver.resolve()).thenReturn("/docs/rels/{rel}");
 
-        String actual = resources.client().resource("/zones").accept(RepresentationFactory.HAL_JSON).get(String.class);
+        final String actual = resources.client().resource("/zones").accept(RepresentationFactory.HAL_JSON).get(String.class);
 
         assertEquals(expected, actual, true);
     }

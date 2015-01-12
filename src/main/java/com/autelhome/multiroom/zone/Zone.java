@@ -52,11 +52,18 @@ public class Zone implements Comparable<Zone>
     @Override
     public int hashCode()
     {
-        return name != null ? name.hashCode() : 0;
+        return name == null ?  0 : name.hashCode();
     }
 
     @Override
     public int compareTo(final Zone other) {
         return name.compareTo(other.name);
+    }
+
+    @Override
+    public String toString() {
+        return "Zone{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

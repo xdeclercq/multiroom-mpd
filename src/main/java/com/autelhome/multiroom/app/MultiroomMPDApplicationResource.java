@@ -41,7 +41,7 @@ public class MultiroomMPDApplicationResource
      */
     @GET
     public Response get() {
-        Representation representation = multiroomMPDApplicationRepresentationFactory
+        final Representation representation = multiroomMPDApplicationRepresentationFactory
                 .newRepresentation();
         return Response.ok(representation).build();
     }
