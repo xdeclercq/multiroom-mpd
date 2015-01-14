@@ -1,7 +1,7 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.app.MultiroomMPDApplication;
-import com.autelhome.multiroom.app.MultiroomMPDConfiguration;
+import com.autelhome.multiroom.app.ApplicationConfiguration;
 import io.dropwizard.testing.junit.ConfigOverride;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Rule;
@@ -14,7 +14,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class ZoneResourceIntegrationTest {
 
 	@Rule
-	public final DropwizardAppRule<MultiroomMPDConfiguration> rule =
+	public final DropwizardAppRule<ApplicationConfiguration> rule =
 			new DropwizardAppRule<>(MultiroomMPDApplication.class, "src/test/resources/com/autelhome/multiroom/app/configuration.yml",
 					ConfigOverride.config("server.connector.port", "8000"));
 

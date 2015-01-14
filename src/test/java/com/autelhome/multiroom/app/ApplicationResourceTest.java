@@ -16,15 +16,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
-public class MultiroomMPDApplicationResourceTest {
+public class ApplicationResourceTest {
 
     private final UriInfo uriInfo = mock(UriInfo.class);
     private final MultiroomNamespaceResolver multiroomNamespaceResolver = mock(MultiroomNamespaceResolver.class);
-    private final MultiroomMPDApplicationRepresentationFactory multiroomMPDApplicationRepresentationFactory = new MultiroomMPDApplicationRepresentationFactory(uriInfo, multiroomNamespaceResolver);
+    private final ApplicationRepresentationFactory applicationRepresentationFactory = new ApplicationRepresentationFactory(uriInfo, multiroomNamespaceResolver);
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new MultiroomMPDApplicationResource(multiroomMPDApplicationRepresentationFactory))
+            .addResource(new ApplicationResource(applicationRepresentationFactory))
             .addProvider(HalJsonMessageBodyWriter.class)
             .build();
 

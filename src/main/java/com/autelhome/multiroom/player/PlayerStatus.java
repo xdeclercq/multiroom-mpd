@@ -7,11 +7,11 @@ import org.bff.javampd.Player;
  *
  * @author xavier
  */
-public enum PlayerStatusType
+public enum PlayerStatus
 {
     PLAYING, STOPPED;
 
-    public static PlayerStatusType parse(final Player.Status status)
+    public static PlayerStatus fromMPDPlayerStatus(final Player.Status status)
     {
         if (status == Player.Status.STATUS_PLAYING) {
             return PLAYING;

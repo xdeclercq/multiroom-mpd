@@ -9,10 +9,10 @@ import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 
-public class MultiroomMPDApplicationResourceIntegrationTest {
+public class ApplicationResourceIntegrationTest {
 
 	@Rule
-	public final DropwizardAppRule<MultiroomMPDConfiguration> rule =
+	public final DropwizardAppRule<ApplicationConfiguration> rule =
 			new DropwizardAppRule<>(MultiroomMPDApplication.class, "src/test/resources/com/autelhome/multiroom/app/configuration.yml",
 					ConfigOverride.config("server.connector.port", "8001"));
 

@@ -11,9 +11,9 @@ import io.dropwizard.setup.Environment;
  *
  * @author xdeclercq
  */
-public class MultiroomMPDApplication extends Application<MultiroomMPDConfiguration> {
+public class MultiroomMPDApplication extends Application<ApplicationConfiguration> {
 
-    private final GuiceBundle.Builder<MultiroomMPDConfiguration> guiceBuilder;
+    private final GuiceBundle.Builder<ApplicationConfiguration> guiceBuilder;
 
     /**
      * Entry point of the application.
@@ -22,34 +22,34 @@ public class MultiroomMPDApplication extends Application<MultiroomMPDConfigurati
      * @throws Exception if an exception occurs while running the application.
      */
     public static void main(final String... args) throws Exception {
-        new MultiroomMPDApplication(GuiceBundle.<MultiroomMPDConfiguration>newBuilder()).run(args);
+        new MultiroomMPDApplication(GuiceBundle.<ApplicationConfiguration>newBuilder()).run(args);
     }
 
     /**
      * Constructor.
      */
     public MultiroomMPDApplication() {
-        this(GuiceBundle.<MultiroomMPDConfiguration>newBuilder());
+        this(GuiceBundle.<ApplicationConfiguration>newBuilder());
     }
 
     /**
      * Constructor.
      *
-     * @param guiceBundleBuilder a {@link GuiceBundle.Builder<MultiroomMPDConfiguration>} instance
+     * @param guiceBundleBuilder a {@link GuiceBundle.Builder< ApplicationConfiguration >} instance
      */
-    public MultiroomMPDApplication(final GuiceBundle.Builder<MultiroomMPDConfiguration> guiceBundleBuilder) {
+    public MultiroomMPDApplication(final GuiceBundle.Builder<ApplicationConfiguration> guiceBundleBuilder) {
         this.guiceBuilder = guiceBundleBuilder;
     }
 
     @Override
-    public void initialize(final Bootstrap<MultiroomMPDConfiguration> bootstrap) {
-        final GuiceBundle<MultiroomMPDConfiguration> guiceBundle = guiceBuilder
-                .addModule(new MultiroomMPDModule())
+    public void initialize(final Bootstrap<ApplicationConfiguration> bootstrap) {
+        final GuiceBundle<ApplicationConfiguration> guiceBundle = guiceBuilder
+                .addModule(new ApplicationModule())
                 .enableAutoConfig(
                         "com.autelhome.multiroom.hal",
                         "com.autelhome.multiroom.app",
                         "com.autelhome.multiroom.zone")
-                .setConfigClass(MultiroomMPDConfiguration.class)
+                .setConfigClass(ApplicationConfiguration.class)
                 .build();
 
         bootstrap.addBundle(guiceBundle);
@@ -59,7 +59,7 @@ public class MultiroomMPDApplication extends Application<MultiroomMPDConfigurati
     }
 
     @Override
-    public void run(final MultiroomMPDConfiguration configuration, final Environment environment) throws Exception {
+    public void run(final ApplicationConfiguration configuration, final Environment environment) throws Exception {
         environment.getApplicationContext().setContextPath("/multiroom-mpd");
         environment.jersey().setUrlPattern("/api/*");
     }

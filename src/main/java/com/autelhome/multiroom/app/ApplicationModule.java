@@ -9,7 +9,7 @@ import com.google.inject.Provides;
  *
  * @author xdeclercq
  */
-public class MultiroomMPDModule extends AbstractModule {
+public class ApplicationModule extends AbstractModule {
 
     @Override
     protected void configure() {
@@ -23,7 +23,7 @@ public class MultiroomMPDModule extends AbstractModule {
      * @return the zones configuration
      */
     @Provides
-    public ZonesConfiguration getZonesConfiguration(final MultiroomMPDConfiguration configuration) {
+    public ZonesConfiguration getZonesConfiguration(final ApplicationConfiguration configuration) {
         return configuration.getZonesConfiguration();
     }
 }

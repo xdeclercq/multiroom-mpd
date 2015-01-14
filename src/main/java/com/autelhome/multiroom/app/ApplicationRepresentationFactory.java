@@ -15,7 +15,7 @@ import java.net.URI;
  *
  * @author xdeclercq
  */
-public class MultiroomMPDApplicationRepresentationFactory extends BaseRepresentationFactory
+public class ApplicationRepresentationFactory extends BaseRepresentationFactory
 {
 
     private final UriInfo uriInfo;
@@ -28,7 +28,7 @@ public class MultiroomMPDApplicationRepresentationFactory extends BaseRepresenta
      * @param multiroomNamespaceResolver a {@link MultiroomNamespaceResolver} instance
      */
     @Inject
-    public MultiroomMPDApplicationRepresentationFactory(final UriInfo uriInfo, final MultiroomNamespaceResolver multiroomNamespaceResolver)
+    public ApplicationRepresentationFactory(final UriInfo uriInfo, final MultiroomNamespaceResolver multiroomNamespaceResolver)
     {
         super();
         this.uriInfo = uriInfo;
@@ -38,7 +38,7 @@ public class MultiroomMPDApplicationRepresentationFactory extends BaseRepresenta
     @Override
     public Representation newRepresentation()
     {
-        final URI self = uriInfo.getBaseUriBuilder().path(MultiroomMPDApplicationResource.class).build();
+        final URI self = uriInfo.getBaseUriBuilder().path(ApplicationResource.class).build();
 
         final String mrNamespace = multiroomNamespaceResolver.resolve();
 

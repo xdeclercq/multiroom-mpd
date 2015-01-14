@@ -73,7 +73,7 @@ public class ZoneConfigurationTest {
     }
 
     @Test
-    public void hashCodeShoulBeTheSame() throws Exception {
+    public void hashCodeShouldBeTheSame() throws Exception {
         final int hashCode1 = new ZoneConfiguration("room3", 6487).hashCode();
         final int hashCode2 = new ZoneConfiguration("room3", 6487).hashCode();
         final int hashCode3 = new ZoneConfiguration(null, 6487).hashCode();

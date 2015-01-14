@@ -12,8 +12,6 @@ public class ZonesConfigurationTest {
 
     @Test
     public void toZones() throws Exception {
-
-
         final String zone1 = "zone1";
         final String zone2 = "zone2";
         final SortedSet<Zone> expected = new TreeSet<>();
