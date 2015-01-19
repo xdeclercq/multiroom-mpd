@@ -12,9 +12,25 @@
   "_embedded": {
     "mr:zone": [
       {
+        "_links": {
+          "self": {
+            "href": "/zones/Bedroom"
+          },
+          "mr:player": {
+            "href": "/zones/Bedroom/player"
+          }
+        },
         "name": "Bedroom"
       },
       {
+        "_links": {
+          "self": {
+            "href": "/zones/Kitchen"
+          },
+          "mr:player": {
+            "href": "/zones/Kitchen/player"
+          }
+        },
         "name": "Kitchen"
       }
     ]

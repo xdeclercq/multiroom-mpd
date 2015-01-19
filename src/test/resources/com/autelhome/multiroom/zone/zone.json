@@ -1,0 +1,11 @@
+{
+  "_links": {
+    "self": {
+      "href": "/zones/Bedroom"
+    },
+    "mr:player": {
+      "href": "/zones/Bedroom/player"
+    }
+  },
+  "name": "Bedroom"
+}
