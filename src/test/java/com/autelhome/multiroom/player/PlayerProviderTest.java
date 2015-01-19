@@ -29,13 +29,13 @@ public class PlayerProviderTest {
 
         final Player expected = new Player(kitchen, PlayerStatus.PLAYING);
 
-        final Player actual = testSubject.getPlayer(KITCHEN);
+        final Player actual = testSubject.getPlayer(kitchen);
 
         assertThat(actual).isEqualTo(expected);
     }
 
-    @Test(expected = PlayerException.class)
-    public void newPlayerProviderShouldThrowExceptionWhenNoConnectionToMPDServer() throws Exception {
+    @Test
+    public void getPlayerWhenNoConnection() throws Exception {
         final org.bff.javampd.Player mpdPlayer = mock(org.bff.javampd.Player.class);
         final Zone kitchen = new Zone(KITCHEN);
         final MPDPool mpdPool = mock(MPDPool.class);
@@ -44,6 +44,12 @@ public class PlayerProviderTest {
         final ZonesConfiguration zonesConfiguration = new ZonesConfiguration();
         zonesConfiguration.add(new ZoneConfiguration(KITCHEN, 9873));
 
-        new PlayerProvider(zonesConfiguration, mpdPool);
+        final PlayerProvider testSubject = new PlayerProvider(zonesConfiguration, mpdPool);
+
+        final Player expected = new Player(kitchen, PlayerStatus.STOPPED);
+
+        final Player actual = testSubject.getPlayer(kitchen);
+
+        assertThat(actual).isEqualTo(expected);
     }
 }

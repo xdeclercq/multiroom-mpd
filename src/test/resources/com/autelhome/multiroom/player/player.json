@@ -1,22 +1,9 @@
+{"_links":{"self":{"href":"/zones/Kitchen/player"}}}
+
 {
   "_links": {
-    "curies": {
-        "href": "/docs/rels/{rel}",
-        "name": "mr",
-        "templated": true
-    },
     "self": {
-      "href": "/zones"
+      "href": "/zones/Kitchen/player"
     }
-  },
-  "_embedded": {
-    "mr:zone": [
-      {
-        "name": "Bedroom"
-      },
-      {
-        "name": "Kitchen"
-      }
-    ]
   }
 }

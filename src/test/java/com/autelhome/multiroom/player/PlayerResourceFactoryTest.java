@@ -1,10 +1,27 @@
 package com.autelhome.multiroom.player;
 
-import junit.framework.TestCase;
+import com.autelhome.multiroom.zone.Zone;
+import org.junit.Test;
 
-public class PlayerResourceFactoryTest extends TestCase {
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-	public void testNewInstance() throws Exception {
+public class PlayerResourceFactoryTest {
 
+	private final PlayerProvider playerProvider = mock(PlayerProvider.class);
+	private final PlayerRepresentationFactory playerRepresentationFactory = mock(PlayerRepresentationFactory.class);
+	private final PlayerResourceFactory testSubject = new PlayerResourceFactory(playerProvider, playerRepresentationFactory);
+
+	@Test
+	public void newInstance() throws Exception {
+		final Zone kitchen = new Zone("Kitchen");
+		final Player player = new Player(kitchen, PlayerStatus.STOPPED);
+		when(playerProvider.getPlayer(kitchen)).thenReturn(player);
+
+		final PlayerResource expected = new PlayerResource(player, playerRepresentationFactory);
+		final PlayerResource actual = testSubject.newInstance(kitchen);
+
+		assertThat(actual).isEqualTo(expected);
 	}
 }

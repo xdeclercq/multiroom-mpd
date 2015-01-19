@@ -15,11 +15,7 @@ import java.net.URI;
  *
  * @author xdeclercq
  */
-public class ApplicationRepresentationFactory extends BaseRepresentationFactory
-{
-
-    private final UriInfo uriInfo;
-    private final MultiroomNamespaceResolver multiroomNamespaceResolver;
+public class ApplicationRepresentationFactory extends BaseRepresentationFactory {
 
     /**
      * Constructor.
@@ -30,22 +26,18 @@ public class ApplicationRepresentationFactory extends BaseRepresentationFactory
     @Inject
     public ApplicationRepresentationFactory(final UriInfo uriInfo, final MultiroomNamespaceResolver multiroomNamespaceResolver)
     {
-        super();
-        this.uriInfo = uriInfo;
-        this.multiroomNamespaceResolver = multiroomNamespaceResolver;
+        super(uriInfo, multiroomNamespaceResolver);
     }
 
     @Override
     public Representation newRepresentation()
     {
-        final URI self = uriInfo.getBaseUriBuilder().path(ApplicationResource.class).build();
+        final URI self = getBaseUriBuilder().path(ApplicationResource.class).build();
 
-        final String mrNamespace = multiroomNamespaceResolver.resolve();
-
-        final URI zonesURI = uriInfo.getBaseUriBuilder().path(ZoneResource.class).build();
+        final URI zonesURI = getBaseUriBuilder().path(ZoneResource.class).build();
 
         return newRepresentation(self)
-                .withNamespace("mr", mrNamespace)
+                .withNamespace("mr", getMRNamespace())
                 .withLink("mr:zones", zonesURI);
     }
 }

@@ -6,6 +6,8 @@ import com.autelhome.multiroom.zone.ZonesConfiguration;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.bff.javampd.exception.MPDPlayerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class PlayerProvider
 {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlayerProvider.class);
     private final Map<Zone, Player> players;
 
     /**
@@ -33,12 +36,13 @@ public class PlayerProvider
         players =  zonesConfiguration.toZones()
                 .stream()
                 .map(zone -> {
+                    final org.bff.javampd.Player mpdPlayer = mpdPool.getMPDPlayer(zone);
                     try {
-                        final org.bff.javampd.Player mpdPlayer = mpdPool.getMPDPlayer(zone);
                         final org.bff.javampd.Player.Status mpdStatus = mpdPlayer.getStatus();
                         return new Player(zone, PlayerStatus.fromMPDPlayerStatus(mpdStatus));
                     } catch (MPDPlayerException e) {
-                        throw new PlayerException("Unable to get the status of the player of zone " + zone.getName(), e);
+                        LOGGER.warn("Unable to get the status of the player of zone " + zone.getName(), e);
+                        return new Player(zone, PlayerStatus.STOPPED);
                     }
                 })
                     .collect(Collectors.toMap(Player::getZone, player -> player));
@@ -47,12 +51,11 @@ public class PlayerProvider
     /**
      * Returns the player related to a zone.
      *
-     * @param zoneName a zone name
-     * @return the player related to the zone named {@code zoneName}
+     * @param zone a zone
+     * @return the player related to the provided {@code zone}
      */
-    public Player getPlayer(final String zoneName)
+    public Player getPlayer(final Zone zone)
     {
-        return players.get(new Zone(zoneName));
+        return players.get(zone);
     }
-
 }

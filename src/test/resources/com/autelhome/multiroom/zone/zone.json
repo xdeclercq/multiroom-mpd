@@ -1,5 +1,10 @@
 {
   "_links": {
+    "curies": {
+      "href": "/docs/rels/{rel}",
+      "name": "mr",
+      "templated": true
+    },
     "self": {
       "href": "/zones/Bedroom"
     },

@@ -3,7 +3,7 @@ package com.autelhome.multiroom.player;
 import com.autelhome.multiroom.zone.Zone;
 
 /**
- * Represents a player linked to a zone.
+ * Represents a player. A player is linked to a zone.
  *
  * @author xdeclercq
  */
@@ -25,6 +25,15 @@ public class Player {
 
     public Zone getZone() {
         return zone;
+    }
+
+    /**
+     * Returns the zone name.
+     *
+     * @return the zone name
+     */
+    public Object getZoneName() {
+        return zone.getName();
     }
 
     public PlayerStatus getStatus() {
