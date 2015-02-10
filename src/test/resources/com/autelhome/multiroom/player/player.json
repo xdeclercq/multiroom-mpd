@@ -1,9 +1,19 @@
-{"_links":{"self":{"href":"/zones/Kitchen/player"}}}
-
 {
+
   "_links": {
+    "curies": {
+      "name": "mr",
+      "href": "http://server:3421/multiroom-mpd/docs/#/relations/{rel}",
+      "templated": true
+    },
     "self": {
-      "href": "/zones/Kitchen/player"
+      "href": "http://server:948/api/zones/Kitchen/player"
+    },
+    "mr:play": {
+      "href": "http://server:948/api/zones/Kitchen/player/play"
+    },
+    "mr:stop": {
+      "href": "http://server:948/api/zones/Kitchen/player/stop"
     }
   }
 }

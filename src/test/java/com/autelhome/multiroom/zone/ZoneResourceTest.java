@@ -1,23 +1,22 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.hal.HalJsonMessageBodyWriter;
-import com.autelhome.multiroom.hal.MultiroomNamespaceResolver;
 import com.autelhome.multiroom.player.PlayerResourceFactory;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
+import com.sun.jersey.api.client.ClientResponse;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
@@ -26,9 +25,8 @@ public class ZoneResourceTest {
 
     private final ZoneService zoneService = mock(ZoneService.class);
     private final UriInfo uriInfo = mock(UriInfo.class);
-    private final MultiroomNamespaceResolver multiroomNamespaceResolver = mock(MultiroomNamespaceResolver.class);
-    private final ZoneRepresentationFactory zoneRepresentationFactory = new ZoneRepresentationFactory(uriInfo, multiroomNamespaceResolver);
-    private final ZonesRepresentationFactory zonesRepresentationFactory = new ZonesRepresentationFactory(uriInfo, zoneRepresentationFactory, multiroomNamespaceResolver);
+    private final ZoneRepresentationFactory zoneRepresentationFactory = new ZoneRepresentationFactory(uriInfo);
+    private final ZonesRepresentationFactory zonesRepresentationFactory = new ZonesRepresentationFactory(uriInfo, zoneRepresentationFactory);
     private final PlayerResourceFactory playerResourceFactory = mock(PlayerResourceFactory.class);
 
     @Rule
@@ -38,46 +36,51 @@ public class ZoneResourceTest {
             .build();
 
     @Test
-    @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
     public void get() throws Exception {
-        final String expected = Resources.toString(Resources.getResource(getClass(), "zones.json"), Charsets.UTF_8);
+        final String expectedContent = Resources.toString(Resources.getResource(getClass(), "zones.json"), Charsets.UTF_8);
 
         final SortedSet<Zone> zones = new TreeSet<>();
         zones.add(new Zone("Kitchen"));
         zones.add(new Zone("Bedroom"));
 
         when(zoneService.getAll()).thenReturn(zones);
-        when(uriInfo.getBaseUriBuilder()).thenAnswer(new Answer<UriBuilder>() {
-            @Override
-            public UriBuilder answer(final InvocationOnMock invocation) throws Throwable {
-                return UriBuilder.fromPath("/");
-            }
-        });
-        when(multiroomNamespaceResolver.resolve()).thenReturn("/docs/rels/{rel}");
 
-        final String actual = resources.client().resource("/zones").accept(RepresentationFactory.HAL_JSON).get(String.class);
+        final String baseURI = "http://server:6789/api";
+        when(uriInfo.getBaseUriBuilder()).thenAnswer(i -> UriBuilder.fromPath(baseURI));
+        when(uriInfo.getBaseUri()).thenReturn(URI.create(baseURI));
 
-        assertEquals(expected, actual, true);
+        final ClientResponse actualResponse = resources.client().resource("/zones").accept(RepresentationFactory.HAL_JSON).get(ClientResponse.class);
+
+        final String actualContent = actualResponse.getEntity(String.class);
+
+        assertEquals(expectedContent, actualContent, true);
+
+        final int actualStatusCode = actualResponse.getStatus();
+
+        assertThat(actualStatusCode).isEqualTo(200);
     }
 
     @Test
-    @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
     public void getByName() throws Exception {
-        final String expected = Resources.toString(Resources.getResource(getClass(), "zone.json"), Charsets.UTF_8);
 
         final Zone bedroom = new Zone("Bedroom");
 
         when(zoneService.getByName("Bedroom")).thenReturn(bedroom);
-        when(uriInfo.getBaseUriBuilder()).thenAnswer(new Answer<UriBuilder>() {
-            @Override
-            public UriBuilder answer(final InvocationOnMock invocation) throws Throwable {
-                return UriBuilder.fromPath("/");
-            }
-        });
-        when(multiroomNamespaceResolver.resolve()).thenReturn("/docs/rels/{rel}");
 
-        final String actual = resources.client().resource("/zones/Bedroom").accept(RepresentationFactory.HAL_JSON).get(String.class);
+        final String baseURI = "http://server:374/api";
+        when(uriInfo.getBaseUriBuilder()).thenAnswer(i -> UriBuilder.fromPath(baseURI));
+        when(uriInfo.getBaseUri()).thenReturn(URI.create(baseURI));
 
-        assertEquals(expected, actual, true);
+        final ClientResponse actualResponse = resources.client().resource("/zones/Bedroom").accept(RepresentationFactory.HAL_JSON).get(ClientResponse.class);
+
+        final String actualContent = actualResponse.getEntity(String.class);
+
+        final String expectedContent = Resources.toString(Resources.getResource(getClass(), "zone.json"), Charsets.UTF_8);
+
+        assertEquals(expectedContent, actualContent, true);
+
+        final int actualStatusCode = actualResponse.getStatus();
+
+        assertThat(actualStatusCode).isEqualTo(200);
     }
 }

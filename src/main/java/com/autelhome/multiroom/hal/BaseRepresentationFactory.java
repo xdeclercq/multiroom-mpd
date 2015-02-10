@@ -4,6 +4,7 @@ import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 
 /**
  * Base representation factory.
@@ -13,27 +14,16 @@ import javax.ws.rs.core.UriInfo;
 public class BaseRepresentationFactory extends StandardRepresentationFactory {
 
 	private final UriInfo uriInfo;
-	private final MultiroomNamespaceResolver multiroomNamespaceResolver;
+
 
 	/**
 	 * Constructor.
 	 *
 	 * @param uriInfo the {@link UriInfo} related to the request
 	 */
-	protected BaseRepresentationFactory(final UriInfo uriInfo) {
-		this(uriInfo, null);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param uriInfo the {@link UriInfo} related to the request
-	 * @param multiroomNamespaceResolver a {@link MultiroomNamespaceResolver} instance
-	 */
-	protected  BaseRepresentationFactory(final UriInfo uriInfo, final MultiroomNamespaceResolver multiroomNamespaceResolver) {
+	protected  BaseRepresentationFactory(final UriInfo uriInfo) {
 		withFlag(COALESCE_ARRAYS);
 		this.uriInfo = uriInfo;
-		this.multiroomNamespaceResolver = multiroomNamespaceResolver;
 	}
 
 	/**
@@ -51,6 +41,7 @@ public class BaseRepresentationFactory extends StandardRepresentationFactory {
 	 * @return the 'mr' namespace URL
 	 */
 	protected String getMRNamespace() {
-		return multiroomNamespaceResolver.resolve();
+        final URI baseUri = uriInfo.getBaseUri();
+        return String.format("http://%s:%d/multiroom-mpd/docs/#/relations/{rel}", baseUri.getHost(), baseUri.getPort());
 	}
 }

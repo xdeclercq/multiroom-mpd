@@ -43,7 +43,7 @@ public class MultiroomMPDApplicationTest {
         final GuiceBundle<ApplicationConfiguration> guiceBundle = mock(GuiceBundle.class);
         when(guiceBuilder.build()).thenReturn(guiceBundle);
         when(guiceBuilder.addModule(any(Module.class))).thenReturn(guiceBuilder);
-        when(guiceBuilder.enableAutoConfig(anyString(), anyString(), anyString())).thenReturn(guiceBuilder);
+        when(guiceBuilder.enableAutoConfig(anyString(), anyString(), anyString(), anyString())).thenReturn(guiceBuilder);
         when(guiceBuilder.setConfigClass(ApplicationConfiguration.class)).thenReturn(guiceBuilder);
 
         testSubject.initialize(bootstrap);

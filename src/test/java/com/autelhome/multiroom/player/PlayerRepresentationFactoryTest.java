@@ -22,11 +22,18 @@ public class PlayerRepresentationFactoryTest {
     public void newRepresentation() throws Exception {
         final StandardRepresentationFactory representationFactory = new StandardRepresentationFactory();
 
-        final String baseURI = "http://myserver/api";
+        final String baseURI = "http://myserver:1234/api";
+        when(uriInfo.getBaseUri()).thenReturn(URI.create(baseURI));
         final URI self = URI.create(baseURI + "/zones/myZone/player");
-        when(uriInfo.getBaseUriBuilder()).thenReturn(UriBuilder.fromUri(baseURI));
+        final URI play = URI.create(baseURI + "/zones/myZone/player/play");
+        final URI stop = URI.create(baseURI + "/zones/myZone/player/stop");
+        when(uriInfo.getBaseUriBuilder()).thenAnswer(i -> UriBuilder.fromPath(baseURI));
         final String expected = representationFactory
+                .withFlag(RepresentationFactory.COALESCE_ARRAYS)
                 .newRepresentation(self)
+                .withNamespace("mr", "http://myserver:1234/multiroom-mpd/docs/#/relations/{rel}")
+                .withLink("mr:play", play)
+                .withLink("mr:stop", stop)
                 .toString(RepresentationFactory.HAL_JSON);
 
 

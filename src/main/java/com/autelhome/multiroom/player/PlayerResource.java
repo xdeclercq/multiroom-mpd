@@ -1,10 +1,14 @@
 package com.autelhome.multiroom.player;
 
+import com.autelhome.multiroom.util.EventBus;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import java.util.Objects;
 
 /**
  * REST resource to control a player of a zone.
@@ -16,17 +20,42 @@ public class PlayerResource {
 
 	private final PlayerRepresentationFactory playerRepresentationFactory;
 	private final Player player;
+    private final EventBus eventBus;
 
-	/**
+    /**
 	 * Constructor.
 	 *
 	 * @param player a player
-	 * @param playerRepresentationFactory A {@link PlayerRepresentationFactory} instance
+	 * @param playerRepresentationFactory a {@link PlayerRepresentationFactory} instance
+     * @param eventBus the event bus
 	 */
-	public PlayerResource(final Player player, final PlayerRepresentationFactory playerRepresentationFactory) {
+	public PlayerResource(final Player player, final PlayerRepresentationFactory playerRepresentationFactory, final EventBus eventBus) {
 		this.playerRepresentationFactory = playerRepresentationFactory;
 		this.player = player;
+        this.eventBus = eventBus;
 	}
+
+    /**
+     * Sends a play command to the event bus.
+     */
+    @POST
+    @Path("play")
+    public Response play() {
+        eventBus.send(new PlayCommand(player.getZone()));
+
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(player)).build();
+    }
+
+    /**
+     * Sends a stop command to the event bus.
+     */
+    @POST
+    @Path("stop")
+    public Response stop() {
+        eventBus.send(new StopCommand(player.getZone()));
+
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(player)).build();
+    }
 
 	/**
 	 * Returns a representation of the player.
@@ -49,15 +78,11 @@ public class PlayerResource {
 
 		final PlayerResource that = (PlayerResource) o;
 
-		if (player == null ? that.player != null : !player.equals(that.player)) {
-			return false;
-		}
-
-		return true;
-	}
+		return Objects.equals(player, that.player);
+    }
 
 	@Override
 	public int hashCode() {
-		return player == null ? 0 : player.hashCode();
+		return Objects.hashCode(player);
 	}
 }

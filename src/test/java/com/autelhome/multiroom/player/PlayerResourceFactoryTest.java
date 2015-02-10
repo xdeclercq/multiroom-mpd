@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.player;
 
+import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.Zone;
 import org.junit.Test;
 
@@ -11,7 +12,8 @@ public class PlayerResourceFactoryTest {
 
 	private final PlayerProvider playerProvider = mock(PlayerProvider.class);
 	private final PlayerRepresentationFactory playerRepresentationFactory = mock(PlayerRepresentationFactory.class);
-	private final PlayerResourceFactory testSubject = new PlayerResourceFactory(playerProvider, playerRepresentationFactory);
+    private final EventBus eventBus = mock(EventBus.class);
+	private final PlayerResourceFactory testSubject = new PlayerResourceFactory(playerProvider, playerRepresentationFactory, eventBus);
 
 	@Test
 	public void newInstance() throws Exception {
@@ -19,7 +21,7 @@ public class PlayerResourceFactoryTest {
 		final Player player = new Player(kitchen, PlayerStatus.STOPPED);
 		when(playerProvider.getPlayer(kitchen)).thenReturn(player);
 
-		final PlayerResource expected = new PlayerResource(player, playerRepresentationFactory);
+		final PlayerResource expected = new PlayerResource(player, playerRepresentationFactory, eventBus);
 		final PlayerResource actual = testSubject.newInstance(kitchen);
 
 		assertThat(actual).isEqualTo(expected);

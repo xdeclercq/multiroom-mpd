@@ -48,7 +48,8 @@ public class MultiroomMPDApplication extends Application<ApplicationConfiguratio
                 .enableAutoConfig(
                         "com.autelhome.multiroom.hal",
                         "com.autelhome.multiroom.app",
-                        "com.autelhome.multiroom.zone")
+                        "com.autelhome.multiroom.zone",
+                        "com.autelhome.multiroom.util")
                 .setConfigClass(ApplicationConfiguration.class)
                 .build();
 
@@ -56,6 +57,7 @@ public class MultiroomMPDApplication extends Application<ApplicationConfiguratio
 
         bootstrap.addBundle(new AssetsBundle());
         bootstrap.addBundle(new AssetsBundle("/docs", "/docs", "index.html", "docs"));
+
     }
 
     @Override

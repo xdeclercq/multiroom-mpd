@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Provider of player by its zone.
+ * Provider of players by their zone.
  *
  * @author xdeclercq
  */

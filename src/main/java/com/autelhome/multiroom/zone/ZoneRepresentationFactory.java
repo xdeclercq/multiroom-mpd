@@ -1,7 +1,6 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.hal.BaseRepresentationFactory;
-import com.autelhome.multiroom.hal.MultiroomNamespaceResolver;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
@@ -21,11 +20,10 @@ public class ZoneRepresentationFactory extends BaseRepresentationFactory
      * Constructor.
      *
      * @param uriInfo the {@link UriInfo} related to the request
-     * @param multiroomNamespaceResolver a {@link MultiroomNamespaceResolver} instance
      */
     @Inject
-    public ZoneRepresentationFactory(final UriInfo uriInfo, final MultiroomNamespaceResolver multiroomNamespaceResolver) {
-        super(uriInfo, multiroomNamespaceResolver);
+    public ZoneRepresentationFactory(final UriInfo uriInfo) {
+        super(uriInfo);
     }
 
     /**

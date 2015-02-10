@@ -38,9 +38,23 @@ public class PlayerRepresentationFactory extends BaseRepresentationFactory
                 .path(ZoneResource.class, "getPlayerResource")
                 .build(player.getZoneName());
 
-        final Representation representation = newRepresentation(self);
+        final URI play = getBaseUriBuilder()
+                .path(ZoneResource.class)
+                .path(ZoneResource.class, "getPlayerResource")
+                .path(PlayerResource.class, "play")
+                .build(player.getZoneName());
 
-        return representation;
+        final URI stop = getBaseUriBuilder()
+                .path(ZoneResource.class)
+                .path(ZoneResource.class, "getPlayerResource")
+                .path(PlayerResource.class, "stop")
+                .build(player.getZoneName());
+
+
+        return newRepresentation(self)
+                .withNamespace("mr", getMRNamespace())
+                .withLink("mr:play", play)
+                .withLink("mr:stop", stop);
     }
 
 }

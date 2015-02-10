@@ -1,7 +1,9 @@
 package com.autelhome.multiroom.util;
 
 /**
- * @xdeclercq
+ *
+ *
+ * @author xdeclercq
  */
 public interface Command {
 }

@@ -2,7 +2,6 @@ package com.autelhome.multiroom.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rx.Observer;
 import rx.subjects.PublishSubject;
 import rx.subjects.SerializedSubject;
 import rx.subjects.Subject;
@@ -26,49 +25,31 @@ public class HotAsyncEventBus implements EventBus {
 
     private final Map<Class, List<Subject<Command, Command>>> commandsStreams = new HashMap<>();
 
-    private static class SimpleListener implements Observer<Command> {
-
-        private final CommandHandler handler;
-
-        public SimpleListener(final CommandHandler handler) {
-            this.handler = handler;
-        }
-
-        @Override
-        public void onCompleted() {
-
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            LOGGER.error("Error on stream", e);
-        }
-
-        @Override
-        public void onNext(Command command) {
-            handler.handle(command);
-        }
-    }
-
 
     @Override
-    public <C extends Command>  void register(final CommandHandler<C> handler, Class<C> clazz) {
+    public <C extends Command>  void register(final CommandHandler<C> handler, final Class<C> clazz) {
         LOGGER.info("Registering a handler for command type {}", clazz);
         final Subject<Command, Command> commandStream = new SerializedSubject<>(PublishSubject.<Command>create());
         if (!commandsStreams.containsKey(clazz)) {
             commandsStreams.put(clazz, new ArrayList<>());
         }
-        List<Subject<Command, Command>> commandStreamsForClass = commandsStreams.get(clazz);
+        final List<Subject<Command, Command>> commandStreamsForClass = commandsStreams.get(clazz);
 
         commandStreamsForClass.add(commandStream);
-        commandStream.subscribe(new SimpleListener(handler));
+        commandStream.subscribe(new CommandStreamObserver(handler));
     }
 
     @Override
-    public void send(Command command) {
+    public void send(final Command command) {
         final Class<? extends Command> commandClass = command.getClass();
 
-        commandsStreams.get(commandClass)
+        final List<Subject<Command, Command>> commandStreamsForClass = commandsStreams.get(commandClass);
+
+        if (commandStreamsForClass == null) {
+            return;
+        }
+
+        commandStreamsForClass
                 .forEach(commandStream -> commandStream.onNext(command));
     }
 }
