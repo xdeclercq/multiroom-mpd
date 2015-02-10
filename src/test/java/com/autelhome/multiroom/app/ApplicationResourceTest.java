@@ -1,7 +1,6 @@
 package com.autelhome.multiroom.app;
 
 import com.autelhome.multiroom.hal.HalJsonMessageBodyWriter;
-import com.autelhome.multiroom.hal.MultiroomNamespaceResolver;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
@@ -12,31 +11,33 @@ import org.junit.Test;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import java.net.URI;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
-public class MultiroomMPDApplicationResourceTest {
+public class ApplicationResourceTest {
 
     private final UriInfo uriInfo = mock(UriInfo.class);
-    private final MultiroomNamespaceResolver multiroomNamespaceResolver = mock(MultiroomNamespaceResolver.class);
-    private final MultiroomMPDApplicationRepresentationFactory multiroomMPDApplicationRepresentationFactory = new MultiroomMPDApplicationRepresentationFactory(uriInfo, multiroomNamespaceResolver);
+    private final ApplicationRepresentationFactory applicationRepresentationFactory = new ApplicationRepresentationFactory(uriInfo);
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new MultiroomMPDApplicationResource(multiroomMPDApplicationRepresentationFactory))
+            .addResource(new ApplicationResource(applicationRepresentationFactory))
             .addProvider(HalJsonMessageBodyWriter.class)
             .build();
 
     @Test
     public void get() throws Exception {
-        String expected = Resources.toString(Resources.getResource(getClass(), "application.json"), Charsets.UTF_8);
+        final String expected = Resources.toString(Resources.getResource(getClass(), "application.json"), Charsets.UTF_8);
 
-        final UriBuilder uriBuilder = UriBuilder.fromUri("/");
+        final String baseURI = "http://localhost:1234";
+        final UriBuilder uriBuilder = UriBuilder.fromUri(baseURI);
         when(uriInfo.getBaseUriBuilder()).thenReturn(uriBuilder);
-        when(multiroomNamespaceResolver.resolve()).thenReturn("http://localhost/docs/{rel}");
+        when(uriInfo.getBaseUri()).thenReturn(URI.create(baseURI));
 
-        String actual = resources.client().resource("/").accept(RepresentationFactory.HAL_JSON).get(String.class);
+        final String actual = resources.client().resource("/").accept(RepresentationFactory.HAL_JSON).get(String.class);
 
         assertEquals(expected, actual, true);
     }

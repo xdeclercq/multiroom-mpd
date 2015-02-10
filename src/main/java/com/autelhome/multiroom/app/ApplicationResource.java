@@ -16,19 +16,19 @@ import javax.ws.rs.core.Response;
  */
 @Path("/")
 @Produces({RepresentationFactory.HAL_JSON})
-public class MultiroomMPDApplicationResource
+public class ApplicationResource
 {
 
-    private final MultiroomMPDApplicationRepresentationFactory multiroomMPDApplicationRepresentationFactory;
+    private final ApplicationRepresentationFactory applicationRepresentationFactory;
 
     /**
      * Constructor.
      *
-     * @param multiroomMPDApplicationRepresentationFactory a {@link MultiroomMPDApplicationRepresentationFactory} isntance
+     * @param applicationRepresentationFactory a {@link ApplicationRepresentationFactory} isntance
      */
     @Inject
-    public MultiroomMPDApplicationResource(final MultiroomMPDApplicationRepresentationFactory multiroomMPDApplicationRepresentationFactory) {
-        this.multiroomMPDApplicationRepresentationFactory = multiroomMPDApplicationRepresentationFactory;
+    public ApplicationResource(final ApplicationRepresentationFactory applicationRepresentationFactory) {
+        this.applicationRepresentationFactory = applicationRepresentationFactory;
     }
 
     /**
@@ -41,7 +41,7 @@ public class MultiroomMPDApplicationResource
      */
     @GET
     public Response get() {
-        Representation representation = multiroomMPDApplicationRepresentationFactory
+        final Representation representation = applicationRepresentationFactory
                 .newRepresentation();
         return Response.ok(representation).build();
     }

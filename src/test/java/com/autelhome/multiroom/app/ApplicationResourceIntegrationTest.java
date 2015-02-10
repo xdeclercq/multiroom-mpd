@@ -9,19 +9,19 @@ import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 
-public class MultiroomMPDApplicationResourceIntegrationTest {
+public class ApplicationResourceIntegrationTest {
 
 	@Rule
-	public final DropwizardAppRule<MultiroomMPDConfiguration> rule =
+	public final DropwizardAppRule<ApplicationConfiguration> rule =
 			new DropwizardAppRule<>(MultiroomMPDApplication.class, "src/test/resources/com/autelhome/multiroom/app/configuration.yml",
 					ConfigOverride.config("server.connector.port", "8001"));
 
 	@Test
 	public void get() throws Exception {
 
-		String url = String.format("http://localhost:%d/multiroom-mpd/api/", rule.getLocalPort());
-		String docsUrl = String.format("http://localhost:%d/multiroom-mpd/docs/#/relations/{rel}", rule.getLocalPort());
-		String zonesUrl = String.format("http://localhost:%d/multiroom-mpd/api/zones", rule.getLocalPort());
+        final String url = String.format("http://localhost:%d/multiroom-mpd/api/", rule.getLocalPort());
+        final String docsUrl = String.format("http://localhost:%d/multiroom-mpd/docs/#/relations/{rel}", rule.getLocalPort());
+        final String zonesUrl = String.format("http://localhost:%d/multiroom-mpd/api/zones", rule.getLocalPort());
 
 		when().get(url)
 			.then().assertThat()

@@ -18,10 +18,10 @@ public class MultiroomMPDApplicationTest {
     private final Environment environment = mock(Environment.class);
     private final JerseyEnvironment jersey = mock(JerseyEnvironment.class);
     private final MutableServletContextHandler contextHandler = mock(MutableServletContextHandler.class);
-    private final GuiceBundle.Builder<MultiroomMPDConfiguration> guiceBuilder = mock(GuiceBundle.Builder.class);
-    private final Bootstrap<MultiroomMPDConfiguration> bootstrap = mock(Bootstrap.class);
+    private final GuiceBundle.Builder<ApplicationConfiguration> guiceBuilder = mock(GuiceBundle.Builder.class);
+    private final Bootstrap<ApplicationConfiguration> bootstrap = mock(Bootstrap.class);
     private final ZonesConfiguration zonesConfiguration = new ZonesConfiguration();
-    private final MultiroomMPDConfiguration configuration = new MultiroomMPDConfiguration(zonesConfiguration);
+    private final ApplicationConfiguration configuration = new ApplicationConfiguration("mpdhost", zonesConfiguration);
 
     private final MultiroomMPDApplication testSubject = new MultiroomMPDApplication(guiceBuilder);
 
@@ -40,11 +40,11 @@ public class MultiroomMPDApplicationTest {
     @Test
     public void initialize() throws Exception {
 
-        final GuiceBundle<MultiroomMPDConfiguration> guiceBundle = mock(GuiceBundle.class);
+        final GuiceBundle<ApplicationConfiguration> guiceBundle = mock(GuiceBundle.class);
         when(guiceBuilder.build()).thenReturn(guiceBundle);
         when(guiceBuilder.addModule(any(Module.class))).thenReturn(guiceBuilder);
-        when(guiceBuilder.enableAutoConfig(anyString(), anyString(), anyString())).thenReturn(guiceBuilder);
-        when(guiceBuilder.setConfigClass(MultiroomMPDConfiguration.class)).thenReturn(guiceBuilder);
+        when(guiceBuilder.enableAutoConfig(anyString(), anyString(), anyString(), anyString())).thenReturn(guiceBuilder);
+        when(guiceBuilder.setConfigClass(ApplicationConfiguration.class)).thenReturn(guiceBuilder);
 
         testSubject.initialize(bootstrap);
 

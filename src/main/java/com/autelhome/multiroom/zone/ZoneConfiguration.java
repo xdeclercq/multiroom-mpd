@@ -20,7 +20,7 @@ public class ZoneConfiguration
      * @param mpdPort the MPD instance port number
      */
     @JsonCreator
-    public ZoneConfiguration(@JsonProperty("name") String name, @JsonProperty("mpdPort") int mpdPort)
+    public ZoneConfiguration(@JsonProperty("name") final String name, @JsonProperty("mpdPort") final int mpdPort)
     {
         this.name = name;
         this.mpdPort = mpdPort;
@@ -31,7 +31,7 @@ public class ZoneConfiguration
         return name;
     }
 
-    public int getMPDPort()
+     public int getMPDPort()
     {
         return mpdPort;
     }
@@ -69,8 +69,16 @@ public class ZoneConfiguration
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
+        int result = name == null ? 0 : name.hashCode();
         result = 31 * result + mpdPort;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ZoneConfiguration{" +
+                "name='" + name + '\'' +
+                ", mpdPort=" + mpdPort +
+                '}';
     }
 }

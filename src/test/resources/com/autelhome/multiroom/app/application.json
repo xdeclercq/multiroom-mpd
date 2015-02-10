@@ -1,15 +1,15 @@
 {
   "_links": {
     "curies": {
-      "href": "http://localhost/docs/{rel}",
+      "href": "http://localhost:1234/multiroom-mpd/docs/#/relations/{rel}",
       "name": "mr",
       "templated": true
     },
     "self": {
-      "href": "/"
+      "href": "http://localhost:1234/"
     },
     "mr:zones": {
-      "href": "/zones"
+      "href": "http://localhost:1234/zones"
     }
   }
 }

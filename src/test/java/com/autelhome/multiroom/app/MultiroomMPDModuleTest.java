@@ -8,16 +8,16 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class MultiroomMPDModuleTest {
 
-    private final MultiroomMPDModule testSubject = new MultiroomMPDModule();
+    private final ApplicationModule testSubject = new ApplicationModule();
 
     @Test
     public void getZonesConfiguration() throws Exception {
         final ZonesConfiguration expected = new ZonesConfiguration();
         expected.add(new ZoneConfiguration("Kitchen", 1234));
         expected.add(new ZoneConfiguration("Bedroom", 5678));
-        final MultiroomMPDConfiguration configuration = new MultiroomMPDConfiguration(expected);
+        final ApplicationConfiguration configuration = new ApplicationConfiguration("mpdhost", expected);
 
-        ZonesConfiguration actual = testSubject.getZonesConfiguration(configuration);
+        final ZonesConfiguration actual = testSubject.getZonesConfiguration(configuration);
 
         assertThat(actual).isEqualTo(expected);
     }

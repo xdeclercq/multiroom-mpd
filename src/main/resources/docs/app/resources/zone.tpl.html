@@ -1,4 +1,4 @@
-<div class="panel">
+<div>
   <h3>Resource 'zone'</h3>
 
   <p>A zone.</p>
@@ -9,8 +9,17 @@
   </ul>
 
   <h4>Example</h4>
-  <pre>
+  <pre class="panel">
 {
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/multiroom-mpd/api/zones/Kitchen"
+    },
+    "mr:player": {
+      "href": "http://localhost:8080/multiroom-mpd/api/zones/Kitchen/player"
+    }
+  },
+
   "name": "Kitchen"
 }
   </pre>

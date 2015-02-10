@@ -9,8 +9,7 @@ import java.util.SortedSet;
  *
  * @author xdeclercq
  */
-public class ZoneService
-{
+public class ZoneService {
 
     private final ZonesConfiguration zonesConfiguration;
 
@@ -20,8 +19,7 @@ public class ZoneService
      * @param zonesConfiguration the {@link ZonesConfiguration}
      */
     @Inject
-    public ZoneService(final ZonesConfiguration zonesConfiguration)
-    {
+    public ZoneService(final ZonesConfiguration zonesConfiguration) {
         this.zonesConfiguration = zonesConfiguration;
     }
 
@@ -30,9 +28,18 @@ public class ZoneService
      *
      * @return the sorted set of {@link Zone}s.
      */
-    public SortedSet<Zone> getAll()
-    {
+    public SortedSet<Zone> getAll() {
         return zonesConfiguration.toZones();
+    }
+
+    /**
+     * Retrieves a zone by its name.
+     *
+     * @param zoneName a zone name
+     * @return the zone named {@code zoneName}
+     */
+    public Zone getByName(final String zoneName) {
+        return getAll().stream().filter(zone -> zoneName.equals(zone.getName())).findFirst().get();
     }
 
 }

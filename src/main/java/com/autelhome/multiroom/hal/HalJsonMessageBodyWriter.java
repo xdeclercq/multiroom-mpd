@@ -23,25 +23,22 @@ import java.lang.reflect.Type;
  */
 @Provider
 @Produces({RepresentationFactory.HAL_JSON})
-public class HalJsonMessageBodyWriter implements MessageBodyWriter {
+public class HalJsonMessageBodyWriter implements MessageBodyWriter<ReadableRepresentation> {
 
     private static final MediaType HAL_JSON_TYPE = new MediaType("application", "hal+json");
 
     @Override
-    public boolean isWriteable(Class aClass, Type type, Annotation[] annotations, MediaType mediaType) {
-        return ReadableRepresentation.class.isAssignableFrom(aClass) && mediaType.isCompatible(HAL_JSON_TYPE);
+    public boolean isWriteable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
+        return ReadableRepresentation.class.isAssignableFrom(type) && mediaType.isCompatible(HAL_JSON_TYPE);
     }
 
     @Override
-    public long getSize(Object o, Class aClass, Type type, Annotation[] annotations, MediaType mediaType) {
-        ReadableRepresentation representation = (ReadableRepresentation) o;
+    public long getSize(final ReadableRepresentation representation, final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
         return representation.toString(mediaType.toString()).length();
     }
 
     @Override
-    public void writeTo(Object o, Class aClass, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap multivaluedMap, OutputStream outputStream) throws IOException, WebApplicationException
-    {
-        ReadableRepresentation representation = (ReadableRepresentation) o;
-        representation.toString(mediaType.toString(), new OutputStreamWriter(outputStream, Charsets.UTF_8));
+    public void writeTo(final ReadableRepresentation representation, final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType, final MultivaluedMap<String, Object> httpHeaders, final OutputStream entityStream) throws IOException, WebApplicationException {
+        representation.toString(mediaType.toString(), new OutputStreamWriter(entityStream, Charsets.UTF_8));
     }
 }

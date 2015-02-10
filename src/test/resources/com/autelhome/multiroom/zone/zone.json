@@ -1,0 +1,16 @@
+{
+  "_links": {
+    "curies": {
+      "href": "http://server:374/multiroom-mpd/docs/#/relations/{rel}",
+      "name": "mr",
+      "templated": true
+    },
+    "self": {
+      "href": "http://server:374/api/zones/Bedroom"
+    },
+    "mr:player": {
+      "href": "http://server:374/api/zones/Bedroom/player"
+    }
+  },
+  "name": "Bedroom"
+}

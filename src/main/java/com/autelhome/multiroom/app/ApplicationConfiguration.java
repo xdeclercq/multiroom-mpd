@@ -10,21 +10,33 @@ import io.dropwizard.Configuration;
  *
  * @author xdeclercq
  */
-public class MultiroomMPDConfiguration extends Configuration
+public class ApplicationConfiguration extends Configuration
 {
     private final ZonesConfiguration zonesConfiguration;
+    private final String mpdHost;
 
     /**
      * Constructor.
      *
+     * @param mpdHost the MPD hostname or IP address
      * @param zonesConfiguration the {@link ZonesConfiguration}
      */
     @JsonCreator
-    public MultiroomMPDConfiguration(@JsonProperty("zones") ZonesConfiguration zonesConfiguration)
+    public ApplicationConfiguration(@JsonProperty("mpdHost") final String mpdHost,
+                                    @JsonProperty("zones") final ZonesConfiguration zonesConfiguration)
     {
+        this.mpdHost = mpdHost;
         this.zonesConfiguration = zonesConfiguration;
     }
 
+    /**
+     * Returns the mpd host.
+     *
+     * @return the mpd host
+     */
+    public String getMPDHost() {
+        return mpdHost;
+    }
 
     /**
      * Returns the zones configuration.
@@ -35,4 +47,5 @@ public class MultiroomMPDConfiguration extends Configuration
     {
         return zonesConfiguration;
     }
+
 }

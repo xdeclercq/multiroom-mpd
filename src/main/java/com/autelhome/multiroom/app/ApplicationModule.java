@@ -1,5 +1,7 @@
 package com.autelhome.multiroom.app;
 
+import com.autelhome.multiroom.util.EventBus;
+import com.autelhome.multiroom.util.HotAsyncEventBus;
 import com.autelhome.multiroom.zone.ZonesConfiguration;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -9,11 +11,11 @@ import com.google.inject.Provides;
  *
  * @author xdeclercq
  */
-public class MultiroomMPDModule extends AbstractModule {
+public class ApplicationModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        // do nothing
+        bind(EventBus.class).toInstance(new HotAsyncEventBus());
     }
 
     /**
@@ -23,7 +25,7 @@ public class MultiroomMPDModule extends AbstractModule {
      * @return the zones configuration
      */
     @Provides
-    public ZonesConfiguration getZonesConfiguration(MultiroomMPDConfiguration configuration) {
+    public ZonesConfiguration getZonesConfiguration(final ApplicationConfiguration configuration) {
         return configuration.getZonesConfiguration();
     }
 }

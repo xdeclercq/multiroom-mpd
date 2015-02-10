@@ -1,12 +1,10 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.hal.BaseRepresentationFactory;
-import com.autelhome.multiroom.hal.MultiroomNamespaceResolver;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
 
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Collection;
@@ -18,24 +16,19 @@ import java.util.Collection;
  */
 public class ZonesRepresentationFactory extends BaseRepresentationFactory
 {
-    private final UriInfo uriInfo;
     private final ZoneRepresentationFactory zoneRepresentationFactory;
-    private final MultiroomNamespaceResolver multiroomNamespaceResolver;
 
     /**
      * Constructor.
      *
      * @param uriInfo the {@link UriInfo} related to the request
      * @param zoneRepresentationFactory an {@link ZoneRepresentationFactory} instance
-     * @param multiroomNamespaceResolver a {@link MultiroomNamespaceResolver} instance
      */
     @Inject
-    public ZonesRepresentationFactory(final UriInfo uriInfo, final ZoneRepresentationFactory zoneRepresentationFactory, MultiroomNamespaceResolver multiroomNamespaceResolver)
+    public ZonesRepresentationFactory(final UriInfo uriInfo, final ZoneRepresentationFactory zoneRepresentationFactory)
     {
-        super();
-        this.uriInfo = uriInfo;
+        super(uriInfo);
         this.zoneRepresentationFactory = zoneRepresentationFactory;
-        this.multiroomNamespaceResolver = multiroomNamespaceResolver;
     }
 
     /**
@@ -46,13 +39,11 @@ public class ZonesRepresentationFactory extends BaseRepresentationFactory
      */
     public Representation newRepresentation(final Collection<Zone> zones)
     {
-        UriBuilder selfUriBuilder = uriInfo.getBaseUriBuilder();
-        URI self = selfUriBuilder.path(ZoneResource.class).build();
+        final URI self = getBaseUriBuilder().path(ZoneResource.class).build();
 
         final Representation representation = newRepresentation(self);
 
-        final String mrNamespace = multiroomNamespaceResolver.resolve();
-        representation.withNamespace("mr", mrNamespace);
+        representation.withNamespace("mr", getMRNamespace());
 
         zones.forEach(
                 (zone) -> representation.withRepresentation("mr:zone", zoneRepresentationFactory.newRepresentation(zone))

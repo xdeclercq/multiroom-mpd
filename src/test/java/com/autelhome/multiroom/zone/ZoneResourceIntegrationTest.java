@@ -1,7 +1,7 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.app.MultiroomMPDApplication;
-import com.autelhome.multiroom.app.MultiroomMPDConfiguration;
+import com.autelhome.multiroom.app.ApplicationConfiguration;
 import io.dropwizard.testing.junit.ConfigOverride;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Rule;
@@ -14,15 +14,15 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class ZoneResourceIntegrationTest {
 
 	@Rule
-	public final DropwizardAppRule<MultiroomMPDConfiguration> rule =
+	public final DropwizardAppRule<ApplicationConfiguration> rule =
 			new DropwizardAppRule<>(MultiroomMPDApplication.class, "src/test/resources/com/autelhome/multiroom/app/configuration.yml",
 					ConfigOverride.config("server.connector.port", "8000"));
 
 	@Test
 	public void get() throws Exception {
 
-		String url = String.format("http://localhost:%d/multiroom-mpd/api/zones", rule.getLocalPort());
-		String docsUrl = String.format("http://localhost:%d/multiroom-mpd/docs/#/relations/{rel}", rule.getLocalPort());
+        final String url = String.format("http://localhost:%d/multiroom-mpd/api/zones", rule.getLocalPort());
+        final String docsUrl = String.format("http://localhost:%d/multiroom-mpd/docs/#/relations/{rel}", rule.getLocalPort());
 
 		when().get(url)
 			.then().assertThat()
