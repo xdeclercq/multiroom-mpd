@@ -1,8 +1,11 @@
 <div>
   <h3>Resource 'zones'</h3>
 
-  <p>List of zones.</p>
+  <p>Collection of zones resource.</p>
   <p>Embeds representations of <a ui-sref="root.resources.details({ name: 'zone' })">zone</a> resources.</p>
+
+  <h4>Properties</h4>
+  <p>This resource has no properties.</p>
 
   <h4>Links</h4>
   <table>
@@ -19,7 +22,23 @@
         <td>self</td>
         <td>The list of zones</td>
         <td>GET</td>
-        <td>No.</td>
+        <td>No</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Embedded</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>Relation</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a ui-sref="root.relations.details({ name: 'mr-zone' })">mr:zone</a></td>
+        <td>The <a ui-sref="root.resources.details({ name: 'zone' })">zone</a> resources</td>
       </tr>
     </tbody>
   </table>
@@ -29,12 +48,12 @@
 {
   "_links": {
     "curies": {
-        "href": "http://localhost:8080/multiroom-mpd/docs/#/relations/{rel}",
-        "name": "mr",
-        "templated": true
+      "href": "http://localhost:8080/multiroom-mpd/docs/#/relations/{rel}",
+      "name": "mr",
+      "templated": true
     },
     "self": {
-      "href": "http://localhost:8080/multiroom-mpd/api/zones"
+      "href": "http://localhost:8080/multiroom-mpd/api/zones/"
     }
   },
   "_embedded": {
@@ -63,6 +82,5 @@
       }
     ]
   }
-}
-  </pre>
+}</pre>
 </div>

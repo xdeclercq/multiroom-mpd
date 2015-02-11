@@ -6,10 +6,10 @@
       "templated": true
     },
     "self": {
-      "href": "http://localhost:1234/"
+      "href": "http://localhost:1234"
     },
     "mr:zones": {
-      "href": "http://localhost:1234/zones"
+      "href": "http://localhost:1234/zones/"
     }
   }
 }

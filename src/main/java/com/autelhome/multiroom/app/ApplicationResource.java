@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
  *
  * @author xdeclercq
  */
-@Path("/")
+@Path("")
 @Produces({RepresentationFactory.HAL_JSON})
 public class ApplicationResource
 {

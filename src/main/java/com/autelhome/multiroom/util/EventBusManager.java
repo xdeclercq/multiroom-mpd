@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.util;
 
+import com.autelhome.multiroom.player.PauseCommand;
 import com.autelhome.multiroom.player.PlayCommand;
 import com.autelhome.multiroom.player.PlayerCommandHandlers;
 import com.autelhome.multiroom.player.StopCommand;
@@ -33,8 +34,8 @@ public class EventBusManager implements Managed {
     @Override
     public void start() throws Exception {
         eventBus.register(playerCommandHandlers::handlePlay, PlayCommand.class);
-
         eventBus.register(playerCommandHandlers::handleStop, StopCommand.class);
+        eventBus.register(playerCommandHandlers::handlePause, PauseCommand.class);
     }
 
     @Override

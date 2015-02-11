@@ -34,13 +34,13 @@ public class ZoneRepresentationFactory extends BaseRepresentationFactory
      */
     public Representation newRepresentation(final Zone zone) {
         final URI self = getBaseUriBuilder()
-                .path(ZoneResource.class)
-                .path(ZoneResource.class, "getByName")
+                .path(ZonesResource.class)
+                .path(ZonesResource.class, "getByName")
                 .build(zone.getName());
 
         final URI player = getBaseUriBuilder()
-                .path(ZoneResource.class)
-                .path(ZoneResource.class, "getPlayerResource")
+                .path(ZonesResource.class)
+                .path(ZonesResource.class, "getPlayerResource")
                 .build(zone.getName());
 
         return newRepresentation(self)

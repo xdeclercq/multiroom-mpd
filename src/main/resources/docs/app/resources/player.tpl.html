@@ -1,0 +1,86 @@
+<div>
+  <h3>Resource 'player'</h3>
+
+  <p>A player of a zone.</p>
+
+  <h4>Properties</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>name</td>
+        <td>The zone name</td>
+        <td>String</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Links</h4>
+  <table>
+    <thead>
+    <tr>
+      <th>Relation</th>
+      <th>Description</th>
+      <th>Methods</th>
+      <th>Templated</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>self</td>
+      <td>The player</td>
+      <td>GET</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><a ui-sref="root.relations.details({ name: 'mr-play' })">mr:play</a></td>
+      <td>A link to play music and retrieve the player resource</td>
+      <td>POST</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><a ui-sref="root.relations.details({ name: 'mr-pause' })">mr:pause</a></td>
+      <td>A link to put the music on hold and retrieve the player resource</td>
+      <td>POST</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><a ui-sref="root.relations.details({ name: 'mr-stop' })">mr:stop</a></td>
+      <td>A link to stop the player and retrieve the player resource</td>
+      <td>POST</td>
+      <td>No</td>
+    </tr>
+    </tbody>
+  </table>
+
+
+  <h4>Example</h4>
+  <pre class="panel">
+{
+  "_links": {
+    "curies": {
+      "href": "http://localhost:8080/multiroom-mpd/docs/#/relations/{rel}",
+      "name": "mr",
+    "templated": true
+    },
+    "self": {
+      "href": "http://localhost:8080/multiroom-mpd/api/zones/Bathroom/player"
+    },
+    "mr:play": {
+      "href": "http://localhost:8080/multiroom-mpd/api/zones/Bathroom/player/play"
+    },
+    "mr:pause": {
+      "href": "http://localhost:8080/multiroom-mpd/api/zones/Bathroom/player/pause"
+    },
+    "mr:stop": {
+      "href": "http://localhost:8080/multiroom-mpd/api/zones/Bathroom/player/stop"
+    }
+  }
+}</pre>
+</div>

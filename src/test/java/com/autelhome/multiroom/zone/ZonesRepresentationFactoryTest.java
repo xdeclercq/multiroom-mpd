@@ -37,7 +37,7 @@ public class ZonesRepresentationFactoryTest {
         when(uriInfo.getBaseUri()).thenReturn(URI.create("http://localhost:1234/"));
 
         final String expected = representationFactory
-                .newRepresentation(URI.create("/zones"))
+                .newRepresentation(URI.create("/zones/"))
                 .withNamespace("mr", mrNamespace)
                 .withRepresentation("mr:zone", zone1Representation)
                 .withRepresentation("mr:zone", zone2Representation)

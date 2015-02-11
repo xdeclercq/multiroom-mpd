@@ -1,7 +1,7 @@
 package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.hal.BaseRepresentationFactory;
-import com.autelhome.multiroom.zone.ZoneResource;
+import com.autelhome.multiroom.zone.ZonesResource;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
 
@@ -33,20 +33,27 @@ public class PlayerRepresentationFactory extends BaseRepresentationFactory
      * @return a new {@link Representation} of the player
      */
     public Representation newRepresentation(final Player player) {
+        final String getPlayerResourceMethod = "getPlayerResource";
         final URI self = getBaseUriBuilder()
-                .path(ZoneResource.class)
-                .path(ZoneResource.class, "getPlayerResource")
+                .path(ZonesResource.class)
+                .path(ZonesResource.class, getPlayerResourceMethod)
                 .build(player.getZoneName());
 
         final URI play = getBaseUriBuilder()
-                .path(ZoneResource.class)
-                .path(ZoneResource.class, "getPlayerResource")
+                .path(ZonesResource.class)
+                .path(ZonesResource.class, getPlayerResourceMethod)
                 .path(PlayerResource.class, "play")
                 .build(player.getZoneName());
 
+        final URI pause = getBaseUriBuilder()
+                .path(ZonesResource.class)
+                .path(ZonesResource.class, getPlayerResourceMethod)
+                .path(PlayerResource.class, "pause")
+                .build(player.getZoneName());
+
         final URI stop = getBaseUriBuilder()
-                .path(ZoneResource.class)
-                .path(ZoneResource.class, "getPlayerResource")
+                .path(ZonesResource.class)
+                .path(ZonesResource.class, getPlayerResourceMethod)
                 .path(PlayerResource.class, "stop")
                 .build(player.getZoneName());
 
@@ -54,6 +61,7 @@ public class PlayerRepresentationFactory extends BaseRepresentationFactory
         return newRepresentation(self)
                 .withNamespace("mr", getMRNamespace())
                 .withLink("mr:play", play)
+                .withLink("mr:pause", pause)
                 .withLink("mr:stop", stop);
     }
 

@@ -4,6 +4,7 @@ import com.autelhome.multiroom.mpd.MPDPool;
 import com.autelhome.multiroom.zone.Zone;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.bff.javampd.Player;
 import org.bff.javampd.exception.MPDPlayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +32,33 @@ public class PlayerCommandHandlers {
      */
     public void handlePlay(final PlayCommand playCommand) {
         final Zone zone = playCommand.getZone();
-        final org.bff.javampd.Player mpdPlayer = mpdPool.getMPDPlayer(zone);
+        final Player mpdPlayer = mpdPool.getMPDPlayer(zone);
         try {
             mpdPlayer.play();
             LOGGER.info("zone {} - play", zone.getName());
         } catch (MPDPlayerException e) {
             LOGGER.error("Error when handling play command for zone {}", zone.getName());
+        }
+    }
+
+    /**
+     * Issues a pause command to the MPD player associated to zone {@code zone}.
+     *
+     * @param pauseCommand a pause command
+     */
+    public void handlePause(final PauseCommand pauseCommand) {
+        final Zone zone = pauseCommand.getZone();
+        final Player mpdPlayer = mpdPool.getMPDPlayer(zone);
+        try {
+            final Player.Status mpdPlayerStatus = mpdPlayer.getStatus();
+            if (!Player.Status.STATUS_PLAYING.equals(mpdPlayerStatus)) {
+                LOGGER.warn("zone {} - Unable to handle pause command: player is playing");
+                return;
+            }
+            mpdPlayer.pause();
+            LOGGER.info("zone {} - pause", zone.getName());
+        } catch (MPDPlayerException e) {
+            LOGGER.error("Error when handling pause command for zone {}", zone.getName());
         }
     }
 
@@ -47,7 +69,7 @@ public class PlayerCommandHandlers {
      */
     public void handleStop(final StopCommand stopCommand) {
         final Zone zone = stopCommand.getZone();
-        final org.bff.javampd.Player mpdPlayer = mpdPool.getMPDPlayer(zone);
+        final Player mpdPlayer = mpdPool.getMPDPlayer(zone);
         try {
             mpdPlayer.stop();
             LOGGER.info("zone {} - stop", zone.getName());

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
-public class ZoneResourceTest {
+public class ZonesResourceTest {
 
     private final ZoneService zoneService = mock(ZoneService.class);
     private final UriInfo uriInfo = mock(UriInfo.class);
@@ -31,7 +31,7 @@ public class ZoneResourceTest {
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new ZoneResource(zoneService, zonesRepresentationFactory, zoneRepresentationFactory, playerResourceFactory))
+            .addResource(new ZonesResource(zoneService, zonesRepresentationFactory, zoneRepresentationFactory, playerResourceFactory))
             .addProvider(HalJsonMessageBodyWriter.class)
             .build();
 

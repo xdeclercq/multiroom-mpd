@@ -39,7 +39,7 @@ public class ZonesRepresentationFactory extends BaseRepresentationFactory
      */
     public Representation newRepresentation(final Collection<Zone> zones)
     {
-        final URI self = getBaseUriBuilder().path(ZoneResource.class).build();
+        final URI self = getBaseUriBuilder().path(ZonesResource.class).build();
 
         final Representation representation = newRepresentation(self);
 

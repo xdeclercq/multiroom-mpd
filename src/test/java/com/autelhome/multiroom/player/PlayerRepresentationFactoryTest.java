@@ -26,6 +26,7 @@ public class PlayerRepresentationFactoryTest {
         when(uriInfo.getBaseUri()).thenReturn(URI.create(baseURI));
         final URI self = URI.create(baseURI + "/zones/myZone/player");
         final URI play = URI.create(baseURI + "/zones/myZone/player/play");
+        final URI pause = URI.create(baseURI + "/zones/myZone/player/pause");
         final URI stop = URI.create(baseURI + "/zones/myZone/player/stop");
         when(uriInfo.getBaseUriBuilder()).thenAnswer(i -> UriBuilder.fromPath(baseURI));
         final String expected = representationFactory
@@ -33,6 +34,7 @@ public class PlayerRepresentationFactoryTest {
                 .newRepresentation(self)
                 .withNamespace("mr", "http://myserver:1234/multiroom-mpd/docs/#/relations/{rel}")
                 .withLink("mr:play", play)
+                .withLink("mr:pause", pause)
                 .withLink("mr:stop", stop)
                 .toString(RepresentationFactory.HAL_JSON);
 
