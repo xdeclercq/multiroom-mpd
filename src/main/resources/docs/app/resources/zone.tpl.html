@@ -4,9 +4,49 @@
   <p>A zone.</p>
 
   <h4>Properties</h4>
-  <ul>
-    <li>name: the zone name</li>
-  </ul>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>name</td>
+        <td>The zone name</td>
+        <td>String</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Links</h4>
+  <table>
+    <thead>
+    <tr>
+      <th>Relation</th>
+      <th>Description</th>
+      <th>Methods</th>
+      <th>Templated</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>self</td>
+      <td>The zone</td>
+      <td>GET</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><a ui-sref="root.relations.details({ name: 'mr-player' })">mr:player</a></td>
+      <td>A link to the <a ui-sref="root.resources.details({ name: 'player' })">player</a> resource of this zone</td>
+      <td>GET</td>
+      <td>No</td>
+    </tr>
+    </tbody>
+  </table>
+
 
   <h4>Example</h4>
   <pre class="panel">
@@ -19,8 +59,6 @@
       "href": "http://localhost:8080/multiroom-mpd/api/zones/Kitchen/player"
     }
   },
-
   "name": "Kitchen"
-}
-  </pre>
+}</pre>
 </div>

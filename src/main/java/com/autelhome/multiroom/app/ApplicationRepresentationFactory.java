@@ -1,7 +1,7 @@
 package com.autelhome.multiroom.app;
 
 import com.autelhome.multiroom.hal.BaseRepresentationFactory;
-import com.autelhome.multiroom.zone.ZoneResource;
+import com.autelhome.multiroom.zone.ZonesResource;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
@@ -30,9 +30,11 @@ public class ApplicationRepresentationFactory extends BaseRepresentationFactory 
     @Override
     public Representation newRepresentation()
     {
-        final URI self = getBaseUriBuilder().path(ApplicationResource.class).build();
+        final String selfStr = getBaseUriBuilder().path(ApplicationResource.class).build().toString();
 
-        final URI zonesURI = getBaseUriBuilder().path(ZoneResource.class).build();
+        final URI self = URI.create(selfStr.charAt(selfStr.length()-1) == '/' ? selfStr.substring(0, selfStr.length() - 1) : selfStr);
+
+        final URI zonesURI = getBaseUriBuilder().path(ZonesResource.class).build();
 
         return newRepresentation(self)
                 .withNamespace("mr", getMRNamespace())

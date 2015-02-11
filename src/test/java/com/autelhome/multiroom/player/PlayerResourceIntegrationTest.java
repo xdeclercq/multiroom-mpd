@@ -14,7 +14,19 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 public class PlayerResourceIntegrationTest {
 
-	@Rule
+    private static final String DOCS_URL_FORMAT = "http://localhost:%d/multiroom-mpd/docs/#/relations/{rel}";
+    private static final String PLAYER_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player";
+    private static final String PLAY_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player/play";
+    private static final String PAUSE_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player/pause";
+    private static final String STOP_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player/stop";
+    private static final String LINKS_SELF_HREF_PATH = "_links.self.href";
+    private static final String LINKS_CURIES_NAME_PATH = "_links.curies.name";
+    private static final String LINKS_CURIES_HREF_PATH = "_links.curies.href";
+    private static final String LINKS_CURIES_TEMPLATED_PATH = "_links.curies.templated";
+    private static final String LINKS_MR_PLAY_HREF_PATH = "_links.\"mr:play\".href";
+    private static final String LINKS_MR_PAUSE_HREF_PATH = "_links.\"mr:pause\".href";
+    private static final String LINKS_MR_STOP_HREF_PATH = "_links.\"mr:stop\".href";
+    @Rule
 	public final DropwizardAppRule<ApplicationConfiguration> rule =
 			new DropwizardAppRule<>(MultiroomMPDApplication.class, "src/test/resources/com/autelhome/multiroom/app/configuration.yml",
 					ConfigOverride.config("server.connector.port", "8001"));
@@ -22,57 +34,84 @@ public class PlayerResourceIntegrationTest {
     @Test
 	public void get() throws Exception {
 
-        final String url = String.format("http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player", rule.getLocalPort());
-        final String docsUrl = String.format("http://localhost:%d/multiroom-mpd/docs/#/relations/{rel}", rule.getLocalPort());
-        final String playUrl = String.format("http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player/play", rule.getLocalPort());
-        final String stopUrl = String.format("http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player/stop", rule.getLocalPort());
+        final String url = String.format(PLAYER_URL_FORMAT, rule.getLocalPort());
+        final String docsUrl = String.format(DOCS_URL_FORMAT, rule.getLocalPort());
+        final String playUrl = String.format(PLAY_URL_FORMAT, rule.getLocalPort());
+        final String pauseUrl = String.format(PAUSE_URL_FORMAT, rule.getLocalPort());
+        final String stopUrl = String.format(STOP_URL_FORMAT, rule.getLocalPort());
 
 		when().get(url)
 			.then().assertThat()
             .statusCode(is(equalTo(200)))
-			.and().body("_links.self.href", is(equalTo(url)))
-			.and().body("_links.curies.name", is(equalTo("mr")))
-            .and().body("_links.curies.href", is(equalTo(docsUrl)))
-            .and().body("_links.curies.templated", is(equalTo(true)))
-            .and().body("_links.\"mr:play\".href", is(equalTo(playUrl)))
-            .and().body("_links.\"mr:stop\".href", is(equalTo(stopUrl)));
+			.and().body(LINKS_SELF_HREF_PATH, is(equalTo(url)))
+			.and().body(LINKS_CURIES_NAME_PATH, is(equalTo("mr")))
+            .and().body(LINKS_CURIES_HREF_PATH, is(equalTo(docsUrl)))
+            .and().body(LINKS_CURIES_TEMPLATED_PATH, is(equalTo(true)))
+            .and().body(LINKS_MR_PLAY_HREF_PATH, is(equalTo(playUrl)))
+            .and().body(LINKS_MR_PAUSE_HREF_PATH, is(equalTo(pauseUrl)))
+            .and().body(LINKS_MR_STOP_HREF_PATH, is(equalTo(stopUrl)));
 	}
 
     @Test
     public void play() throws Exception {
 
-        final String url = String.format("http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player/play", rule.getLocalPort());
-        final String docsUrl = String.format("http://localhost:%d/multiroom-mpd/docs/#/relations/{rel}", rule.getLocalPort());
-        final String playerUrl = String.format("http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player", rule.getLocalPort());
-        final String stopUrl = String.format("http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player/stop", rule.getLocalPort());
+        final String url = String.format(PLAY_URL_FORMAT, rule.getLocalPort());
+        final String docsUrl = String.format(DOCS_URL_FORMAT, rule.getLocalPort());
+        final String playerUrl = String.format(PLAYER_URL_FORMAT, rule.getLocalPort());
+        final String pauseUrl = String.format(PAUSE_URL_FORMAT, rule.getLocalPort());
+        final String stopUrl = String.format(STOP_URL_FORMAT, rule.getLocalPort());
 
         when().post(url)
                 .then().assertThat()
                 .statusCode(is(equalTo(202)))
-                .and().body("_links.self.href", is(equalTo(playerUrl)))
-                .and().body("_links.curies.name", is(equalTo("mr")))
-                .and().body("_links.curies.href", is(equalTo(docsUrl)))
-                .and().body("_links.curies.templated", is(equalTo(true)))
-                .and().body("_links.\"mr:play\".href", is(equalTo(url)))
-                .and().body("_links.\"mr:stop\".href", is(equalTo(stopUrl)));
+                .and().body(LINKS_SELF_HREF_PATH, is(equalTo(playerUrl)))
+                .and().body(LINKS_CURIES_NAME_PATH, is(equalTo("mr")))
+                .and().body(LINKS_CURIES_HREF_PATH, is(equalTo(docsUrl)))
+                .and().body(LINKS_CURIES_TEMPLATED_PATH, is(equalTo(true)))
+                .and().body(LINKS_MR_PLAY_HREF_PATH, is(equalTo(url)))
+                .and().body(LINKS_MR_PAUSE_HREF_PATH, is(equalTo(pauseUrl)))
+                .and().body(LINKS_MR_STOP_HREF_PATH, is(equalTo(stopUrl)));
+    }
+
+    @Test
+    public void pause() throws Exception {
+
+        final String url = String.format(PAUSE_URL_FORMAT, rule.getLocalPort());
+        final String docsUrl = String.format(DOCS_URL_FORMAT, rule.getLocalPort());
+        final String playerUrl = String.format(PLAYER_URL_FORMAT, rule.getLocalPort());
+        final String playUrl = String.format(PLAY_URL_FORMAT, rule.getLocalPort());
+        final String stopUrl = String.format(STOP_URL_FORMAT, rule.getLocalPort());
+
+        when().post(url)
+                .then().assertThat()
+                .statusCode(is(equalTo(202)))
+                .and().body(LINKS_SELF_HREF_PATH, is(equalTo(playerUrl)))
+                .and().body(LINKS_CURIES_NAME_PATH, is(equalTo("mr")))
+                .and().body(LINKS_CURIES_HREF_PATH, is(equalTo(docsUrl)))
+                .and().body(LINKS_CURIES_TEMPLATED_PATH, is(equalTo(true)))
+                .and().body(LINKS_MR_PLAY_HREF_PATH, is(equalTo(playUrl)))
+                .and().body(LINKS_MR_PAUSE_HREF_PATH, is(equalTo(url)))
+                .and().body(LINKS_MR_STOP_HREF_PATH, is(equalTo(stopUrl)));
     }
 
     @Test
     public void stop() throws Exception {
 
-        final String url = String.format("http://localhost:%d/multiroom-mpd/api/zones/Bathroom/player/stop", rule.getLocalPort());
-        final String docsUrl = String.format("http://localhost:%d/multiroom-mpd/docs/#/relations/{rel}", rule.getLocalPort());
-        final String playerUrl = String.format("http://localhost:%d/multiroom-mpd/api/zones/Bathroom/player", rule.getLocalPort());
-        final String playUrl = String.format("http://localhost:%d/multiroom-mpd/api/zones/Bathroom/player/play", rule.getLocalPort());
+        final String url = String.format(STOP_URL_FORMAT, rule.getLocalPort());
+        final String docsUrl = String.format(DOCS_URL_FORMAT, rule.getLocalPort());
+        final String playerUrl = String.format(PLAYER_URL_FORMAT, rule.getLocalPort());
+        final String playUrl = String.format(PLAY_URL_FORMAT, rule.getLocalPort());
+        final String pauseUrl = String.format(PAUSE_URL_FORMAT, rule.getLocalPort());
 
         when().post(url)
                 .then().assertThat()
                 .statusCode(is(equalTo(202)))
-                .and().body("_links.self.href", is(equalTo(playerUrl)))
-                .and().body("_links.curies.name", is(equalTo("mr")))
-                .and().body("_links.curies.href", is(equalTo(docsUrl)))
-                .and().body("_links.curies.templated", is(equalTo(true)))
-                .and().body("_links.\"mr:play\".href", is(equalTo(playUrl)))
-                .and().body("_links.\"mr:stop\".href", is(equalTo(url)));
+                .and().body(LINKS_SELF_HREF_PATH, is(equalTo(playerUrl)))
+                .and().body(LINKS_CURIES_NAME_PATH, is(equalTo("mr")))
+                .and().body(LINKS_CURIES_HREF_PATH, is(equalTo(docsUrl)))
+                .and().body(LINKS_CURIES_TEMPLATED_PATH, is(equalTo(true)))
+                .and().body(LINKS_MR_PLAY_HREF_PATH, is(equalTo(playUrl)))
+                .and().body(LINKS_MR_PAUSE_HREF_PATH, is(equalTo(pauseUrl)))
+                .and().body(LINKS_MR_STOP_HREF_PATH, is(equalTo(url)));
     }
 }

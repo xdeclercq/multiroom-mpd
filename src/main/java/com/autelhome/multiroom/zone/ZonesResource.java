@@ -18,9 +18,9 @@ import java.util.SortedSet;
  *
  * @author xdeclercq
  */
-@Path("/zones")
+@Path("/zones/")
 @Produces({RepresentationFactory.HAL_JSON})
-public class ZoneResource
+public class ZonesResource
 {
 
     private final ZoneService zoneService;
@@ -37,7 +37,7 @@ public class ZoneResource
      * @param playerResourceFactory a {@link PlayerResourceFactory} instance
      */
     @Inject
-    public ZoneResource(final ZoneService zoneService, final ZonesRepresentationFactory zonesRepresentationFactory, final ZoneRepresentationFactory zoneRepresentationFactory, final PlayerResourceFactory playerResourceFactory) {
+    public ZonesResource(final ZoneService zoneService, final ZonesRepresentationFactory zonesRepresentationFactory, final ZoneRepresentationFactory zoneRepresentationFactory, final PlayerResourceFactory playerResourceFactory) {
         this.zoneService = zoneService;
         this.zonesRepresentationFactory = zonesRepresentationFactory;
         this.zoneRepresentationFactory = zoneRepresentationFactory;

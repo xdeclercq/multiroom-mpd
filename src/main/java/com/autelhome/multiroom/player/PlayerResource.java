@@ -36,7 +36,9 @@ public class PlayerResource {
 	}
 
     /**
-     * Sends a play command to the event bus.
+     * Sends a play command to the event bus and returns a representation of the player.
+     *
+     * @return HTTP 202 with a representation of the player
      */
     @POST
     @Path("play")
@@ -47,7 +49,22 @@ public class PlayerResource {
     }
 
     /**
-     * Sends a stop command to the event bus.
+     * Sends a pause command to the event bus and returns a representation of the player.
+     *
+     * @return HTTP 202 with a representation of the player
+     */
+    @POST
+    @Path("pause")
+    public Response pause() {
+        eventBus.send(new PauseCommand(player.getZone()));
+
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(player)).build();
+    }
+
+    /**
+     * Sends a stop command to the event bus and returns a representation of the player.
+     *
+     * @return HTTP 202 with a representation of the player
      */
     @POST
     @Path("stop")

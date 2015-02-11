@@ -6,7 +6,7 @@
         "templated": true
     },
     "self": {
-      "href": "http://server:6789/api/zones"
+      "href": "http://server:6789/api/zones/"
     }
   },
   "_embedded": {
