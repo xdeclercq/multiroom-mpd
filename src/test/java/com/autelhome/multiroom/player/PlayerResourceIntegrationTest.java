@@ -2,8 +2,11 @@ package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.app.ApplicationConfiguration;
 import com.autelhome.multiroom.app.MultiroomMPDApplication;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.ConfigOverride;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -30,20 +33,30 @@ public class PlayerResourceIntegrationTest {
 	public final DropwizardAppRule<ApplicationConfiguration> rule =
 			new DropwizardAppRule<>(MultiroomMPDApplication.class, "src/test/resources/com/autelhome/multiroom/app/configuration.yml",
 					ConfigOverride.config("server.connector.port", "8001"));
+    private final Client client = new Client();
+
+    @Before
+    public void setUp() throws Exception {
+        final String zonesUrl = String.format("http://localhost:%d/multiroom-mpd/api/zones/", rule.getLocalPort());
+
+        client.resource(
+                String.format(zonesUrl, rule.getLocalPort()))
+                .post(ClientResponse.class, "{\"name\": \"Kitchen\", \"mpdInstancePort\": 1234}");
+    }
+
 
     @Test
 	public void get() throws Exception {
-
-        final String url = String.format(PLAYER_URL_FORMAT, rule.getLocalPort());
+        final String playerUrl = String.format(PLAYER_URL_FORMAT, rule.getLocalPort());
         final String docsUrl = String.format(DOCS_URL_FORMAT, rule.getLocalPort());
         final String playUrl = String.format(PLAY_URL_FORMAT, rule.getLocalPort());
         final String pauseUrl = String.format(PAUSE_URL_FORMAT, rule.getLocalPort());
         final String stopUrl = String.format(STOP_URL_FORMAT, rule.getLocalPort());
 
-		when().get(url)
+		when().get(playerUrl)
 			.then().assertThat()
             .statusCode(is(equalTo(200)))
-			.and().body(LINKS_SELF_HREF_PATH, is(equalTo(url)))
+			.and().body(LINKS_SELF_HREF_PATH, is(equalTo(playerUrl)))
 			.and().body(LINKS_CURIES_NAME_PATH, is(equalTo("mr")))
             .and().body(LINKS_CURIES_HREF_PATH, is(equalTo(docsUrl)))
             .and().body(LINKS_CURIES_TEMPLATED_PATH, is(equalTo(true)))
@@ -75,12 +88,15 @@ public class PlayerResourceIntegrationTest {
 
     @Test
     public void pause() throws Exception {
-
         final String url = String.format(PAUSE_URL_FORMAT, rule.getLocalPort());
         final String docsUrl = String.format(DOCS_URL_FORMAT, rule.getLocalPort());
         final String playerUrl = String.format(PLAYER_URL_FORMAT, rule.getLocalPort());
         final String playUrl = String.format(PLAY_URL_FORMAT, rule.getLocalPort());
         final String stopUrl = String.format(STOP_URL_FORMAT, rule.getLocalPort());
+
+        client.resource(
+                String.format(playUrl, rule.getLocalPort()))
+                .post(ClientResponse.class);
 
         when().post(url)
                 .then().assertThat()

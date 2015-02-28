@@ -29,36 +29,38 @@ public class PlayerRepresentationFactory extends BaseRepresentationFactory
     /**
      * Returns a new {@link Representation} of a player.
      *
-     * @param player a player
+     * @param zoneName the zone name
      * @return a new {@link Representation} of the player
      */
-    public Representation newRepresentation(final Player player) {
+    public Representation newRepresentation(final String zoneName) {
         final String getPlayerResourceMethod = "getPlayerResource";
-        final URI self = getBaseUriBuilder()
+        final URI self = getBaseURIBuilder()
                 .path(ZonesResource.class)
                 .path(ZonesResource.class, getPlayerResourceMethod)
-                .build(player.getZoneName());
+                .build(zoneName);
 
-        final URI play = getBaseUriBuilder()
+        final URI play = getBaseURIBuilder()
                 .path(ZonesResource.class)
                 .path(ZonesResource.class, getPlayerResourceMethod)
                 .path(PlayerResource.class, "play")
-                .build(player.getZoneName());
+                .build(zoneName);
 
-        final URI pause = getBaseUriBuilder()
+        final URI pause = getBaseURIBuilder()
                 .path(ZonesResource.class)
                 .path(ZonesResource.class, getPlayerResourceMethod)
                 .path(PlayerResource.class, "pause")
-                .build(player.getZoneName());
+                .build(zoneName);
 
-        final URI stop = getBaseUriBuilder()
+        final URI stop = getBaseURIBuilder()
                 .path(ZonesResource.class)
                 .path(ZonesResource.class, getPlayerResourceMethod)
                 .path(PlayerResource.class, "stop")
-                .build(player.getZoneName());
+                .build(zoneName);
+
+        // TODO: embed status with link to socket resource
 
 
-        return newRepresentation(self)
+        return super.newRepresentation(self.toString())
                 .withNamespace("mr", getMRNamespace())
                 .withLink("mr:play", play)
                 .withLink("mr:pause", pause)

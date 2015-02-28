@@ -20,7 +20,8 @@
             "href": "http://server:6789/api/zones/Bedroom/player"
           }
         },
-        "name": "Bedroom"
+        "name": "Bedroom",
+        "mpdInstancePort": 234
       },
       {
         "_links": {
@@ -31,7 +32,8 @@
             "href": "http://server:6789/api/zones/Kitchen/player"
           }
         },
-        "name": "Kitchen"
+        "name": "Kitchen",
+        "mpdInstancePort": 7912
       }
     ]
   }

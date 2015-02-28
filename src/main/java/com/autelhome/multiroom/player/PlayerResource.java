@@ -1,6 +1,7 @@
 package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.util.EventBus;
+import com.autelhome.multiroom.zone.ZoneDto;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 
 import javax.ws.rs.GET;
@@ -19,19 +20,19 @@ import java.util.Objects;
 public class PlayerResource {
 
 	private final PlayerRepresentationFactory playerRepresentationFactory;
-	private final Player player;
+	private final ZoneDto zoneDto;
     private final EventBus eventBus;
 
     /**
 	 * Constructor.
 	 *
-	 * @param player a player
+	 * @param zoneDto the zone to which the player is related
 	 * @param playerRepresentationFactory a {@link PlayerRepresentationFactory} instance
      * @param eventBus the event bus
 	 */
-	public PlayerResource(final Player player, final PlayerRepresentationFactory playerRepresentationFactory, final EventBus eventBus) {
-		this.playerRepresentationFactory = playerRepresentationFactory;
-		this.player = player;
+	public PlayerResource(final ZoneDto zoneDto, final PlayerRepresentationFactory playerRepresentationFactory, final EventBus eventBus) {
+        this.zoneDto = zoneDto;
+        this.playerRepresentationFactory = playerRepresentationFactory;
         this.eventBus = eventBus;
 	}
 
@@ -43,9 +44,9 @@ public class PlayerResource {
     @POST
     @Path("play")
     public Response play() {
-        eventBus.send(new PlayCommand(player.getZone()));
+        eventBus.send(new Play(zoneDto.getId(), zoneDto.getVersion()));
 
-        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(player)).build();
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(zoneDto.getName())).build();
     }
 
     /**
@@ -56,9 +57,9 @@ public class PlayerResource {
     @POST
     @Path("pause")
     public Response pause() {
-        eventBus.send(new PauseCommand(player.getZone()));
+        eventBus.send(new Pause(zoneDto.getId(), zoneDto.getVersion()));
 
-        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(player)).build();
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(zoneDto.getName())).build();
     }
 
     /**
@@ -69,9 +70,9 @@ public class PlayerResource {
     @POST
     @Path("stop")
     public Response stop() {
-        eventBus.send(new StopCommand(player.getZone()));
+        eventBus.send(new Stop(zoneDto.getId(), zoneDto.getVersion()));
 
-        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(player)).build();
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(zoneDto.getName())).build();
     }
 
 	/**
@@ -81,7 +82,7 @@ public class PlayerResource {
 	 */
 	@GET
 	public Response getPlayer() {
-		return Response.ok(playerRepresentationFactory.newRepresentation(player)).build();
+		return Response.ok(playerRepresentationFactory.newRepresentation(zoneDto.getName())).build();
 	}
 
 	@Override
@@ -95,11 +96,11 @@ public class PlayerResource {
 
 		final PlayerResource that = (PlayerResource) o;
 
-		return Objects.equals(player, that.player);
+		return Objects.equals(zoneDto, that.zoneDto);
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(player);
+		return Objects.hashCode(zoneDto);
 	}
 }

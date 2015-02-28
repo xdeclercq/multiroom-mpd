@@ -32,13 +32,13 @@ public class ZoneRepresentationFactory extends BaseRepresentationFactory
      * @param zone a zone
      * @return a new {@link Representation} of the zone
      */
-    public Representation newRepresentation(final Zone zone) {
-        final URI self = getBaseUriBuilder()
+    public Representation newRepresentation(final ZoneDto zone) {
+        final URI self = getBaseURIBuilder()
                 .path(ZonesResource.class)
                 .path(ZonesResource.class, "getByName")
                 .build(zone.getName());
 
-        final URI player = getBaseUriBuilder()
+        final URI player = getBaseURIBuilder()
                 .path(ZonesResource.class)
                 .path(ZonesResource.class, "getPlayerResource")
                 .build(zone.getName());
@@ -46,6 +46,7 @@ public class ZoneRepresentationFactory extends BaseRepresentationFactory
         return newRepresentation(self)
                 .withNamespace("mr", getMRNamespace())
                 .withProperty("name", zone.getName())
+                .withProperty("mpdInstancePort", zone.getMpdInstancePortNumber())
                 .withLink("mr:player", player);
     }
 

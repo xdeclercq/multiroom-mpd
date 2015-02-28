@@ -13,7 +13,7 @@ import java.net.URI;
  */
 public class BaseRepresentationFactory extends StandardRepresentationFactory {
 
-	private final UriInfo uriInfo;
+	private final URI baseURI;
 
 
 	/**
@@ -23,16 +23,28 @@ public class BaseRepresentationFactory extends StandardRepresentationFactory {
 	 */
 	protected  BaseRepresentationFactory(final UriInfo uriInfo) {
 		withFlag(COALESCE_ARRAYS);
-		this.uriInfo = uriInfo;
+
+		baseURI = uriInfo.getBaseUri();
 	}
+
+    /**
+     * Constructor.
+     *
+     * @param uriRequest the request uri
+     */
+    protected BaseRepresentationFactory(final URI uriRequest) {
+        baseURI = URI.create("http://" + uriRequest.getAuthority() + "/" + uriRequest.getPath().substring(0, uriRequest.getPath().indexOf('/')));
+
+        withFlag(COALESCE_ARRAYS);
+    }
 
 	/**
 	 * Returns the base {@link UriBuilder} based on the request.
 	 *
 	 * @return the base {@link UriBuilder} based on the request
 	 */
-	protected UriBuilder getBaseUriBuilder() {
-		return uriInfo.getBaseUriBuilder();
+	protected UriBuilder getBaseURIBuilder() {
+		return UriBuilder.fromUri(baseURI);
 	}
 
 	/**
@@ -41,7 +53,16 @@ public class BaseRepresentationFactory extends StandardRepresentationFactory {
 	 * @return the 'mr' namespace URL
 	 */
 	protected String getMRNamespace() {
-        final URI baseUri = uriInfo.getBaseUri();
-        return String.format("http://%s:%d/multiroom-mpd/docs/#/relations/{rel}", baseUri.getHost(), baseUri.getPort());
+        return getDocumentationBaseUri() + "relations/{rel}";
 	}
+
+    /**
+     * Returns the documentation base URI.
+     *
+     * @return the documentation base URI
+     */
+    protected String getDocumentationBaseUri() {
+        final URI baseUri = getBaseURIBuilder().build();
+        return String.format("http://%s/multiroom-mpd/docs/#/", baseUri.getAuthority());
+    }
 }

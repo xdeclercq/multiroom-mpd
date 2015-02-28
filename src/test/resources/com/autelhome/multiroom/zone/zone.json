@@ -1,16 +1,17 @@
 {
   "_links": {
     "curies": {
-      "href": "http://server:374/multiroom-mpd/docs/#/relations/{rel}",
+      "href": "http://server:6789/multiroom-mpd/docs/#/relations/{rel}",
       "name": "mr",
       "templated": true
     },
     "self": {
-      "href": "http://server:374/api/zones/Bedroom"
+      "href": "http://server:6789/api/zones/Bedroom"
     },
     "mr:player": {
-      "href": "http://server:374/api/zones/Bedroom/player"
+      "href": "http://server:6789/api/zones/Bedroom/player"
     }
   },
-  "name": "Bedroom"
+  "name": "Bedroom",
+  "mpdInstancePort": 234
 }

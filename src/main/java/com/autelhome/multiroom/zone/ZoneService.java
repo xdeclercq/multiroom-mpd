@@ -2,25 +2,27 @@ package com.autelhome.multiroom.zone;
 
 import com.google.inject.Inject;
 
+import java.util.Optional;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
- * Service to manage {@link Zone}s.
+ * Service to fetch {@link Zone}s.
  *
  * @author xdeclercq
  */
 public class ZoneService {
 
-    private final ZonesConfiguration zonesConfiguration;
+    private final ZoneDatabase zoneDatabase;
 
     /**
      * Constructor.
      *
-     * @param zonesConfiguration the {@link ZonesConfiguration}
+     * @param zoneDatabase the zone database
      */
     @Inject
-    public ZoneService(final ZonesConfiguration zonesConfiguration) {
-        this.zonesConfiguration = zonesConfiguration;
+    public ZoneService(final ZoneDatabase zoneDatabase) {
+        this.zoneDatabase = zoneDatabase;
     }
 
     /**
@@ -28,18 +30,18 @@ public class ZoneService {
      *
      * @return the sorted set of {@link Zone}s.
      */
-    public SortedSet<Zone> getAll() {
-        return zonesConfiguration.toZones();
+    public SortedSet<ZoneDto> getAll() {
+        return new TreeSet<>(zoneDatabase.getAll());
     }
 
     /**
      * Retrieves a zone by its name.
      *
-     * @param zoneName a zone name
+     * @param zoneName the name of a zone
      * @return the zone named {@code zoneName}
      */
-    public Zone getByName(final String zoneName) {
-        return getAll().stream().filter(zone -> zoneName.equals(zone.getName())).findFirst().get();
+    public Optional<ZoneDto> getByName(final String zoneName) {
+        return zoneDatabase.getByName(zoneName);
     }
 
 }
