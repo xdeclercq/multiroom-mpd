@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.player;
 
+import com.autelhome.multiroom.errors.ResourceNotFoundException;
 import com.autelhome.multiroom.hal.HalJsonMessageBodyWriter;
 import com.autelhome.multiroom.util.ContextInjectableProvider;
 import com.autelhome.multiroom.util.EventBus;
@@ -14,7 +15,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Optional;
@@ -27,7 +27,7 @@ import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
 public class PlayerResourceTest {
 
-    private static final String BASE_URI = "http://server:3421/api/";
+    private static final String BASE_URI = "http://server:3421/multiroom-mpd/api/";
     private static final String KITCHEN = "Kitchen";
     private static final ZoneDto KITCHEN_DTO = new ZoneDto(UUID.randomUUID(), KITCHEN, 7912, 1);
 
@@ -35,12 +35,15 @@ public class PlayerResourceTest {
 
     private static final String PLAYER_JSON_FILE_NAME = "player.json";
     private final ZoneService zoneService = mock(ZoneService.class);
-    private final UriInfo uriInfo = mock(UriInfo.class);
+    private final UriInfo uriInfo = getUriInfo();
     private final ZoneRepresentationFactory zoneRepresentationFactory = new ZoneRepresentationFactory(uriInfo);
     private final ZonesRepresentationFactory zonesRepresentationFactory = new ZonesRepresentationFactory(uriInfo, zoneRepresentationFactory);
     private final PlayerResourceFactory playerResourceFactory = mock(PlayerResourceFactory.class);
     private final EventBus eventBus = mock(EventBus.class);
     private final HttpServletRequest request = mock(HttpServletRequest.class);
+    private final PlayerStatusRepresentationFactory playerStatusRepresentationFactory = new PlayerStatusRepresentationFactory(uriInfo);
+    private final PlayerRepresentationFactory playerRepresentationFactory = new PlayerRepresentationFactory(uriInfo, playerStatusRepresentationFactory);
+    private final PlayerService playerService = mock(PlayerService.class);
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
@@ -49,15 +52,20 @@ public class PlayerResourceTest {
             .addProvider(HalJsonMessageBodyWriter.class)
             .build();
 
+    private UriInfo getUriInfo() {
+        final UriInfo result = mock(UriInfo.class);
+        when(result.getBaseUri()).thenReturn(URI.create(BASE_URI));
+        return result;
+    }
+
     @Test
     public void getPlayer() throws Exception {
-        final ZoneDto kitchen = new ZoneDto(UUID.randomUUID(), KITCHEN, 789, 1);
+        final UUID zoneId = UUID.randomUUID();
+        final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
 
-        when(uriInfo.getBaseUriBuilder()).thenAnswer(i -> UriBuilder.fromPath(BASE_URI));
-        when(uriInfo.getBaseUri()).thenReturn(URI.create(BASE_URI));
-        final PlayerRepresentationFactory playerRepresentationFactory = new PlayerRepresentationFactory(uriInfo);
         when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
-        when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerRepresentationFactory, eventBus));
+        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED)));
+        when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
         final ClientResponse actualResponse = resources.client().resource("/zones/Kitchen/player").accept(RepresentationFactory.HAL_JSON).get(ClientResponse.class);
 
@@ -74,13 +82,12 @@ public class PlayerResourceTest {
 
     @Test
     public void play() throws Exception {
-        final ZoneDto kitchen = new ZoneDto(UUID.randomUUID(), KITCHEN, 789, 1);
+        final UUID zoneId = UUID.randomUUID();
+        final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
 
-        when(uriInfo.getBaseUriBuilder()).thenAnswer(i -> UriBuilder.fromPath(BASE_URI));
-        when(uriInfo.getBaseUri()).thenReturn(URI.create(BASE_URI));
-        final PlayerRepresentationFactory playerRepresentationFactory = new PlayerRepresentationFactory(uriInfo);
         when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
-        when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerRepresentationFactory, eventBus));
+        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED)));
+        when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
         final ClientResponse actualResponse = resources.client().resource("/zones/Kitchen/player/play").accept(RepresentationFactory.HAL_JSON).post(ClientResponse.class);
 
@@ -93,15 +100,28 @@ public class PlayerResourceTest {
         assertThat(actualStatus).isEqualTo(202);
     }
 
+    @Test(expected = ResourceNotFoundException.class)
+    public void playWithUnknownPlayer() throws Exception {
+        final UUID zoneId = UUID.randomUUID();
+        final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
+
+        when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
+        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.empty());
+        when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
+
+        resources.client().resource("/zones/Kitchen/player/play").accept(RepresentationFactory.HAL_JSON).post(ClientResponse.class);
+    }
+
+
+
     @Test
     public void pause() throws Exception {
-        final ZoneDto kitchen = new ZoneDto(UUID.randomUUID(), KITCHEN, 789, 1);
+        final UUID zoneId = UUID.randomUUID();
+        final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
 
-        when(uriInfo.getBaseUriBuilder()).thenAnswer(i -> UriBuilder.fromPath(BASE_URI));
-        when(uriInfo.getBaseUri()).thenReturn(URI.create(BASE_URI));
-        final PlayerRepresentationFactory playerRepresentationFactory = new PlayerRepresentationFactory(uriInfo);
         when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
-        when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerRepresentationFactory, eventBus));
+        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED)));
+        when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
         final ClientResponse actualResponse = resources.client().resource("/zones/Kitchen/player/pause").accept(RepresentationFactory.HAL_JSON).post(ClientResponse.class);
 
@@ -116,13 +136,12 @@ public class PlayerResourceTest {
 
     @Test
     public void stop() throws Exception {
-        final ZoneDto kitchen = new ZoneDto(UUID.randomUUID(), KITCHEN, 789, 1);
+        final UUID zoneId = UUID.randomUUID();
+        final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
 
-        when(uriInfo.getBaseUriBuilder()).thenAnswer(i -> UriBuilder.fromPath(BASE_URI));
-        when(uriInfo.getBaseUri()).thenReturn(URI.create(BASE_URI));
-        final PlayerRepresentationFactory playerRepresentationFactory = new PlayerRepresentationFactory(uriInfo);
         when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
-        when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerRepresentationFactory, eventBus));
+        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED)));
+        when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
         final ClientResponse actualResponse = resources.client().resource("/zones/Kitchen/player/stop").accept(RepresentationFactory.HAL_JSON).post(ClientResponse.class);
 
@@ -137,10 +156,10 @@ public class PlayerResourceTest {
 
     @Test
     public void shouldBeEqual() throws Exception {
-        final PlayerResource playerResource1 = new PlayerResource(KITCHEN_DTO, null, null);
-        final PlayerResource playerResource2 = new PlayerResource(KITCHEN_DTO, null, null);
-        final PlayerResource playerResource3 = new PlayerResource(null, null, null);
-        final PlayerResource playerResource4 = new PlayerResource(null, null, null);
+        final PlayerResource playerResource1 = new PlayerResource(KITCHEN_DTO, null, null, null);
+        final PlayerResource playerResource2 = new PlayerResource(KITCHEN_DTO, null, null, null);
+        final PlayerResource playerResource3 = new PlayerResource(null, null, null, null);
+        final PlayerResource playerResource4 = new PlayerResource(null, null, null, null);
 
         assertThat(playerResource1).isEqualTo(playerResource1);
         assertThat(playerResource1).isEqualTo(playerResource2);
@@ -150,9 +169,9 @@ public class PlayerResourceTest {
     @Test
     @SuppressFBWarnings("EC_UNRELATED_TYPES")
     public void shouldNotBeEqual() throws Exception {
-        final PlayerResource playerResource1 = new PlayerResource(KITCHEN_DTO, null, null);
-        final PlayerResource playerResource2 = new PlayerResource(BATHROOM_DTO, null, null);
-        final PlayerResource playerResource3 = new PlayerResource(null, null, null);
+        final PlayerResource playerResource1 = new PlayerResource(KITCHEN_DTO, null, null, null);
+        final PlayerResource playerResource2 = new PlayerResource(BATHROOM_DTO, null, null, null);
+        final PlayerResource playerResource3 = new PlayerResource(null, null, null, null);
 
         assertThat(playerResource1).isNotEqualTo(playerResource2);
         assertThat(playerResource1).isNotEqualTo(playerResource3);
@@ -162,10 +181,10 @@ public class PlayerResourceTest {
 
     @Test
     public void hashCodeShouldBeTheSame() throws Exception {
-        final int hashCode1 = new PlayerResource(KITCHEN_DTO, null, null).hashCode();
-        final int hashCode2 = new PlayerResource(KITCHEN_DTO, null, null).hashCode();
-        final int hashCode3 = new PlayerResource(null, null, null).hashCode();
-        final int hashCode4 = new PlayerResource(null, null, null).hashCode();
+        final int hashCode1 = new PlayerResource(KITCHEN_DTO, null, null, null).hashCode();
+        final int hashCode2 = new PlayerResource(KITCHEN_DTO, null, null, null).hashCode();
+        final int hashCode3 = new PlayerResource(null, null, null, null).hashCode();
+        final int hashCode4 = new PlayerResource(null, null, null, null).hashCode();
 
         assertThat(hashCode1).isEqualTo(hashCode2);
         assertThat(hashCode3).isEqualTo(hashCode4);
@@ -173,9 +192,9 @@ public class PlayerResourceTest {
 
     @Test
     public void hashCodeShouldNotBeTheSame() throws Exception {
-        final int hashCode1 = new PlayerResource(KITCHEN_DTO, null, null).hashCode();
-        final int hashCode2 = new PlayerResource(BATHROOM_DTO, null, null).hashCode();
-        final int hashCode3 = new PlayerResource(null, null, null).hashCode();
+        final int hashCode1 = new PlayerResource(KITCHEN_DTO, null, null, null).hashCode();
+        final int hashCode2 = new PlayerResource(BATHROOM_DTO, null, null, null).hashCode();
+        final int hashCode3 = new PlayerResource(null, null, null, null).hashCode();
 
         assertThat(hashCode1).isNotEqualTo(hashCode2);
         assertThat(hashCode1).isNotEqualTo(hashCode3);

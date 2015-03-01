@@ -1,10 +1,12 @@
 package com.autelhome.multiroom.hal;
 
+import com.google.common.base.Splitter;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.List;
 
 /**
  * Base representation factory.
@@ -14,7 +16,6 @@ import java.net.URI;
 public class BaseRepresentationFactory extends StandardRepresentationFactory {
 
 	private final URI baseURI;
-
 
 	/**
 	 * Constructor.
@@ -33,7 +34,8 @@ public class BaseRepresentationFactory extends StandardRepresentationFactory {
      * @param uriRequest the request uri
      */
     protected BaseRepresentationFactory(final URI uriRequest) {
-        baseURI = URI.create("http://" + uriRequest.getAuthority() + "/" + uriRequest.getPath().substring(0, uriRequest.getPath().indexOf('/')));
+        final List<String> pathTokens = Splitter.on('/').splitToList(uriRequest.getPath());
+        baseURI = URI.create(uriRequest.getScheme() + "://" + uriRequest.getAuthority() + "/" + pathTokens.get(1) + "/" + pathTokens.get(2));
 
         withFlag(COALESCE_ARRAYS);
     }

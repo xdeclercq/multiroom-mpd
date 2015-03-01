@@ -7,16 +7,26 @@
       "templated": true
     },
     "self": {
-      "href": "http://server:3421/api/zones/Kitchen/player"
+      "href": "http://server:3421/multiroom-mpd/api/zones/Kitchen/player"
     },
     "mr:play": {
-      "href": "http://server:3421/api/zones/Kitchen/player/play"
+      "href": "http://server:3421/multiroom-mpd/api/zones/Kitchen/player/play"
     },
     "mr:pause": {
-      "href": "http://server:3421/api/zones/Kitchen/player/pause"
+      "href": "http://server:3421/multiroom-mpd/api/zones/Kitchen/player/pause"
     },
     "mr:stop": {
-      "href": "http://server:3421/api/zones/Kitchen/player/stop"
+      "href": "http://server:3421/multiroom-mpd/api/zones/Kitchen/player/stop"
+    }
+  },
+  "_embedded" : {
+    "mr:status": {
+      "_links": {
+        "self": {
+          "href": "ws://server:3421/multiroom-mpd/ws/zones/Kitchen/player/status"
+        }
+      },
+      "status": "PAUSED"
     }
   }
 }

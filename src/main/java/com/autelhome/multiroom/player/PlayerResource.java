@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.player;
 
+import com.autelhome.multiroom.errors.ResourceNotFoundException;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.ZoneDto;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
@@ -10,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * REST resource to control a player of a zone.
@@ -19,19 +21,23 @@ import java.util.Objects;
 @Produces({RepresentationFactory.HAL_JSON})
 public class PlayerResource {
 
-	private final PlayerRepresentationFactory playerRepresentationFactory;
+    private static final String RESOURCE_TYPE = "player";
+    private final PlayerRepresentationFactory playerRepresentationFactory;
 	private final ZoneDto zoneDto;
     private final EventBus eventBus;
+    private final PlayerService playerService;
 
     /**
 	 * Constructor.
 	 *
 	 * @param zoneDto the zone to which the player is related
+     * @param playerService a {@link PlayerService} instance
 	 * @param playerRepresentationFactory a {@link PlayerRepresentationFactory} instance
      * @param eventBus the event bus
 	 */
-	public PlayerResource(final ZoneDto zoneDto, final PlayerRepresentationFactory playerRepresentationFactory, final EventBus eventBus) {
+	public PlayerResource(final ZoneDto zoneDto, final PlayerService playerService, final PlayerRepresentationFactory playerRepresentationFactory, final EventBus eventBus) {
         this.zoneDto = zoneDto;
+        this.playerService = playerService;
         this.playerRepresentationFactory = playerRepresentationFactory;
         this.eventBus = eventBus;
 	}
@@ -44,9 +50,11 @@ public class PlayerResource {
     @POST
     @Path("play")
     public Response play() {
+        final Optional<PlayerDto> playerDto = getPlayerDto();
+        
         eventBus.send(new Play(zoneDto.getId(), zoneDto.getVersion()));
 
-        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(zoneDto.getName())).build();
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto.get())).build();
     }
 
     /**
@@ -57,9 +65,11 @@ public class PlayerResource {
     @POST
     @Path("pause")
     public Response pause() {
+        final Optional<PlayerDto> playerDto = getPlayerDto();
+
         eventBus.send(new Pause(zoneDto.getId(), zoneDto.getVersion()));
 
-        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(zoneDto.getName())).build();
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto.get())).build();
     }
 
     /**
@@ -70,9 +80,11 @@ public class PlayerResource {
     @POST
     @Path("stop")
     public Response stop() {
+        final Optional<PlayerDto> playerDto = getPlayerDto();
+
         eventBus.send(new Stop(zoneDto.getId(), zoneDto.getVersion()));
 
-        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(zoneDto.getName())).build();
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto.get())).build();
     }
 
 	/**
@@ -82,7 +94,9 @@ public class PlayerResource {
 	 */
 	@GET
 	public Response getPlayer() {
-		return Response.ok(playerRepresentationFactory.newRepresentation(zoneDto.getName())).build();
+        final Optional<PlayerDto> playerDto = getPlayerDto();
+
+        return Response.ok(playerRepresentationFactory.newRepresentation(playerDto.get())).build();
 	}
 
 	@Override
@@ -103,4 +117,12 @@ public class PlayerResource {
 	public int hashCode() {
 		return Objects.hashCode(zoneDto);
 	}
+
+    private Optional<PlayerDto> getPlayerDto() {
+        final Optional<PlayerDto> playerDto = playerService.getPlayerByZoneName(zoneDto.getName());
+        if (!playerDto.isPresent()) {
+            throw new ResourceNotFoundException(RESOURCE_TYPE, zoneDto.getName());
+        }
+        return playerDto;
+    }
 }

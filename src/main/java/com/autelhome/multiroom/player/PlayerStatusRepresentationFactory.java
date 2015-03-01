@@ -1,8 +1,10 @@
 package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.hal.BaseRepresentationFactory;
+import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
 
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
 /**
@@ -13,7 +15,15 @@ import java.net.URI;
 public class PlayerStatusRepresentationFactory extends BaseRepresentationFactory
 {
 
-    private final URI requestURI;
+    /**
+     * Constructor.
+     *
+     * @param uriInfo the uriInfo related to the request
+     */
+    @Inject
+    public PlayerStatusRepresentationFactory(final UriInfo uriInfo) {
+        super(uriInfo);
+    }
 
     /**
      * Constructor.
@@ -22,7 +32,6 @@ public class PlayerStatusRepresentationFactory extends BaseRepresentationFactory
      */
     public PlayerStatusRepresentationFactory(final URI requestURI) {
         super(requestURI);
-        this.requestURI = requestURI;
     }
 
     /**
@@ -31,9 +40,16 @@ public class PlayerStatusRepresentationFactory extends BaseRepresentationFactory
      * @param playerStatus a player status
      * @return a new {@link Representation} of the player status
      */
-    public Representation newRepresentation(final PlayerStatus playerStatus) {
+    public Representation newRepresentation(final PlayerStatus playerStatus, final String zoneName) {
 
-        return newRepresentation(requestURI)
+        final URI self = getBaseURIBuilder()
+                .path("..")
+                .path(PlayerStatusSocketResource.class)
+                .scheme("ws")
+                .build(zoneName)
+                .normalize();
+
+        return newRepresentation(self)
                 .withNamespace("mr", getMRNamespace())
                 .withProperty("status", playerStatus.name());
     }

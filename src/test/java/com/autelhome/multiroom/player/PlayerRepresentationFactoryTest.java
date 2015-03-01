@@ -7,6 +7,7 @@ import org.junit.Test;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.UUID;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -15,7 +16,9 @@ import static org.mockito.Mockito.when;
 public class PlayerRepresentationFactoryTest {
 
     private final UriInfo uriInfo = getUriInfo();
-    private final PlayerRepresentationFactory testSubject = new PlayerRepresentationFactory(uriInfo);
+    private final PlayerStatusRepresentationFactory playerStatusRepresentationFactory = new PlayerStatusRepresentationFactory(uriInfo);;
+    private final PlayerRepresentationFactory testSubject = new PlayerRepresentationFactory(uriInfo, playerStatusRepresentationFactory);
+
     public static final String BASE_URI = "http://myserver:1234/api";
 
     private UriInfo getUriInfo() {
@@ -40,10 +43,12 @@ public class PlayerRepresentationFactoryTest {
                 .withLink("mr:play", play)
                 .withLink("mr:pause", pause)
                 .withLink("mr:stop", stop)
+                .withRepresentation("mr:status", playerStatusRepresentationFactory.newRepresentation(PlayerStatus.PAUSED, "myZone"))
                 .toString(RepresentationFactory.HAL_JSON);
 
+        final PlayerDto playerDto = new PlayerDto(UUID.randomUUID(), "myZone", PlayerStatus.PAUSED);
 
-        final String actual = testSubject.newRepresentation("myZone").toString(RepresentationFactory.HAL_JSON);
+        final String actual = testSubject.newRepresentation(playerDto).toString(RepresentationFactory.HAL_JSON);
 
         assertThat(actual).isEqualTo(expected);
     }

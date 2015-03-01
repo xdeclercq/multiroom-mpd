@@ -92,13 +92,13 @@ public class PlayerStatusSocketResource {
             }
         });
 
-        return new PlayerStatusRepresentationFactory(requestURI).newRepresentation(playerDto.get().getStatus()).toString(RepresentationFactory.HAL_JSON);
+        return new PlayerStatusRepresentationFactory(requestURI).newRepresentation(playerDto.get().getStatus(), zoneName).toString(RepresentationFactory.HAL_JSON);
     }
 
     @Message
     @SuppressWarnings("unused")
     public String sendMessage(final SocketMessage<PlayerStatus> socketMessage) throws JsonProcessingException {
         final URI requestURI = socketMessage.getRequestURI();
-        return new PlayerStatusRepresentationFactory(requestURI).newRepresentation(socketMessage.getEntity()).toString(RepresentationFactory.HAL_JSON);
+        return new PlayerStatusRepresentationFactory(requestURI).newRepresentation(socketMessage.getEntity(), zoneName).toString(RepresentationFactory.HAL_JSON);
     }
 }

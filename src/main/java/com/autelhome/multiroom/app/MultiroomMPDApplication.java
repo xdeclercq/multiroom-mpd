@@ -100,7 +100,6 @@ public class MultiroomMPDApplication extends Application<ApplicationConfiguratio
     private void initializeAtmosphere(final Environment environment) {
         final AtmosphereServlet atmosphereServlet = new AtmosphereGuiceServlet();
         atmosphereServlet.framework().addInitParameter("com.sun.jersey.config.property.packages", "com.autelhome.multiroom.player");
-        //atmosphereServlet.framework().addInitParameter("org.atmosphere.cpr.broadcasterClass", "com.autelhome.multiroom.util.MyBroadcaster");
         atmosphereServlet.framework().addInitParameter(ApplicationConfig.WEBSOCKET_CONTENT_TYPE, "application/hal+json");
         atmosphereServlet.framework().addInitParameter(ApplicationConfig.WEBSOCKET_SUPPORT, "true");
 

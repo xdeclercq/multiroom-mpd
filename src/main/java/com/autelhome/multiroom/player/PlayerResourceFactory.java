@@ -12,18 +12,21 @@ import com.google.inject.Inject;
 public class PlayerResourceFactory
 {
 
+    private final PlayerService playerService;
     private final PlayerRepresentationFactory playerRepresentationFactory;
     private final EventBus eventBus;
 
     /**
      * Constructor.
      *
+     * @param playerService a {@link PlayerService} instance
      * @param playerRepresentationFactory a {@link PlayerRepresentationFactory} instance
      * @param eventBus the event bus
      */
     @Inject
-    public PlayerResourceFactory(final PlayerRepresentationFactory playerRepresentationFactory, final EventBus eventBus)
+    public PlayerResourceFactory(final PlayerService playerService, final PlayerRepresentationFactory playerRepresentationFactory, final EventBus eventBus)
     {
+        this.playerService = playerService;
         this.playerRepresentationFactory = playerRepresentationFactory;
         this.eventBus = eventBus;
     }
@@ -36,6 +39,6 @@ public class PlayerResourceFactory
      */
     public PlayerResource newInstance(final ZoneDto zoneDto)
     {
-        return new PlayerResource(zoneDto, playerRepresentationFactory, eventBus);
+        return new PlayerResource(zoneDto, playerService, playerRepresentationFactory, eventBus);
     }
 }

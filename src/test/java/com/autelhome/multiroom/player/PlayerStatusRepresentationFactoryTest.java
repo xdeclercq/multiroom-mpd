@@ -10,7 +10,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class PlayerStatusRepresentationFactoryTest {
 
-    private final URI requestURI = URI.create("ws://server:666/multiroom-mpd/zones/zone1/player/status");
+    private final URI requestURI = URI.create("ws://server:666/multiroom-mpd/ws/zones/zone1/player/status");
     private final PlayerStatusRepresentationFactory testSubject = new PlayerStatusRepresentationFactory(requestURI);
 
     @Test
@@ -29,7 +29,7 @@ public class PlayerStatusRepresentationFactoryTest {
                 .withProperty("status", playerStatus.toString())
                 .toString(RepresentationFactory.HAL_JSON);
 
-        final String actual = testSubject.newRepresentation(playerStatus).toString(RepresentationFactory.HAL_JSON);
+        final String actual = testSubject.newRepresentation(playerStatus, "zone1").toString(RepresentationFactory.HAL_JSON);
 
         assertThat(actual).isEqualTo(expected);
     }
