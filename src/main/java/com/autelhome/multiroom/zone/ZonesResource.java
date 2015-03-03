@@ -1,17 +1,21 @@
 package com.autelhome.multiroom.zone;
 
+import com.autelhome.multiroom.errors.ResourceNotFoundException;
 import com.autelhome.multiroom.player.PlayerResource;
 import com.autelhome.multiroom.player.PlayerResourceFactory;
+import com.autelhome.multiroom.util.EventBus;
 import com.google.inject.Inject;
+import com.theoryinpractise.halbuilder.api.ContentRepresentation;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.io.StringReader;
+import java.net.URI;
+import java.util.Optional;
 import java.util.SortedSet;
+import java.util.UUID;
 
 /**
  * REST resource to fetch zones.
@@ -27,6 +31,7 @@ public class ZonesResource
     private final ZonesRepresentationFactory zonesRepresentationFactory;
     private final PlayerResourceFactory playerResourceFactory;
     private final ZoneRepresentationFactory zoneRepresentationFactory;
+    private final EventBus eventBus;
 
     /**
      * Constructor.
@@ -37,11 +42,32 @@ public class ZonesResource
      * @param playerResourceFactory a {@link PlayerResourceFactory} instance
      */
     @Inject
-    public ZonesResource(final ZoneService zoneService, final ZonesRepresentationFactory zonesRepresentationFactory, final ZoneRepresentationFactory zoneRepresentationFactory, final PlayerResourceFactory playerResourceFactory) {
+    public ZonesResource(final ZoneService zoneService, final ZonesRepresentationFactory zonesRepresentationFactory, final ZoneRepresentationFactory zoneRepresentationFactory, final PlayerResourceFactory playerResourceFactory, final EventBus eventBus) {
         this.zoneService = zoneService;
         this.zonesRepresentationFactory = zonesRepresentationFactory;
         this.zoneRepresentationFactory = zoneRepresentationFactory;
         this.playerResourceFactory = playerResourceFactory;
+
+        this.eventBus = eventBus;
+    }
+
+    /**
+     * Creates a new zone and returns its representation.
+     *
+     * @param zoneRepresentation a zone
+     * @return the representation of the new zone
+     */
+    @POST
+    public Response create(final String zoneRepresentation) {
+        final ContentRepresentation contentRepresentation = zoneRepresentationFactory.readRepresentation(RepresentationFactory.HAL_JSON, new StringReader(zoneRepresentation));
+
+        final String name = contentRepresentation.getProperties().get("name").toString();
+        final int mpdInstancePortNumber = Integer.parseInt(contentRepresentation.getProperties().get("mpdInstancePort").toString());
+        final UUID id = UUID.randomUUID();
+        eventBus.send(new CreateZone(id, name, mpdInstancePortNumber));
+        final ZoneDto zoneDto = new ZoneDto(id, name, mpdInstancePortNumber, -1);
+        final Representation representation = zoneRepresentationFactory.newRepresentation(zoneDto);
+        return Response.created(URI.create(representation.getLinkByRel("self").getHref())).entity(representation).build();
     }
 
     /**
@@ -50,8 +76,8 @@ public class ZonesResource
      * @return the representation of all zones
      */
     @GET
-    public Response get() {
-        final SortedSet<Zone> zones = zoneService.getAll();
+    public Response getAll() {
+        final SortedSet<ZoneDto> zones = zoneService.getAll();
         final Representation representation = zonesRepresentationFactory.newRepresentation(zones);
         return Response.ok(representation).build();
     }
@@ -65,8 +91,11 @@ public class ZonesResource
     @Path("/{name}")
     @GET
     public Response getByName(@PathParam("name") final String zoneName) {
-        final Zone zone = zoneService.getByName(zoneName);
-        final Representation representation = zoneRepresentationFactory.newRepresentation(zone);
+        final Optional<ZoneDto> zoneDto = zoneService.getByName(zoneName);
+        if (!zoneDto.isPresent()) {
+            throw new ResourceNotFoundException("zone", zoneName);
+        }
+        final Representation representation = zoneRepresentationFactory.newRepresentation(zoneDto.get());
         return Response.ok(representation).build();
     }
 
@@ -78,6 +107,8 @@ public class ZonesResource
      */
     @Path("/{name}/player")
     public PlayerResource getPlayerResource(@PathParam("name") final String zoneName) {
-        return playerResourceFactory.newInstance(zoneService.getByName(zoneName));
+        final Optional<ZoneDto> zoneDto = zoneService.getByName(zoneName);
+        return playerResourceFactory.newInstance(zoneDto.get());
     }
+
 }

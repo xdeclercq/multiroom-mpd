@@ -1,14 +1,18 @@
 package com.autelhome.multiroom.app;
 
-import com.autelhome.multiroom.zone.ZonesConfiguration;
-import com.google.inject.Module;
+import com.autelhome.multiroom.util.CorsFilter;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.jetty.MutableServletContextHandler;
+import io.dropwizard.jetty.setup.ServletEnvironment;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.servlet.FilterRegistration;
+import javax.servlet.Servlet;
+import javax.servlet.ServletRegistration;
 
 import static org.mockito.Mockito.*;
 
@@ -18,12 +22,11 @@ public class MultiroomMPDApplicationTest {
     private final Environment environment = mock(Environment.class);
     private final JerseyEnvironment jersey = mock(JerseyEnvironment.class);
     private final MutableServletContextHandler contextHandler = mock(MutableServletContextHandler.class);
-    private final GuiceBundle.Builder<ApplicationConfiguration> guiceBuilder = mock(GuiceBundle.Builder.class);
+    private final GuiceBundle<ApplicationConfiguration> guiceBundle = mock(GuiceBundle.class);
     private final Bootstrap<ApplicationConfiguration> bootstrap = mock(Bootstrap.class);
-    private final ZonesConfiguration zonesConfiguration = new ZonesConfiguration();
-    private final ApplicationConfiguration configuration = new ApplicationConfiguration("mpdhost", zonesConfiguration);
+    private final ApplicationConfiguration configuration = new ApplicationConfiguration("mpdhost");
 
-    private final MultiroomMPDApplication testSubject = new MultiroomMPDApplication(guiceBuilder);
+    private final MultiroomMPDApplication testSubject = new MultiroomMPDApplication(guiceBundle);
 
 
     @Test
@@ -40,12 +43,6 @@ public class MultiroomMPDApplicationTest {
     @Test
     public void initialize() throws Exception {
 
-        final GuiceBundle<ApplicationConfiguration> guiceBundle = mock(GuiceBundle.class);
-        when(guiceBuilder.build()).thenReturn(guiceBundle);
-        when(guiceBuilder.addModule(any(Module.class))).thenReturn(guiceBuilder);
-        when(guiceBuilder.enableAutoConfig(anyString(), anyString(), anyString(), anyString())).thenReturn(guiceBuilder);
-        when(guiceBuilder.setConfigClass(ApplicationConfiguration.class)).thenReturn(guiceBuilder);
-
         testSubject.initialize(bootstrap);
 
         verify(bootstrap).addBundle(guiceBundle);
@@ -53,6 +50,16 @@ public class MultiroomMPDApplicationTest {
 
     @Test
     public void run() throws Exception {
+
+        final ServletEnvironment servlet = mock(ServletEnvironment.class);
+        when(environment.servlets()).thenReturn(servlet);
+
+        final ServletRegistration.Dynamic atmosphereServletHolder = mock(ServletRegistration.Dynamic.class);
+        when(servlet.addServlet(anyString(), any(Servlet.class))).thenReturn(atmosphereServletHolder);
+
+        final FilterRegistration.Dynamic corsFilterHolder = mock(FilterRegistration.Dynamic.class);
+        when(servlet.addFilter("CORS Filter", CorsFilter.class)).thenReturn(corsFilterHolder);
+
         testSubject.run(configuration, environment);
 
         verify(contextHandler).setContextPath("/multiroom-mpd");

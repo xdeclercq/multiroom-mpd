@@ -1,6 +1,5 @@
 package com.autelhome.multiroom.player;
 
-import com.autelhome.multiroom.zone.Zone;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
 import org.junit.Test;
@@ -8,6 +7,7 @@ import org.junit.Test;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.UUID;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -15,20 +15,27 @@ import static org.mockito.Mockito.when;
 
 public class PlayerRepresentationFactoryTest {
 
-    private final UriInfo uriInfo = mock(UriInfo.class);
-    private final PlayerRepresentationFactory testSubject = new PlayerRepresentationFactory(uriInfo);
+    private final UriInfo uriInfo = getUriInfo();
+    private final PlayerStatusRepresentationFactory playerStatusRepresentationFactory = new PlayerStatusRepresentationFactory(uriInfo);;
+    private final PlayerRepresentationFactory testSubject = new PlayerRepresentationFactory(uriInfo, playerStatusRepresentationFactory);
+
+    public static final String BASE_URI = "http://myserver:1234/api";
+
+    private UriInfo getUriInfo() {
+        final UriInfo result = mock(UriInfo.class);
+        when(result.getBaseUri()).thenReturn(URI.create(BASE_URI));
+        return result;
+    }
 
     @Test
     public void newRepresentation() throws Exception {
         final StandardRepresentationFactory representationFactory = new StandardRepresentationFactory();
 
-        final String baseURI = "http://myserver:1234/api";
-        when(uriInfo.getBaseUri()).thenReturn(URI.create(baseURI));
-        final URI self = URI.create(baseURI + "/zones/myZone/player");
-        final URI play = URI.create(baseURI + "/zones/myZone/player/play");
-        final URI pause = URI.create(baseURI + "/zones/myZone/player/pause");
-        final URI stop = URI.create(baseURI + "/zones/myZone/player/stop");
-        when(uriInfo.getBaseUriBuilder()).thenAnswer(i -> UriBuilder.fromPath(baseURI));
+        final URI self = URI.create(BASE_URI + "/zones/myZone/player");
+        final URI play = URI.create(BASE_URI + "/zones/myZone/player/play");
+        final URI pause = URI.create(BASE_URI + "/zones/myZone/player/pause");
+        final URI stop = URI.create(BASE_URI + "/zones/myZone/player/stop");
+        when(uriInfo.getBaseUriBuilder()).thenAnswer(i -> UriBuilder.fromPath(BASE_URI));
         final String expected = representationFactory
                 .withFlag(RepresentationFactory.COALESCE_ARRAYS)
                 .newRepresentation(self)
@@ -36,12 +43,12 @@ public class PlayerRepresentationFactoryTest {
                 .withLink("mr:play", play)
                 .withLink("mr:pause", pause)
                 .withLink("mr:stop", stop)
+                .withRepresentation("mr:status", playerStatusRepresentationFactory.newRepresentation(PlayerStatus.PAUSED, "myZone"))
                 .toString(RepresentationFactory.HAL_JSON);
 
+        final PlayerDto playerDto = new PlayerDto(UUID.randomUUID(), "myZone", PlayerStatus.PAUSED);
 
-        final Zone zone = new Zone("myZone");
-        final Player player = new Player(zone, PlayerStatus.PLAYING);
-        final String actual = testSubject.newRepresentation(player).toString(RepresentationFactory.HAL_JSON);
+        final String actual = testSubject.newRepresentation(playerDto).toString(RepresentationFactory.HAL_JSON);
 
         assertThat(actual).isEqualTo(expected);
     }

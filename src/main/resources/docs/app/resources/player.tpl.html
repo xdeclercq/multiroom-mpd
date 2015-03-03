@@ -6,18 +6,18 @@
   <h4>Properties</h4>
   <table>
     <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Type</th>
-      </tr>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Type</th>
+    </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>name</td>
-        <td>The zone name</td>
-        <td>String</td>
-      </tr>
+    <tr>
+      <td>name</td>
+      <td>The zone name</td>
+      <td>String</td>
+    </tr>
     </tbody>
   </table>
 
@@ -56,6 +56,32 @@
       <td>POST</td>
       <td>No</td>
     </tr>
+    <tr>
+      <td><a ui-sref="root.relations.details({ name: 'mr-status' })">mr:status</a></td>
+      <td>A link to the <a ui-sref="root.resources.details({ name: 'status' })">status</a> resource of this player</td>
+      <td>WS</td>
+      <td>No</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h4>Embedded</h4>
+  <table>
+    <thead>
+    <tr>
+      <th>Relation</th>
+      <th>Description</th>
+      <th>Methods</th>
+      <th>Templated</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td><a ui-sref="root.relations.details({ name: 'mr-status' })">mr:status</a></td>
+      <td>The <a ui-sref="root.resources.details({ name: 'status' })">status</a> resource of this player</td>
+      <td>WS</td>
+      <td>No</td>
+    </tr>
     </tbody>
   </table>
 
@@ -80,6 +106,16 @@
     },
     "mr:stop": {
       "href": "http://localhost:8080/multiroom-mpd/api/zones/Bathroom/player/stop"
+    }
+  },
+  "_embedded" : {
+    "mr:status": {
+      "_links": {
+        "self": {
+          "href": "ws://localhost:8080/multiroom-mpd/ws/zones/Kitchen/player/status"
+        }
+      },
+      "status": "PAUSED"
     }
   }
 }</pre>

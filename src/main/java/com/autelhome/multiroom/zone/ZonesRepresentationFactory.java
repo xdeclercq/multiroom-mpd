@@ -37,9 +37,9 @@ public class ZonesRepresentationFactory extends BaseRepresentationFactory
      * @param zones the {@link Zone}s
      * @return a new {@link Representation} of the zones
      */
-    public Representation newRepresentation(final Collection<Zone> zones)
+    public Representation newRepresentation(final Collection<ZoneDto> zones)
     {
-        final URI self = getBaseUriBuilder().path(ZonesResource.class).build();
+        final URI self = getBaseURIBuilder().path(ZonesResource.class).build();
 
         final Representation representation = newRepresentation(self);
 

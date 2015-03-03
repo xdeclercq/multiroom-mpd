@@ -1,10 +1,14 @@
 package com.autelhome.multiroom.app;
 
 import com.autelhome.multiroom.util.EventBus;
-import com.autelhome.multiroom.util.HotAsyncEventBus;
-import com.autelhome.multiroom.zone.ZonesConfiguration;
+import com.autelhome.multiroom.util.EventStore;
+import com.autelhome.multiroom.util.InMemoryEventStore;
+import com.autelhome.multiroom.util.RxEventBus;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import org.atmosphere.cpr.AtmosphereResourceFactory;
+import org.atmosphere.cpr.BroadcasterFactory;
+import org.atmosphere.guice.AtmosphereGuiceServlet;
 
 /**
  * Guice module.
@@ -15,17 +19,31 @@ public class ApplicationModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(EventBus.class).toInstance(new HotAsyncEventBus());
+        final RxEventBus eventBus = new RxEventBus();
+        bind(EventBus.class).toInstance(eventBus);
+        bind(EventStore.class).toInstance(new InMemoryEventStore(eventBus));
     }
 
     /**
-     * Returns the zones configuration.
+     * Provides the {@link BroadcasterFactory} instance.
      *
-     * @param configuration the application configuration
-     * @return the zones configuration
+     * @param atmosphereGuiceServlet the atmosphere guice servlet
+     * @return the {@link BroadcasterFactory} instance
      */
     @Provides
-    public ZonesConfiguration getZonesConfiguration(final ApplicationConfiguration configuration) {
-        return configuration.getZonesConfiguration();
+    BroadcasterFactory provideBroadcasterFactory(final AtmosphereGuiceServlet atmosphereGuiceServlet) {
+        return atmosphereGuiceServlet.framework().getBroadcasterFactory();
     }
+
+    /**
+     * Provides the {@link AtmosphereResourceFactory} instance.
+     *
+     * @param atmosphereGuiceServlet the atmosphere guice servlet
+     * @return the {@link AtmosphereResourceFactory} instance
+     */
+    @Provides
+    AtmosphereResourceFactory provideAtmosphereResourceFactory(final AtmosphereGuiceServlet atmosphereGuiceServlet) {
+        return atmosphereGuiceServlet.framework().atmosphereFactory();
+    }
+
 }

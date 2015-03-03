@@ -5,20 +5,14 @@ package com.autelhome.multiroom.util;
  *
  * @author xdeclercq
  */
-public interface EventBus {
+public interface EventBus extends CommandSender, EventPublisher {
 
     /**
      * Registers a handler.
      *
      * @param handler a handler
-     * @param clazz the command class
+     * @param messageClass the message class
      */
-    <C extends Command> void register(final CommandHandler<C> handler, final Class<C> clazz);
+    <M extends Message> void register(final MessageHandler<M> handler, final Class<M> messageClass);
 
-    /**
-     * Sends a command to observers.
-     *
-     * @param command a command
-     */
-    void send(final Command command);
 }

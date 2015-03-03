@@ -1,10 +1,11 @@
 package com.autelhome.multiroom.player;
 
-import com.autelhome.multiroom.mpd.MPDPool;
+import com.autelhome.multiroom.mpd.MPDGateway;
 import com.autelhome.multiroom.zone.Zone;
-import org.bff.javampd.Player;
-import org.bff.javampd.exception.MPDPlayerException;
+import com.autelhome.multiroom.zone.ZoneRepository;
 import org.junit.Test;
+
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -13,93 +14,58 @@ import static org.mockito.Mockito.*;
  */
 public class PlayerCommandHandlersTest {
 
-    private static final Zone ZONE = new Zone("zone for play");
-    private final MPDPool mpdPool = mock(MPDPool.class);
-    private final PlayerCommandHandlers testSubject = new PlayerCommandHandlers(mpdPool);
+    private static final UUID ZONE_ID = UUID.randomUUID();
+    private static final int MPD_INSTANCE_PORT_NUMBER = 1234;
+    private final MPDGateway mpdGateway = mock(MPDGateway.class);
+    private final ZoneRepository zoneRepository = mock(ZoneRepository.class);
+    private final PlayerCommandHandlers testSubject = new PlayerCommandHandlers(mpdGateway, zoneRepository);
 
     @Test
     public void handlePlay() throws Exception {
-        final Player mpdPlayer = mock(Player.class);
-        when(mpdPool.getMPDPlayer(ZONE)).thenReturn(mpdPlayer);
-        testSubject.handlePlay(new PlayCommand(ZONE));
+        final Zone zone = mock(Zone.class);
+        when(zone.getMpdInstancePortNumber()).thenReturn(MPD_INSTANCE_PORT_NUMBER);
+        when(zoneRepository.getById(ZONE_ID)).thenReturn(zone);
+        final int mpdInstancePortNumber = 12;
+        when(zone.getMpdInstancePortNumber()).thenReturn(mpdInstancePortNumber);
+        testSubject.handlePlay(new Play(ZONE_ID, 123));
 
-        verify(mpdPlayer, times(1)).play();
-    }
-
-    @Test
-    public void handlePlayWithException() throws Exception {
-        final Player mpdPlayer = mock(Player.class);
-        when(mpdPool.getMPDPlayer(ZONE)).thenReturn(mpdPlayer);
-
-        doThrow(MPDPlayerException.class).when(mpdPlayer).play();
-
-        testSubject.handlePlay(new PlayCommand(ZONE));
-
-        verify(mpdPlayer, times(1)).play();
+        verify(mpdGateway, times(1)).play(mpdInstancePortNumber);
+        verify(zoneRepository, times(1)).save(zone, 123);
     }
 
     @Test
     public void handlePause() throws Exception {
-        final Player mpdPlayer = mock(Player.class);
-        when(mpdPool.getMPDPlayer(ZONE)).thenReturn(mpdPlayer);
-        when(mpdPlayer.getStatus()).thenReturn(Player.Status.STATUS_PLAYING);
-        testSubject.handlePause(new PauseCommand(ZONE));
+        final Zone zone = mock(Zone.class);
+        when(zone.getMpdInstancePortNumber()).thenReturn(MPD_INSTANCE_PORT_NUMBER);
+        when(zoneRepository.getById(ZONE_ID)).thenReturn(zone);
+        final int mpdInstancePortNumber = 12;
+        when(zone.getMpdInstancePortNumber()).thenReturn(mpdInstancePortNumber);
+        testSubject.handlePause(new Pause(ZONE_ID, 123));
 
-        verify(mpdPlayer, times(1)).pause();
-    }
-
-    @Test
-    public void handlePauseWhenPaused() throws Exception {
-        final Player mpdPlayer = mock(Player.class);
-        when(mpdPool.getMPDPlayer(ZONE)).thenReturn(mpdPlayer);
-        when(mpdPlayer.getStatus()).thenReturn(Player.Status.STATUS_PAUSED);
-        testSubject.handlePause(new PauseCommand(ZONE));
-
-        verify(mpdPlayer, never()).pause();
-    }
-
-    @Test
-    public void handlePauseWhenStopped() throws Exception {
-        final Player mpdPlayer = mock(Player.class);
-        when(mpdPool.getMPDPlayer(ZONE)).thenReturn(mpdPlayer);
-        when(mpdPlayer.getStatus()).thenReturn(Player.Status.STATUS_STOPPED);
-        testSubject.handlePause(new PauseCommand(ZONE));
-
-        verify(mpdPlayer, never()).pause();
-    }
-
-
-
-    @Test
-    public void handlePauseWithException() throws Exception {
-        final Player mpdPlayer = mock(Player.class);
-        when(mpdPool.getMPDPlayer(ZONE)).thenReturn(mpdPlayer);
-        when(mpdPlayer.getStatus()).thenReturn(Player.Status.STATUS_PLAYING);
-        doThrow(MPDPlayerException.class).when(mpdPlayer).pause();
-
-        testSubject.handlePause(new PauseCommand(ZONE));
-
-        verify(mpdPlayer, times(1)).pause();
+        verify(mpdGateway, times(1)).pause(mpdInstancePortNumber);
+        verify(zoneRepository, times(1)).save(zone, 123);
     }
 
     @Test
     public void handleStop() throws Exception {
-        final Player mpdPlayer = mock(Player.class);
-        when(mpdPool.getMPDPlayer(ZONE)).thenReturn(mpdPlayer);
-        testSubject.handleStop(new StopCommand(ZONE));
+        final Zone zone = mock(Zone.class);
+        when(zone.getMpdInstancePortNumber()).thenReturn(MPD_INSTANCE_PORT_NUMBER);
+        when(zoneRepository.getById(ZONE_ID)).thenReturn(zone);
+        final int mpdInstancePortNumber = 12;
+        when(zone.getMpdInstancePortNumber()).thenReturn(mpdInstancePortNumber);
+        testSubject.handleStop(new Stop(ZONE_ID, 123));
 
-        verify(mpdPlayer, times(1)).stop();
+        verify(mpdGateway, times(1)).stop(mpdInstancePortNumber);
+        verify(zoneRepository, times(1)).save(zone, 123);
     }
 
     @Test
-    public void handleSopWithException() throws Exception {
-        final Player mpdPlayer = mock(Player.class);
-        when(mpdPool.getMPDPlayer(ZONE)).thenReturn(mpdPlayer);
+    public void handleChangePlayerStatus() throws Exception {
+        final Zone zone = mock(Zone.class);
+        when(zoneRepository.getById(ZONE_ID)).thenReturn(zone);
+        testSubject.handleChangePlayerStatus(new ChangePlayerStatus(ZONE_ID, PlayerStatus.STOPPED, 123));
+        verify(zoneRepository, times(1)).save(zone, 123);
 
-        doThrow(MPDPlayerException.class).when(mpdPlayer).stop();
-
-        testSubject.handleStop(new StopCommand(ZONE));
-
-        verify(mpdPlayer, times(1)).stop();
     }
+
 }

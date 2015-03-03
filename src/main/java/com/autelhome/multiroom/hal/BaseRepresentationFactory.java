@@ -1,10 +1,12 @@
 package com.autelhome.multiroom.hal;
 
+import com.google.common.base.Splitter;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.List;
 
 /**
  * Base representation factory.
@@ -13,8 +15,7 @@ import java.net.URI;
  */
 public class BaseRepresentationFactory extends StandardRepresentationFactory {
 
-	private final UriInfo uriInfo;
-
+	private final URI baseURI;
 
 	/**
 	 * Constructor.
@@ -23,16 +24,29 @@ public class BaseRepresentationFactory extends StandardRepresentationFactory {
 	 */
 	protected  BaseRepresentationFactory(final UriInfo uriInfo) {
 		withFlag(COALESCE_ARRAYS);
-		this.uriInfo = uriInfo;
+
+		baseURI = uriInfo.getBaseUri();
 	}
+
+    /**
+     * Constructor.
+     *
+     * @param uriRequest the request uri
+     */
+    protected BaseRepresentationFactory(final URI uriRequest) {
+        final List<String> pathTokens = Splitter.on('/').splitToList(uriRequest.getPath());
+        baseURI = URI.create(uriRequest.getScheme() + "://" + uriRequest.getAuthority() + "/" + pathTokens.get(1) + "/" + pathTokens.get(2));
+
+        withFlag(COALESCE_ARRAYS);
+    }
 
 	/**
 	 * Returns the base {@link UriBuilder} based on the request.
 	 *
 	 * @return the base {@link UriBuilder} based on the request
 	 */
-	protected UriBuilder getBaseUriBuilder() {
-		return uriInfo.getBaseUriBuilder();
+	protected UriBuilder getBaseURIBuilder() {
+		return UriBuilder.fromUri(baseURI);
 	}
 
 	/**
@@ -41,7 +55,16 @@ public class BaseRepresentationFactory extends StandardRepresentationFactory {
 	 * @return the 'mr' namespace URL
 	 */
 	protected String getMRNamespace() {
-        final URI baseUri = uriInfo.getBaseUri();
-        return String.format("http://%s:%d/multiroom-mpd/docs/#/relations/{rel}", baseUri.getHost(), baseUri.getPort());
+        return getDocumentationBaseUri() + "relations/{rel}";
 	}
+
+    /**
+     * Returns the documentation base URI.
+     *
+     * @return the documentation base URI
+     */
+    protected String getDocumentationBaseUri() {
+        final URI baseUri = getBaseURIBuilder().build();
+        return String.format("http://%s/multiroom-mpd/docs/#/", baseUri.getAuthority());
+    }
 }

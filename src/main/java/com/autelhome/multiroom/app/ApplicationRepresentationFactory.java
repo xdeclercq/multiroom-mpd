@@ -30,11 +30,11 @@ public class ApplicationRepresentationFactory extends BaseRepresentationFactory 
     @Override
     public Representation newRepresentation()
     {
-        final String selfStr = getBaseUriBuilder().path(ApplicationResource.class).build().toString();
+        final String selfStr = getBaseURIBuilder().path(ApplicationResource.class).build().toString();
 
         final URI self = URI.create(selfStr.charAt(selfStr.length()-1) == '/' ? selfStr.substring(0, selfStr.length() - 1) : selfStr);
 
-        final URI zonesURI = getBaseUriBuilder().path(ZonesResource.class).build();
+        final URI zonesURI = getBaseURIBuilder().path(ZonesResource.class).build();
 
         return newRepresentation(self)
                 .withNamespace("mr", getMRNamespace())

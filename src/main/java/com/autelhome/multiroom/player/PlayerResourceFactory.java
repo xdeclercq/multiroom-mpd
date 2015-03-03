@@ -1,7 +1,7 @@
 package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.util.EventBus;
-import com.autelhome.multiroom.zone.Zone;
+import com.autelhome.multiroom.zone.ZoneDto;
 import com.google.inject.Inject;
 
 /**
@@ -12,21 +12,21 @@ import com.google.inject.Inject;
 public class PlayerResourceFactory
 {
 
-    private final PlayerProvider playerProvider;
+    private final PlayerService playerService;
     private final PlayerRepresentationFactory playerRepresentationFactory;
     private final EventBus eventBus;
 
     /**
      * Constructor.
      *
-     * @param playerProvider a {@link PlayerProvider} instance
+     * @param playerService a {@link PlayerService} instance
      * @param playerRepresentationFactory a {@link PlayerRepresentationFactory} instance
-     * @param eventBus the eventBus.
+     * @param eventBus the event bus
      */
     @Inject
-    public PlayerResourceFactory(final PlayerProvider playerProvider, final PlayerRepresentationFactory playerRepresentationFactory, final EventBus eventBus)
+    public PlayerResourceFactory(final PlayerService playerService, final PlayerRepresentationFactory playerRepresentationFactory, final EventBus eventBus)
     {
-        this.playerProvider = playerProvider;
+        this.playerService = playerService;
         this.playerRepresentationFactory = playerRepresentationFactory;
         this.eventBus = eventBus;
     }
@@ -34,11 +34,11 @@ public class PlayerResourceFactory
     /**
      * Returns a new {@link PlayerResource} instance for a zone.
      *
-     * @param zone a zone
+     * @param zoneDto the zone
      * @return a new {@link PlayerResource} instance for the player related to the provided {@code zone}
      */
-    public PlayerResource newInstance(final Zone zone)
+    public PlayerResource newInstance(final ZoneDto zoneDto)
     {
-        return new PlayerResource(playerProvider.getPlayer(zone), playerRepresentationFactory, eventBus);
+        return new PlayerResource(zoneDto, playerService, playerRepresentationFactory, eventBus);
     }
 }
