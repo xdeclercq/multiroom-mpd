@@ -1,0 +1,40 @@
+{
+  "_links": {
+    "curies": {
+        "href": "http://server:6789/multiroom-mpd/docs/#/relations/{rel}",
+        "name": "mr",
+        "templated": true
+    },
+    "self": {
+      "href": "http://server:6789/api/zones/"
+    }
+  },
+  "_embedded": {
+    "mr:zone": [
+      {
+        "_links": {
+          "self": {
+            "href": "http://server:6789/api/zones/Bedroom"
+          },
+          "mr:player": {
+            "href": "http://server:6789/api/zones/Bedroom/player"
+          }
+        },
+        "name": "Bedroom",
+        "mpdInstancePort": 234
+      },
+      {
+        "_links": {
+          "self": {
+            "href": "http://server:6789/api/zones/Kitchen"
+          },
+          "mr:player": {
+            "href": "http://server:6789/api/zones/Kitchen/player"
+          }
+        },
+        "name": "Kitchen",
+        "mpdInstancePort": 7912
+      }
+    ]
+  }
+}

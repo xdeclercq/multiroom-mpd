@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="large-12 columns">
+    <h1>API Documentation</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="large-2 columns">
+    Resources:
+    <ul>
+      <li><a ui-sref="root.resources.details({ name: 'multiroom-mpd' })">Multiroom MPD</a></li>
+      <li><a ui-sref="root.resources.details({ name: 'zones' })">Zones</a></li>
+      <li><a ui-sref="root.resources.details({ name: 'zone' })">Zone</a></li>
+      <li><a ui-sref="root.resources.details({ name: 'player' })">Player</a></li>
+      <li><a ui-sref="root.resources.details({ name: 'status' })">Status</a></li>
+    </ul>
+    Link relations:
+    <ul>
+      <li><a ui-sref="root.relations.details({ name: 'mr-zones' })">mr:zones</a></li>
+      <li><a ui-sref="root.relations.details({ name: 'mr-zone' })">mr:zone</a></li>
+      <li><a ui-sref="root.relations.details({ name: 'mr-player' })">mr:player</a></li>
+      <li><a ui-sref="root.relations.details({ name: 'mr-play' })">mr:play</a></li>
+      <li><a ui-sref="root.relations.details({ name: 'mr-pause' })">mr:pause</a></li>
+      <li><a ui-sref="root.relations.details({ name: 'mr-stop' })">mr:stop</a></li>
+      <li><a ui-sref="root.relations.details({ name: 'mr-status' })">mr:status</a></li>
+    </ul>
+  </div>
+  <div class="large-10 columns">
+    <div ui-view></div>
+  </div>
+</div>

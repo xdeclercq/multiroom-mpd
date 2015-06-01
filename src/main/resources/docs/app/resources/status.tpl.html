@@ -1,0 +1,39 @@
+<div>
+  <h3>Resource 'status'</h3>
+
+  <p>The status of a player.</p>
+
+  <h4>Properties</h4>
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Type</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>status</td>
+      <td>The status. One of PLAYING, PAUSED, STOPPED, UNKNOWN</td>
+      <td>String</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h4>Example</h4>
+  <pre class="panel">
+{
+  "_links": {
+    "curies": {
+      "href": "http://localhost:8080/multiroom-mpd/docs/#/relations/{rel}",
+      "name": "mr",
+    "templated": true
+    },
+    "self": {
+      "href": "ws://localhost:8080/multiroom-mpd/ws/zones/Bathroom/player/status"
+    }
+  },
+  "status" : "PLAYING"
+}</pre>
+</div>

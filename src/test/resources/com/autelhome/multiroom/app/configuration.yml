@@ -1,0 +1,9 @@
+server:
+  type: simple
+  applicationContextPath: /multiroom-mpd
+  adminContextPath: /admin
+  connector:
+    type: http
+    port: 8080
+
+mpdHost: localhost
