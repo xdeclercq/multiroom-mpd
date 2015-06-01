@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 public class PlayerRepresentationFactoryTest {
 
     private final UriInfo uriInfo = getUriInfo();
-    private final PlayerStatusRepresentationFactory playerStatusRepresentationFactory = new PlayerStatusRepresentationFactory(uriInfo);;
+    private final PlayerStatusRepresentationFactory playerStatusRepresentationFactory = new PlayerStatusRepresentationFactory(uriInfo);
     private final PlayerRepresentationFactory testSubject = new PlayerRepresentationFactory(uriInfo, playerStatusRepresentationFactory);
 
     public static final String BASE_URI = "http://myserver:1234/api";

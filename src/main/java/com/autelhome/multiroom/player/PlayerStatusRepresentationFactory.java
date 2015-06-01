@@ -18,7 +18,7 @@ public class PlayerStatusRepresentationFactory extends BaseRepresentationFactory
     /**
      * Constructor.
      *
-     * @param uriInfo the uriInfo related to the request
+     * @param uriInfo the {@link UriInfo} related to the request
      */
     @Inject
     public PlayerStatusRepresentationFactory(final UriInfo uriInfo) {

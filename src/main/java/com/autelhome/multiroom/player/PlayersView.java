@@ -93,7 +93,6 @@ public class PlayersView {
     private void broadcast(final String zoneName, final PlayerStatus playerStatus) {
         final SocketBroadcaster broadcaster = broadcasterFactory.lookup(SocketBroadcaster.class, String.format(PlayerStatusSocketResource.WS_PLAYER_STATUS_RESOURCE_ID_FORMAT, zoneName));
         if( broadcaster != null ) {
-
             broadcaster.broadcastEntity(playerStatus);
         }
     }
