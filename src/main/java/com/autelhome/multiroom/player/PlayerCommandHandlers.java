@@ -33,8 +33,8 @@ public class PlayerCommandHandlers {
      */
     public void handlePlay(final Play play) {
         final Zone zone = zoneRepository.getById(play.getAggregateId());
-        mpdGateway.play(zone.getMpdInstancePortNumber());
         zone.play();
+        mpdGateway.play(zone.getMpdInstancePortNumber());
         final String zoneName = zone.getName();
         LOGGER.info("zone {} - handle play", zoneName);
 
@@ -48,8 +48,8 @@ public class PlayerCommandHandlers {
      */
     public void handlePause(final Pause pause) {
         final Zone zone = zoneRepository.getById(pause.getAggregateId());
-        mpdGateway.pause(zone.getMpdInstancePortNumber());
         zone.pause();
+        mpdGateway.pause(zone.getMpdInstancePortNumber());
         final String zoneName = zone.getName();
         LOGGER.info("zone {} - handle pause", zoneName);
 
@@ -63,8 +63,8 @@ public class PlayerCommandHandlers {
      */
     public void handleStop(final Stop stop) {
         final Zone zone = zoneRepository.getById(stop.getAggregateId());
-        mpdGateway.stop(zone.getMpdInstancePortNumber());
         zone.stop();
+        mpdGateway.stop(zone.getMpdInstancePortNumber());
         final String zoneName = zone.getName();
         LOGGER.info("zone {} - handle pause", zoneName);
 
@@ -72,7 +72,7 @@ public class PlayerCommandHandlers {
     }
 
     /**
-     * Changes the palyer status.
+     * Changes the player status.
      *
      * @param changePlayerStatus a change player status command.
      */

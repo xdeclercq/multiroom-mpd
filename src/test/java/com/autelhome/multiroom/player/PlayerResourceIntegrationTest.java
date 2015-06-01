@@ -33,6 +33,9 @@ public class PlayerResourceIntegrationTest {
     private static final String EMBEDDED_MR_STATUS_STATUS_PATH = "_embedded.\"mr:status\".status";
     private static final String EMBEDDED_MR_STATUS_LINKS_SELF_HREF_PATH = "_embedded.\"mr:status\"._links.self.href";
     private static final String UNKNOWN = "UNKNOWN";
+    private static final String PLAYING = "PLAYING";
+    private static final String STOPPED = "STOPPED";
+
     @Rule
 	public final DropwizardAppRule<ApplicationConfiguration> rule =
 			new DropwizardAppRule<>(MultiroomMPDApplication.class, "src/test/resources/com/autelhome/multiroom/app/configuration.yml",
@@ -93,7 +96,7 @@ public class PlayerResourceIntegrationTest {
                 .and().body(LINKS_MR_PLAY_HREF_PATH, is(equalTo(url)))
                 .and().body(LINKS_MR_PAUSE_HREF_PATH, is(equalTo(pauseUrl)))
                 .and().body(LINKS_MR_STOP_HREF_PATH, is(equalTo(stopUrl)))
-                .and().body(EMBEDDED_MR_STATUS_STATUS_PATH, is(equalTo(UNKNOWN)))
+                .and().body(EMBEDDED_MR_STATUS_STATUS_PATH, is(equalTo(PLAYING)))
                 .and().body(EMBEDDED_MR_STATUS_LINKS_SELF_HREF_PATH, is(equalTo(statusUrl)));
     }
 
@@ -140,7 +143,7 @@ public class PlayerResourceIntegrationTest {
                 .and().body(LINKS_MR_PLAY_HREF_PATH, is(equalTo(playUrl)))
                 .and().body(LINKS_MR_PAUSE_HREF_PATH, is(equalTo(pauseUrl)))
                 .and().body(LINKS_MR_STOP_HREF_PATH, is(equalTo(url)))
-                .and().body(EMBEDDED_MR_STATUS_STATUS_PATH, is(equalTo(UNKNOWN)))
+                .and().body(EMBEDDED_MR_STATUS_STATUS_PATH, is(equalTo(STOPPED)))
                 .and().body(EMBEDDED_MR_STATUS_LINKS_SELF_HREF_PATH, is(equalTo(statusUrl)));
     }
 }

@@ -50,9 +50,9 @@ public class PlayerResource {
     @POST
     @Path("play")
     public Response play() {
-        final Optional<PlayerDto> playerDto = getPlayerDto();
-        
         eventBus.send(new Play(zoneDto.getId(), zoneDto.getVersion()));
+
+        final Optional<PlayerDto> playerDto = getPlayerDto();
 
         return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto.get())).build();
     }
@@ -65,9 +65,9 @@ public class PlayerResource {
     @POST
     @Path("pause")
     public Response pause() {
-        final Optional<PlayerDto> playerDto = getPlayerDto();
-
         eventBus.send(new Pause(zoneDto.getId(), zoneDto.getVersion()));
+
+        final Optional<PlayerDto> playerDto = getPlayerDto();
 
         return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto.get())).build();
     }
@@ -80,9 +80,9 @@ public class PlayerResource {
     @POST
     @Path("stop")
     public Response stop() {
-        final Optional<PlayerDto> playerDto = getPlayerDto();
-
         eventBus.send(new Stop(zoneDto.getId(), zoneDto.getVersion()));
+
+        final Optional<PlayerDto> playerDto = getPlayerDto();
 
         return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto.get())).build();
     }
