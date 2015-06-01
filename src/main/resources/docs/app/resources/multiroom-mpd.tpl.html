@@ -1,0 +1,52 @@
+<div>
+  <h3>Resource 'Multiroom MPD'</h3>
+
+  <p>Root resource of the Multiroom MPD api.</p>
+
+  <h4>Properties</h4>
+  <p>This resource has no properties.</p>
+
+  <h4>Links</h4>
+  <table>
+    <thead>
+    <tr>
+      <th>Relation</th>
+      <th>Description</th>
+      <th>Methods</th>
+      <th>Templated</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>self</td>
+      <td>The root resource of the Multiroom MPD api</td>
+      <td>GET</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><a ui-sref="root.relations.details({ name: 'mr-zones' })">mr:zones</a></td>
+      <td>A link to the <a ui-sref="root.resources.details({ name: 'zones' })">zones</a> resource</td>
+      <td>GET,POST</td>
+      <td>No</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h4>Example</h4>
+  <pre class="panel">
+{
+  "_links": {
+    "curies": {
+      "href": "http://localhost:8080/multiroom-mpd/docs/#/relations/{rel}",
+      "name": "mr",
+      "templated": true
+    },
+    "self": {
+      "href": "http://localhost:8080/multiroom-mpd/api"
+    },
+    "mr:zones": {
+      "href":"http://localhost:8080/multiroom-mpd/api/zones/"
+    }
+  }
+}</pre>
+</div>
