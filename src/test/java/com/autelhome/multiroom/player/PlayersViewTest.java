@@ -1,9 +1,8 @@
 package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.util.InstanceNotFoundException;
-import com.autelhome.multiroom.util.SocketBroadcaster;
+import com.autelhome.multiroom.socket.SocketBroadcaster;
 import com.autelhome.multiroom.zone.ZoneCreated;
-import org.atmosphere.cpr.BroadcasterFactory;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -15,8 +14,8 @@ public class PlayersViewTest {
 
     public static final String ZONE_NAME = "a zone";
     private final PlayerDatabase playerDatabase = mock(PlayerDatabase.class);
-    private final BroadcasterFactory broadcasterFactory = mock(BroadcasterFactory.class);
-    private final PlayersView testSubject = new PlayersView(playerDatabase, broadcasterFactory);
+    private final SocketBroadcaster socketBroadcaster = mock(SocketBroadcaster.class);
+    private final PlayersView testSubject = new PlayersView(playerDatabase, socketBroadcaster);
 
     @Test
     public void handleCreated() throws Exception {
@@ -33,14 +32,11 @@ public class PlayersViewTest {
 
         final Optional<PlayerDto> playerDto = Optional.of(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PAUSED));
         when(playerDatabase.getByZoneId(zoneId)).thenReturn(playerDto);
-        final SocketBroadcaster broadcaster = mock(SocketBroadcaster.class);
-        when(broadcasterFactory.lookup(SocketBroadcaster.class, String.format(PlayerStatusSocketResource.WS_PLAYER_STATUS_RESOURCE_ID_FORMAT, ZONE_NAME))).thenReturn(broadcaster);
 
         testSubject.handlePlayed(new Played(zoneId));
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING));
 
-        verify(broadcaster).broadcastEntity(PlayerStatus.PLAYING);
     }
 
 
@@ -59,14 +55,11 @@ public class PlayersViewTest {
 
         final Optional<PlayerDto> playerDto = Optional.of(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING));
         when(playerDatabase.getByZoneId(zoneId)).thenReturn(playerDto);
-        final SocketBroadcaster broadcaster = mock(SocketBroadcaster.class);
-        when(broadcasterFactory.lookup(SocketBroadcaster.class, String.format(PlayerStatusSocketResource.WS_PLAYER_STATUS_RESOURCE_ID_FORMAT, ZONE_NAME))).thenReturn(broadcaster);
 
         testSubject.handlePaused(new Paused(zoneId));
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PAUSED));
 
-        verify(broadcaster).broadcastEntity(PlayerStatus.PAUSED);
 
     }
 
@@ -76,14 +69,11 @@ public class PlayersViewTest {
 
         final Optional<PlayerDto> playerDto = Optional.of(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING));
         when(playerDatabase.getByZoneId(zoneId)).thenReturn(playerDto);
-        final SocketBroadcaster broadcaster = mock(SocketBroadcaster.class);
-        when(broadcasterFactory.lookup(SocketBroadcaster.class, String.format(PlayerStatusSocketResource.WS_PLAYER_STATUS_RESOURCE_ID_FORMAT, ZONE_NAME))).thenReturn(broadcaster);
 
         testSubject.handleStopped(new Stopped(zoneId));
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.STOPPED));
 
-        verify(broadcaster).broadcastEntity(PlayerStatus.STOPPED);
     }
 
     @Test
@@ -92,14 +82,11 @@ public class PlayersViewTest {
 
         final Optional<PlayerDto> playerDto = Optional.of(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING));
         when(playerDatabase.getByZoneId(zoneId)).thenReturn(playerDto);
-        final SocketBroadcaster broadcaster = mock(SocketBroadcaster.class);
-        when(broadcasterFactory.lookup(SocketBroadcaster.class, String.format(PlayerStatusSocketResource.WS_PLAYER_STATUS_RESOURCE_ID_FORMAT, ZONE_NAME))).thenReturn(broadcaster);
 
         testSubject.handlePlayerStatusUpdated(new PlayerStatusUpdated(zoneId, PlayerStatus.PAUSED));
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PAUSED));
 
-        verify(broadcaster).broadcastEntity(PlayerStatus.PAUSED);
 
     }
 }

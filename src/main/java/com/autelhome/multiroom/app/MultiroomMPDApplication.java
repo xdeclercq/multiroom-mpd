@@ -1,6 +1,8 @@
 package com.autelhome.multiroom.app;
 
-import com.autelhome.multiroom.util.CorsFilter;
+import be.tomcools.dropwizard.websocket.WebsocketBundle;
+import com.autelhome.multiroom.player.PlayerStatusEndpoint;
+import com.autelhome.multiroom.util.InjectorLookup;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.hubspot.dropwizard.guice.GuiceBundle;
@@ -8,14 +10,6 @@ import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.atmosphere.cpr.ApplicationConfig;
-import org.atmosphere.cpr.AtmosphereServlet;
-import org.atmosphere.guice.AtmosphereGuiceServlet;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletRegistration;
-import java.util.EnumSet;
 
 /**
  * Application providing a RESTful API to manage a multi-instance MPD installation.
@@ -24,8 +18,8 @@ import java.util.EnumSet;
  */
 public class MultiroomMPDApplication extends Application<ApplicationConfiguration> {
 
-    public static final String CONTEXT_PATH = "/multiroom-mpd";
     private final GuiceBundle<ApplicationConfiguration> guiceBundle;
+    private final WebsocketBundle websocketBundle;
 
 
     /**
@@ -37,7 +31,8 @@ public class MultiroomMPDApplication extends Application<ApplicationConfiguratio
     public static void main(final String... args) throws Exception {
         final GuiceBundle.Builder<ApplicationConfiguration> guiceBundleBuilder = getApplicationConfigurationBuilder();
         final GuiceBundle<ApplicationConfiguration> guiceBundle = getGuiceBundle(guiceBundleBuilder);
-        new MultiroomMPDApplication(guiceBundle).run(args);
+        final WebsocketBundle websocketBundle = new WebsocketBundle();
+        new MultiroomMPDApplication(guiceBundle, websocketBundle).run(args);
     }
 
     private static GuiceBundle<ApplicationConfiguration> getGuiceBundle(final GuiceBundle.Builder<ApplicationConfiguration> guiceBundleBuilder) {
@@ -65,6 +60,7 @@ public class MultiroomMPDApplication extends Application<ApplicationConfiguratio
     public MultiroomMPDApplication() {
         final GuiceBundle.Builder<ApplicationConfiguration> guiceBundleBuilder = getApplicationConfigurationBuilder();
         this.guiceBundle = getGuiceBundle(guiceBundleBuilder);
+        this.websocketBundle = new WebsocketBundle();
     }
 
     /**
@@ -72,8 +68,9 @@ public class MultiroomMPDApplication extends Application<ApplicationConfiguratio
      *
      * @param guiceBundle a {@link GuiceBundle} instance
      */
-    public MultiroomMPDApplication(final GuiceBundle<ApplicationConfiguration> guiceBundle) {
+    public MultiroomMPDApplication(final GuiceBundle<ApplicationConfiguration> guiceBundle, final WebsocketBundle websocketBundle) {
         this.guiceBundle = guiceBundle;
+        this.websocketBundle = websocketBundle;
     }
 
     @Override
@@ -82,32 +79,18 @@ public class MultiroomMPDApplication extends Application<ApplicationConfiguratio
 
         bootstrap.addBundle(new AssetsBundle());
         bootstrap.addBundle(new AssetsBundle("/docs", "/docs", "index.html", "docs"));
+        bootstrap.addBundle(websocketBundle);
 
     }
 
     @Override
     public void run(final ApplicationConfiguration configuration, final Environment environment) throws Exception {
-        environment.getApplicationContext().setContextPath(CONTEXT_PATH);
-        environment.jersey().setUrlPattern("/api/*");
-        initializeAtmosphere(environment);
+        websocketBundle.addEndpoint(PlayerStatusEndpoint.class);
 
         final Injector injector = guiceBundle.getInjector();
+        InjectorLookup.setInjector(injector);
 
         environment.servlets().addServletListeners(new MyGuiceServletContextListener(injector));
-
-    }
-
-    private void initializeAtmosphere(final Environment environment) {
-        final AtmosphereServlet atmosphereServlet = new AtmosphereGuiceServlet();
-        atmosphereServlet.framework().addInitParameter("com.sun.jersey.config.property.packages", "com.autelhome.multiroom.player");
-        atmosphereServlet.framework().addInitParameter(ApplicationConfig.WEBSOCKET_CONTENT_TYPE, "application/hal+json");
-        atmosphereServlet.framework().addInitParameter(ApplicationConfig.WEBSOCKET_SUPPORT, "true");
-
-        final ServletRegistration.Dynamic atmosphereServletHolder = environment.servlets().addServlet("ws", atmosphereServlet);
-        atmosphereServletHolder.addMapping("/ws/*");
-
-        final FilterRegistration.Dynamic corsFilterHolder = environment.servlets().addFilter("CORS Filter", CorsFilter.class);
-        corsFilterHolder.addMappingForServletNames(EnumSet.allOf(DispatcherType.class), true, "ws");
     }
 
     private static final class MyGuiceServletContextListener extends GuiceServletContextListener {

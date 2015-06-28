@@ -39,6 +39,6 @@ public class HalJsonMessageBodyWriter implements MessageBodyWriter<ReadableRepre
 
     @Override
     public void writeTo(final ReadableRepresentation representation, final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType, final MultivaluedMap<String, Object> httpHeaders, final OutputStream entityStream) throws IOException, WebApplicationException {
-        representation.toString(mediaType.toString(), new OutputStreamWriter(entityStream, Charsets.UTF_8));
+        representation.toString(HAL_JSON_TYPE.toString(), new OutputStreamWriter(entityStream, Charsets.UTF_8));
     }
 }

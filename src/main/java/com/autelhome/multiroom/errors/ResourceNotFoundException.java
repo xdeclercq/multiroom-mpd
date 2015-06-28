@@ -1,7 +1,7 @@
 package com.autelhome.multiroom.errors;
 
 /**
- * {@link RuntimeException} for resource not found.
+ * {@link ToClientException} for resource not found.
  *
  * @author xdeclercq
  */

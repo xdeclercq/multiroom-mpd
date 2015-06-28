@@ -8,16 +8,17 @@ import java.util.Locale;
  * @author xdeclercq
  */
 public enum ErrorCode {
-    RESOURCE_NOT_FOUND("Resource Not Found", 404), INVALID_RESOURCE("Invalid Resource", 500);
+    RESOURCE_NOT_FOUND("Resource Not Found", 404), INVALID_RESOURCE("Invalid Resource", 500), UNKNOWN_ERROR("Unknown Error", 500);
 
 
     private final String label;
-    private int statusCode;
+    private final int statusCode;
 
     /**
      * Constructor.
      *
      * @param label the error label
+     * @param statusCode the status code
      */
     private ErrorCode(final String label, final int statusCode) {
         this.label = label;

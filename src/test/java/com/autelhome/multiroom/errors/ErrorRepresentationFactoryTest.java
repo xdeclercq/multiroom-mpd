@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.net.URI;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ErrorRepresentationFactoryTest {
 

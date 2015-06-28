@@ -6,19 +6,22 @@ import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.ws.DefaultWebSocketListener;
 import com.ning.http.client.ws.WebSocket;
 import com.ning.http.client.ws.WebSocketUpgradeHandler;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import io.dropwizard.testing.junit.ConfigOverride;
+import com.squarespace.jersey2.guice.BootstrapUtils;
+import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 import java.util.concurrent.TimeUnit;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class PlayerStatusSocketResourceIntegrationTest {
+public class PlayerStatusEndpointIntegrationTest {
 
     private static final String ZONES_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/";
 
@@ -27,7 +30,7 @@ public class PlayerStatusSocketResourceIntegrationTest {
             new DropwizardAppRule<>(MultiroomMPDApplication.class, "src/test/resources/com/autelhome/multiroom/app/configuration.yml",
                     ConfigOverride.config("server.connector.port", "8000"));
 
-    private final Client client = new Client();
+    private final Client client = new JerseyClientBuilder().build();
     private String zonesUrl;
 
 
@@ -35,16 +38,21 @@ public class PlayerStatusSocketResourceIntegrationTest {
     public void setUp() throws Exception {
         zonesUrl = String.format(ZONES_URL_FORMAT, rule.getLocalPort());
 
-        client.resource(
+        client.target(
                 String.format(zonesUrl, rule.getLocalPort()))
-                .post(ClientResponse.class, "{\"name\": \"Kitchen\", \"mpdInstancePort\": 6600}");
+                .request()
+                .post(Entity.json("{\"name\": \"Kitchen\", \"mpdInstancePort\": 6600}"));
 
-        client.resource(
+        client.target(
                 String.format(zonesUrl, rule.getLocalPort()))
-                .post(ClientResponse.class, "{\"name\": \"Bathroom\", \"mpdInstancePort\": 6601}");
+                .request()
+                .post(Entity.json("{\"name\": \"Bathroom\", \"mpdInstancePort\": 6601}"));
     }
 
-
+    @After
+    public  void tearDown() throws Exception {
+        BootstrapUtils.reset();
+    }
 
     @Test
     public void testPlaying() throws Exception {
@@ -117,17 +125,20 @@ public class PlayerStatusSocketResourceIntegrationTest {
 
         @Override
         public void onOpen(final WebSocket websocket) {
-            client.resource(
+            client.target(
                     String.format(zonesUrl + "Kitchen/player/play", rule.getLocalPort()))
-                    .post(ClientResponse.class);
+                    .request()
+                    .post(null);
 
-            client.resource(
+            client.target(
                     String.format(zonesUrl + "Kitchen/player/stop", rule.getLocalPort()))
-                    .post(ClientResponse.class);
+                    .request()
+                    .post(null);
 
-            client.resource(
+            client.target(
                     String.format(zonesUrl + "Kitchen/player/play", rule.getLocalPort()))
-                    .post(ClientResponse.class);
+                    .request()
+                    .post(null);
         }
 
         @Override

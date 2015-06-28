@@ -1,11 +1,10 @@
 package com.autelhome.multiroom.player;
 
+import com.autelhome.multiroom.socket.SocketBroadcaster;
 import com.autelhome.multiroom.util.InstanceNotFoundException;
-import com.autelhome.multiroom.util.SocketBroadcaster;
 import com.autelhome.multiroom.zone.ZoneCreated;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.atmosphere.cpr.BroadcasterFactory;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,18 +18,18 @@ import java.util.UUID;
 public class PlayersView {
 
     private final PlayerDatabase playerDatabase;
-    private final BroadcasterFactory broadcasterFactory;
+    private final SocketBroadcaster socketBroadcaster;
 
     /**
      * Constructor.
      *
      * @param playerDatabase the player database
-     * @param broadcasterFactory the broadcaster factory
+     * @param socketBroadcaster the socket broadcaster
      */
     @Inject
-    public PlayersView(final PlayerDatabase playerDatabase, final BroadcasterFactory broadcasterFactory) {
+    public PlayersView(final PlayerDatabase playerDatabase, final SocketBroadcaster socketBroadcaster) {
         this.playerDatabase = playerDatabase;
-        this.broadcasterFactory = broadcasterFactory;
+        this.socketBroadcaster = socketBroadcaster;
     }
 
     /**
@@ -91,9 +90,7 @@ public class PlayersView {
     }
 
     private void broadcast(final String zoneName, final PlayerStatus playerStatus) {
-        final SocketBroadcaster broadcaster = broadcasterFactory.lookup(SocketBroadcaster.class, String.format(PlayerStatusSocketResource.WS_PLAYER_STATUS_RESOURCE_ID_FORMAT, zoneName));
-        if( broadcaster != null ) {
-            broadcaster.broadcastEntity(playerStatus);
-        }
+        final String key = String.format(PlayerStatusEndpoint.WS_PLAYER_STATUS_RESOURCE_ID_FORMAT, zoneName);
+        socketBroadcaster.broadcast(key, playerStatus);
     }
 }

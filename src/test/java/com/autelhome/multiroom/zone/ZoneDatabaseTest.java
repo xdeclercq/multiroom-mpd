@@ -9,7 +9,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ZoneDatabaseTest {
 

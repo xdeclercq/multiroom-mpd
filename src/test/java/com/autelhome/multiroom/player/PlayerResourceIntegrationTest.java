@@ -2,13 +2,17 @@ package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.app.ApplicationConfiguration;
 import com.autelhome.multiroom.app.MultiroomMPDApplication;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import io.dropwizard.testing.junit.ConfigOverride;
+import com.squarespace.jersey2.guice.BootstrapUtils;
+import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 
 import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.core.Is.is;
@@ -40,17 +44,22 @@ public class PlayerResourceIntegrationTest {
 	public final DropwizardAppRule<ApplicationConfiguration> rule =
 			new DropwizardAppRule<>(MultiroomMPDApplication.class, "src/test/resources/com/autelhome/multiroom/app/configuration.yml",
 					ConfigOverride.config("server.connector.port", "8001"));
-    private final Client client = new Client();
+    private final Client client = new JerseyClientBuilder().build();
 
     @Before
     public void setUp() throws Exception {
         final String zonesUrl = String.format("http://localhost:%d/multiroom-mpd/api/zones/", rule.getLocalPort());
 
-        client.resource(
+        client.target(
                 String.format(zonesUrl, rule.getLocalPort()))
-                .post(ClientResponse.class, "{\"name\": \"Kitchen\", \"mpdInstancePort\": 1234}");
+                .request()
+                .post(Entity.json("{\"name\": \"Kitchen\", \"mpdInstancePort\": 1234}"));
     }
 
+    @After
+    public  void tearDown() throws Exception {
+        BootstrapUtils.reset();
+    }
 
     @Test
 	public void get() throws Exception {

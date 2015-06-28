@@ -1,5 +1,7 @@
 package com.autelhome.multiroom.zone;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -94,7 +96,7 @@ public class ZoneDto implements Comparable<ZoneDto>
 
     @Override
     public String toString() {
-        return com.google.common.base.Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("name", name)
                 .add("mpdInstancePortNumber", mpdInstancePortNumber)

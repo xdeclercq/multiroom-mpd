@@ -4,6 +4,7 @@ import com.autelhome.multiroom.hal.BaseRepresentationFactory;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
 
+import javax.websocket.server.ServerEndpoint;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
@@ -44,7 +45,7 @@ public class PlayerStatusRepresentationFactory extends BaseRepresentationFactory
 
         final URI self = getBaseURIBuilder()
                 .path("..")
-                .path(PlayerStatusSocketResource.class)
+                .path(PlayerStatusEndpoint.class.getAnnotation(ServerEndpoint.class).value())
                 .scheme("ws")
                 .build(zoneName)
                 .normalize();

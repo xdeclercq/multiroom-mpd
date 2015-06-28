@@ -1,26 +1,24 @@
 package com.autelhome.multiroom.player;
 
-import com.autelhome.multiroom.errors.ResourceNotFoundException;
 import com.autelhome.multiroom.hal.HalJsonMessageBodyWriter;
-import com.autelhome.multiroom.util.ContextInjectableProvider;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.*;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import com.sun.jersey.api.client.ClientResponse;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.ProcessingException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
@@ -40,7 +38,6 @@ public class PlayerResourceTest {
     private final ZonesRepresentationFactory zonesRepresentationFactory = new ZonesRepresentationFactory(uriInfo, zoneRepresentationFactory);
     private final PlayerResourceFactory playerResourceFactory = mock(PlayerResourceFactory.class);
     private final EventBus eventBus = mock(EventBus.class);
-    private final HttpServletRequest request = mock(HttpServletRequest.class);
     private final PlayerStatusRepresentationFactory playerStatusRepresentationFactory = new PlayerStatusRepresentationFactory(uriInfo);
     private final PlayerRepresentationFactory playerRepresentationFactory = new PlayerRepresentationFactory(uriInfo, playerStatusRepresentationFactory);
     private final PlayerService playerService = mock(PlayerService.class);
@@ -48,7 +45,6 @@ public class PlayerResourceTest {
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new ZonesResource(zoneService, zonesRepresentationFactory, zoneRepresentationFactory, playerResourceFactory, eventBus))
-            .addProvider(new ContextInjectableProvider<>(HttpServletRequest.class, request))
             .addProvider(HalJsonMessageBodyWriter.class)
             .build();
 
@@ -67,10 +63,10 @@ public class PlayerResourceTest {
         when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED)));
         when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
-        final ClientResponse actualResponse = resources.client().resource("/zones/Kitchen/player").accept(RepresentationFactory.HAL_JSON).get(ClientResponse.class);
+        final Response actualResponse = resources.client().target("/zones/Kitchen/player").request().accept(RepresentationFactory.HAL_JSON).get();
 
         final String expectedContent = Resources.toString(Resources.getResource(getClass(), PLAYER_JSON_FILE_NAME), Charsets.UTF_8);
-        final String actualContent = actualResponse.getEntity(String.class);
+        final String actualContent = actualResponse.readEntity(String.class);
         
         assertEquals(expectedContent, actualContent, true);
 
@@ -89,10 +85,10 @@ public class PlayerResourceTest {
         when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED)));
         when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
-        final ClientResponse actualResponse = resources.client().resource("/zones/Kitchen/player/play").accept(RepresentationFactory.HAL_JSON).post(ClientResponse.class);
+        final Response actualResponse = resources.client().target("/zones/Kitchen/player/play").request().accept(RepresentationFactory.HAL_JSON).post(null);
 
         final String expectedContent = Resources.toString(Resources.getResource(getClass(), PLAYER_JSON_FILE_NAME), Charsets.UTF_8);
-        final String actualContent = actualResponse.getEntity(String.class);
+        final String actualContent = actualResponse.readEntity(String.class);
 
         assertEquals(expectedContent, actualContent, true);
 
@@ -100,7 +96,7 @@ public class PlayerResourceTest {
         assertThat(actualStatus).isEqualTo(202);
     }
 
-    @Test(expected = ResourceNotFoundException.class)
+    @Test(expected = ProcessingException.class)
     public void playWithUnknownPlayer() throws Exception {
         final UUID zoneId = UUID.randomUUID();
         final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
@@ -109,7 +105,7 @@ public class PlayerResourceTest {
         when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.empty());
         when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
-        resources.client().resource("/zones/Kitchen/player/play").accept(RepresentationFactory.HAL_JSON).post(ClientResponse.class);
+        resources.client().target("/zones/Kitchen/player/play").request().accept(RepresentationFactory.HAL_JSON).post(null);
     }
 
 
@@ -123,10 +119,10 @@ public class PlayerResourceTest {
         when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED)));
         when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
-        final ClientResponse actualResponse = resources.client().resource("/zones/Kitchen/player/pause").accept(RepresentationFactory.HAL_JSON).post(ClientResponse.class);
+        final Response actualResponse = resources.client().target("/zones/Kitchen/player/pause").request().accept(RepresentationFactory.HAL_JSON).post(null);
 
         final String expectedContent = Resources.toString(Resources.getResource(getClass(), PLAYER_JSON_FILE_NAME), Charsets.UTF_8);
-        final String actualContent = actualResponse.getEntity(String.class);
+        final String actualContent = actualResponse.readEntity(String.class);
 
         assertEquals(expectedContent, actualContent, true);
 
@@ -143,10 +139,10 @@ public class PlayerResourceTest {
         when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED)));
         when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
-        final ClientResponse actualResponse = resources.client().resource("/zones/Kitchen/player/stop").accept(RepresentationFactory.HAL_JSON).post(ClientResponse.class);
+        final Response actualResponse = resources.client().target("/zones/Kitchen/player/stop").request().accept(RepresentationFactory.HAL_JSON).post(null);
 
         final String expectedContent = Resources.toString(Resources.getResource(getClass(), PLAYER_JSON_FILE_NAME), Charsets.UTF_8);
-        final String actualContent = actualResponse.getEntity(String.class);
+        final String actualContent = actualResponse.readEntity(String.class);
 
         assertEquals(expectedContent, actualContent, true);
 

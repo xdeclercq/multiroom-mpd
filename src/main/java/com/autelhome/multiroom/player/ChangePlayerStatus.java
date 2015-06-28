@@ -1,6 +1,7 @@
 package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.util.AbstractCommand;
+import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -62,7 +63,7 @@ public class ChangePlayerStatus extends AbstractCommand {
 
     @Override
     public String toString() {
-        return com.google.common.base.Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("aggregateId", aggregateId)
                 .add("originalVersion", originalVersion)
                 .add("newStatus", newStatus)

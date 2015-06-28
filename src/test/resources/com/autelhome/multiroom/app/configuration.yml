@@ -1,6 +1,7 @@
 server:
   type: simple
   applicationContextPath: /multiroom-mpd
+  rootPath: /api/*
   adminContextPath: /admin
   connector:
     type: http

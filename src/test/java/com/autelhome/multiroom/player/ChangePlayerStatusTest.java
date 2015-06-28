@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.UUID;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertNotEquals;
 

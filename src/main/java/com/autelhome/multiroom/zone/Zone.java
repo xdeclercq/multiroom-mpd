@@ -4,6 +4,7 @@ import com.autelhome.multiroom.errors.InvalidOperationException;
 import com.autelhome.multiroom.player.*;
 import com.autelhome.multiroom.util.AbstractAggregateRoot;
 import com.autelhome.multiroom.util.Event;
+import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -176,7 +177,7 @@ public class Zone extends AbstractAggregateRoot {
 
     @Override
     public String toString() {
-        return com.google.common.base.Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("version", version)
                 .add("mpdInstancePortNumber", mpdInstancePortNumber)

@@ -1,5 +1,7 @@
 package com.autelhome.multiroom.player;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -74,7 +76,7 @@ public class PlayerDto
 
     @Override
     public String toString() {
-        return com.google.common.base.Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("zoneId", zoneId)
                 .add("zoneName", zoneName)
                 .add("status", status)

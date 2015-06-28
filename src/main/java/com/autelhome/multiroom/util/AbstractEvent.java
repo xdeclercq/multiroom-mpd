@@ -1,5 +1,7 @@
 package com.autelhome.multiroom.util;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -66,7 +68,7 @@ public abstract class AbstractEvent implements Event {
 
     @Override
     public String toString() {
-        return com.google.common.base.Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("version", version)
                 .toString();

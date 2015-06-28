@@ -4,7 +4,7 @@ import org.bff.javampd.Player;
 import org.bff.javampd.events.PlayerBasicChangeEvent;
 import org.junit.Test;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PlayerStatusTest {
 

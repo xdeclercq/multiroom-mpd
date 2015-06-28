@@ -5,13 +5,12 @@ import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.ZoneRepository;
 import org.bff.javampd.MPD;
 import org.bff.javampd.Player;
+import org.bff.javampd.exception.MPDPlayerException;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 public class MPDGatewayTest {
 
@@ -40,7 +39,22 @@ public class MPDGatewayTest {
     }
 
     @Test
+    public void getPlayerStatusWithException() throws Exception {
+        doThrow(MPDPlayerException.class).when(mpdPlayer).getStatus();
+        final PlayerStatus actual = testSubject.getPlayerStatus(MPD_INSTANCE_PORT_NUMBER);
+
+        assertThat(actual).isEqualTo(PlayerStatus.UNKNOWN);
+    }
+
+    @Test
     public void play() throws Exception {
+        testSubject.play(MPD_INSTANCE_PORT_NUMBER);
+        verify(mpdPlayer).play();
+    }
+
+    @Test
+    public void playWithException() throws Exception {
+        doThrow(MPDPlayerException.class).when(mpdPlayer).play();
         testSubject.play(MPD_INSTANCE_PORT_NUMBER);
         verify(mpdPlayer).play();
     }
@@ -52,7 +66,21 @@ public class MPDGatewayTest {
     }
 
     @Test
+    public void pauseWithException() throws Exception {
+        doThrow(MPDPlayerException.class).when(mpdPlayer).pause();
+        testSubject.pause(MPD_INSTANCE_PORT_NUMBER);
+        verify(mpdPlayer).pause();
+    }
+
+    @Test
     public void stop() throws Exception {
+        testSubject.stop(MPD_INSTANCE_PORT_NUMBER);
+        verify(mpdPlayer).stop();
+    }
+
+    @Test
+    public void stopWithException() throws Exception {
+        doThrow(MPDPlayerException.class).when(mpdPlayer).stop();
         testSubject.stop(MPD_INSTANCE_PORT_NUMBER);
         verify(mpdPlayer).stop();
     }

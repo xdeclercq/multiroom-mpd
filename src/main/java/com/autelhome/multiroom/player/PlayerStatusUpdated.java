@@ -1,6 +1,7 @@
 package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.util.AbstractEvent;
+import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -57,7 +58,7 @@ public class PlayerStatusUpdated extends AbstractEvent {
 
     @Override
     public String toString() {
-        return com.google.common.base.Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("newPlayerStatus", newPlayerStatus)
                 .toString();

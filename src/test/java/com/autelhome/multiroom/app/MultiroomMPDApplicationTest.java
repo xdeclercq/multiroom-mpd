@@ -1,6 +1,6 @@
 package com.autelhome.multiroom.app;
 
-import com.autelhome.multiroom.util.CorsFilter;
+import be.tomcools.dropwizard.websocket.WebsocketBundle;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.jetty.MutableServletContextHandler;
@@ -10,7 +10,6 @@ import io.dropwizard.setup.Environment;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.servlet.FilterRegistration;
 import javax.servlet.Servlet;
 import javax.servlet.ServletRegistration;
 
@@ -25,8 +24,9 @@ public class MultiroomMPDApplicationTest {
     private final GuiceBundle<ApplicationConfiguration> guiceBundle = mock(GuiceBundle.class);
     private final Bootstrap<ApplicationConfiguration> bootstrap = mock(Bootstrap.class);
     private final ApplicationConfiguration configuration = new ApplicationConfiguration("mpdhost");
+    private final WebsocketBundle websocketBundle = mock(WebsocketBundle.class);
 
-    private final MultiroomMPDApplication testSubject = new MultiroomMPDApplication(guiceBundle);
+    private final MultiroomMPDApplication testSubject = new MultiroomMPDApplication(guiceBundle, websocketBundle);
 
 
     @Test
@@ -57,12 +57,6 @@ public class MultiroomMPDApplicationTest {
         final ServletRegistration.Dynamic atmosphereServletHolder = mock(ServletRegistration.Dynamic.class);
         when(servlet.addServlet(anyString(), any(Servlet.class))).thenReturn(atmosphereServletHolder);
 
-        final FilterRegistration.Dynamic corsFilterHolder = mock(FilterRegistration.Dynamic.class);
-        when(servlet.addFilter("CORS Filter", CorsFilter.class)).thenReturn(corsFilterHolder);
-
         testSubject.run(configuration, environment);
-
-        verify(contextHandler).setContextPath("/multiroom-mpd");
-        verify(jersey).setUrlPattern("/api/*");
     }
 }

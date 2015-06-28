@@ -1,14 +1,18 @@
 package com.autelhome.multiroom.zone;
 
-import com.autelhome.multiroom.app.MultiroomMPDApplication;
 import com.autelhome.multiroom.app.ApplicationConfiguration;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import io.dropwizard.testing.junit.ConfigOverride;
+import com.autelhome.multiroom.app.MultiroomMPDApplication;
+import com.squarespace.jersey2.guice.BootstrapUtils;
+import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
@@ -27,18 +31,25 @@ public class ZoneResourceIntegrationTest {
     public void setUp() throws Exception {
         final String zonesUrl = String.format(ZONES_URL_FORMAT, rule.getLocalPort());
 
-        final Client client = new Client();
+        final Client client = new JerseyClientBuilder().build();
 
-        client.resource(
+        client.target(
                 String.format(zonesUrl, rule.getLocalPort()))
-                .post(ClientResponse.class, "{\"name\": \"Kitchen\", \"mpdInstancePort\": 5678}");
+                .request()
+                .post(Entity.json("{\"name\": \"Kitchen\", \"mpdInstancePort\": 5678}"));
 
-        client.resource(
+        client.target(
                 String.format(zonesUrl, rule.getLocalPort()))
-                .post(ClientResponse.class, "{\"name\": \"Bathroom\", \"mpdInstancePort\": 1234}");
+                .request()
+                .post(Entity.json("{\"name\": \"Bathroom\", \"mpdInstancePort\": 1234}"));
     }
 
-	@Test
+    @After
+    public  void tearDown() throws Exception {
+        BootstrapUtils.reset();
+    }
+
+    @Test
 	public void getAll() throws Exception {
 
         final String url = String.format(ZONES_URL_FORMAT, rule.getLocalPort());
