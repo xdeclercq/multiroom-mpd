@@ -19,7 +19,7 @@ public class MPDListenerTest {
     private final EventBus eventBus = mock(EventBus.class);
     private final ZoneRepository zoneRepository = mock(ZoneRepository.class);
     private final UUID zoneId = UUID.randomUUID();
-    private final MPDListener testSubject = new MPDListener(zoneId, eventBus, zoneRepository);
+    private final MPDPlayerChangeListener testSubject = new MPDPlayerChangeListener(zoneId, eventBus, zoneRepository);
 
     @Test
     public void playerBasicChange() throws Exception {

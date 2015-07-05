@@ -43,7 +43,7 @@ public class ZoneCommandHandlers {
         final int mpdInstancePortNumber = createZone.getMpdInstancePortNumber();
 
         final UUID id = createZone.getAggregateId();
-        final Zone zone = new Zone(id, zoneName, mpdInstancePortNumber, mpdGateway.getPlayerStatus(mpdInstancePortNumber));
+        final Zone zone = new Zone(id, zoneName, mpdInstancePortNumber, mpdGateway.getPlayerStatus(mpdInstancePortNumber), mpdGateway.getZonePlaylist(mpdInstancePortNumber));
         mpdGateway.listenTo(zone);
         repository.save(zone, createZone.getOriginalVersion());
     }

@@ -2,6 +2,8 @@ package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.errors.InvalidOperationException;
 import com.autelhome.multiroom.player.*;
+import com.autelhome.multiroom.playlist.ZonePlaylist;
+import com.autelhome.multiroom.playlist.ZonePlaylistUpdated;
 import com.autelhome.multiroom.util.AbstractAggregateRoot;
 import com.autelhome.multiroom.util.Event;
 import com.google.common.base.MoreObjects;
@@ -36,10 +38,11 @@ public class Zone extends AbstractAggregateRoot {
      * @param name the zone name
      * @param mpdInstancePortNumber the port number of the related mpd instance
      * @param playerStatus the initial player status
+     * @param playlist the initial playlist
      */
-    public Zone(final UUID id, final String name, final int mpdInstancePortNumber, final PlayerStatus playerStatus)
+    public Zone(final UUID id, final String name, final int mpdInstancePortNumber, final PlayerStatus playerStatus, final ZonePlaylist playlist)
     {
-        applyChange(new ZoneCreated(id, name, mpdInstancePortNumber, playerStatus));
+        applyChange(new ZoneCreated(id, name, mpdInstancePortNumber, playerStatus, playlist));
     }
 
     /**
@@ -53,6 +56,15 @@ public class Zone extends AbstractAggregateRoot {
             throw new InvalidOperationException("Unable to change the player status to " + newPlayerStatus + " as it is already the current status");
         }
         applyChange(new PlayerStatusUpdated(id, newPlayerStatus));
+    }
+
+    /**
+     * Changes the playlist.
+     *
+     * @param newPlaylist the new playlist
+     */
+    public void changePlaylist(final ZonePlaylist newPlaylist) {
+        applyChange(new ZonePlaylistUpdated(id, newPlaylist));
     }
 
     /**

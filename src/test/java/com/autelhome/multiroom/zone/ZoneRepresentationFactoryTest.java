@@ -32,6 +32,7 @@ public class ZoneRepresentationFactoryTest {
 
         final String selfLink = BASE_URI + "/zones/myZone";
         final String playerLink = selfLink + "/player";
+        final String playlistLink = selfLink + "/playlist";
 
         final String mrNamespace = "http://myserver:1234/multiroom-mpd/docs/#/relations/{rel}";
 
@@ -42,6 +43,7 @@ public class ZoneRepresentationFactoryTest {
                 .withProperty("name", "myZone")
                 .withProperty("mpdInstancePort", 7912)
                 .withLink("mr:player", playerLink)
+                .withLink("mr:zoneplaylist", playlistLink)
                 .toString(RepresentationFactory.HAL_JSON);
 
         final ZoneDto zone = new ZoneDto(UUID.randomUUID(), "myZone", 7912, 1);

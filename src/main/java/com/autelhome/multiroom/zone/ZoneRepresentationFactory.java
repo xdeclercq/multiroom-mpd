@@ -43,11 +43,17 @@ public class ZoneRepresentationFactory extends BaseRepresentationFactory
                 .path(ZonesResource.class, "getPlayerResource")
                 .build(zone.getName());
 
+        final URI zonePlaylist = getBaseURIBuilder()
+                .path(ZonesResource.class)
+                .path(ZonesResource.class, "getZonePlaylistResource")
+                .build(zone.getName());
+
         return newRepresentation(self)
                 .withNamespace("mr", getMRNamespace())
                 .withProperty("name", zone.getName())
                 .withProperty("mpdInstancePort", zone.getMpdInstancePortNumber())
-                .withLink("mr:player", player);
+                .withLink("mr:player", player)
+                .withLink("mr:zoneplaylist", zonePlaylist);
     }
 
 }

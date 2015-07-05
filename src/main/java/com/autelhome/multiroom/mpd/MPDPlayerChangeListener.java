@@ -15,7 +15,7 @@ import java.util.UUID;
 /**
  * @author xdeclercq
  */
-public class MPDListener implements PlayerBasicChangeListener {
+public class MPDPlayerChangeListener implements PlayerBasicChangeListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlayerBasicChangeListener.class);
     private final UUID zoneId;
@@ -26,8 +26,9 @@ public class MPDListener implements PlayerBasicChangeListener {
      * Constructor.
      *
      * @param zoneId a zone id
+     * @param zoneRepository the zone repository
      */
-    public MPDListener(final UUID zoneId, final EventBus eventBus, final ZoneRepository zoneRepository) {
+    public MPDPlayerChangeListener(final UUID zoneId, final EventBus eventBus, final ZoneRepository zoneRepository) {
         this.zoneId = zoneId;
         this.eventBus = eventBus;
         this.zoneRepository = zoneRepository;

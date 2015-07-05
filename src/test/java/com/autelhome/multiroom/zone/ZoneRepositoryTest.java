@@ -1,6 +1,8 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.player.PlayerStatus;
+import com.autelhome.multiroom.playlist.ZonePlaylist;
+import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.Event;
 import com.autelhome.multiroom.util.EventStore;
 import org.junit.Test;
@@ -38,8 +40,9 @@ public class ZoneRepositoryTest {
         final String name = "a zone";
         final int mpdInstancePortNumber = 1984;
         final PlayerStatus playerStatus = PlayerStatus.STOPPED;
-        final Zone expected = new Zone(id, name, mpdInstancePortNumber, playerStatus);
-        when(eventStore.getEventsForAggregate(id)).thenReturn(Arrays.asList(new ZoneCreated(id, name, mpdInstancePortNumber, playerStatus)));
+        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new Song("a"), new Song("b")));
+        final Zone expected = new Zone(id, name, mpdInstancePortNumber, playerStatus, playlist);
+        when(eventStore.getEventsForAggregate(id)).thenReturn(Arrays.asList(new ZoneCreated(id, name, mpdInstancePortNumber, playerStatus, playlist)));
         final Zone actual = testSubject.getById(id);
         assertThat(actual).isEqualTo(expected);
     }

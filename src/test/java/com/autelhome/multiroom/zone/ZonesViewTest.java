@@ -1,10 +1,13 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.player.PlayerStatus;
+import com.autelhome.multiroom.playlist.ZonePlaylist;
+import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.Event;
 import com.autelhome.multiroom.util.InstanceNotFoundException;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,7 +26,7 @@ public class ZonesViewTest {
         final int mpdInstancePortNumber = 1984;
         final PlayerStatus playerStatus = PlayerStatus.PLAYING;
         final int version = 543;
-        final ZoneCreated zoneCreated = new ZoneCreated(id, name, mpdInstancePortNumber, playerStatus);
+        final ZoneCreated zoneCreated = new ZoneCreated(id, name, mpdInstancePortNumber, playerStatus, new ZonePlaylist(Arrays.asList(new Song("a"), new Song("b"))));
         zoneCreated.setVersion(543);
 
         testSubject.handleCreated(zoneCreated);

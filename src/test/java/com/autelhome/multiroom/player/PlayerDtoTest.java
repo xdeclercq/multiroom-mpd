@@ -79,7 +79,7 @@ public class PlayerDtoTest {
         assertThat(player3).isNotEqualTo(player4);
     }
 
-        @Test
+    @Test
     public void toStringShouldContainFields() throws Exception {
         final UUID zoneId = UUID.randomUUID();
         final String zoneName = "another zone";

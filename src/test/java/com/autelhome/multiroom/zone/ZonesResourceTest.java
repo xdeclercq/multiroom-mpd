@@ -2,6 +2,7 @@ package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.hal.HalJsonMessageBodyWriter;
 import com.autelhome.multiroom.player.PlayerResourceFactory;
+import com.autelhome.multiroom.playlist.ZonePlaylistResourceFactory;
 import com.autelhome.multiroom.util.EventBus;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -34,11 +35,12 @@ public class ZonesResourceTest {
 
     private final ZonesRepresentationFactory zonesRepresentationFactory = new ZonesRepresentationFactory(uriInfo, zoneRepresentationFactory);
     private final PlayerResourceFactory playerResourceFactory = mock(PlayerResourceFactory.class);
+    private final ZonePlaylistResourceFactory zonePlaylistResourceFactory = mock(ZonePlaylistResourceFactory.class);
     private final EventBus eventBus = mock(EventBus.class);
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new ZonesResource(zoneService, zonesRepresentationFactory, zoneRepresentationFactory, playerResourceFactory, eventBus))
+            .addResource(new ZonesResource(zoneService, zonesRepresentationFactory, zoneRepresentationFactory, playerResourceFactory, zonePlaylistResourceFactory, eventBus))
             .addProvider(HalJsonMessageBodyWriter.class)
             .build();
 

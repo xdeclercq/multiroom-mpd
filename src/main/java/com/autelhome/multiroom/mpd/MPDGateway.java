@@ -1,6 +1,7 @@
 package com.autelhome.multiroom.mpd;
 
 import com.autelhome.multiroom.player.PlayerStatus;
+import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.Zone;
 import com.autelhome.multiroom.zone.ZoneRepository;
@@ -51,7 +52,7 @@ public class MPDGateway
         try {
             return PlayerStatus.fromMPDPlayerStatus(mpdPlayer.getStatus());
         } catch (MPDPlayerException e) {
-            LOGGER.error("Error when looking of MPD player with port {}", mpdInstancePortNumber);
+            LOGGER.error("Error when looking of MPD player with port {}", mpdInstancePortNumber, e);
         }
         return PlayerStatus.UNKNOWN;
     }
@@ -66,7 +67,7 @@ public class MPDGateway
         try {
             mpdPlayer.play();
         } catch (MPDPlayerException e) {
-            LOGGER.error("Error when handling play command for MPD instance of port {}", mpdInstancePortNumber);
+            LOGGER.error("Error when handling play command for MPD instance of port {}", mpdInstancePortNumber, e);
         }
     }
 
@@ -80,7 +81,7 @@ public class MPDGateway
         try {
             mpdPlayer.pause();
         } catch (MPDPlayerException e) {
-            LOGGER.error("Error when handling pause command for MPD instance of port {}", mpdInstancePortNumber);
+            LOGGER.error("Error when handling pause command for MPD instance of port {}", mpdInstancePortNumber, e);
         }
     }
 
@@ -94,7 +95,7 @@ public class MPDGateway
         try {
             mpdPlayer.stop();
         } catch (MPDPlayerException e) {
-            LOGGER.error("Error when handling stop command for MPD instance of port {}", mpdInstancePortNumber);
+            LOGGER.error("Error when handling stop command for MPD instance of port {}", mpdInstancePortNumber, e);
         }
     }
 
@@ -106,18 +107,34 @@ public class MPDGateway
     public void listenTo(final Zone zone) {
         final MPD mpd = mpdProvider.getMPD(zone.getMpdInstancePortNumber());
         final StandAloneMonitor monitor = mpd.getMonitor();
-        monitor.addPlayerChangeListener(new MPDListener(zone.getId(), eventBus, zoneRepository));
+        monitor.addPlayerChangeListener(new MPDPlayerChangeListener(zone.getId(), eventBus, zoneRepository));
+        monitor.addPlaylistChangeListener(new MPDPlaylistChangeListener(zone.getId(), eventBus, zoneRepository, this));
         monitor.start();
+    }
+
+    /**
+     * Returns the playlist for a zone.
+     *
+     * @param mpdInstancePortNumber the MPD instance port number
+     * @return the {@link ZonePlaylist} related to the MPD instance with port number {@code mpdInstancePortNumber}
+     */
+    public ZonePlaylist getZonePlaylist(final int mpdInstancePortNumber) {
+        final MPD mpd = mpdProvider.getMPD(mpdInstancePortNumber);
+        try {
+            return ZonePlaylist.fromMPDPlaylist(mpd.getPlaylist());
+        } catch(final MPDException e) {
+            LOGGER.error("Error when fetching zone playlist for MPD instance of port {}", mpdInstancePortNumber, e);
+        }
+        return new ZonePlaylist();
     }
 
     /**
      * Returns the MPD Player for a zone.
      *
      * @param mpdInstancePortNumber the port number of the MPD instance
-     * @return the {@link Player} instance related to the zone named {@code zone}
+     * @return the {@link Player} related to the MPD instance with port number {@code mpdInstancePortNumber}
      */
     private Player getMPDPlayer(final int mpdInstancePortNumber) {
         return mpdProvider.getMPD(mpdInstancePortNumber).getPlayer();
     }
-
 }
