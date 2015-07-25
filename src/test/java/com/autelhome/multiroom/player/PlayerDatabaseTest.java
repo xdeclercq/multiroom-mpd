@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PlayerDatabaseTest {
 
     private static final String A_ZONE = "a zone";
-    final PlayerDatabase testSubject = new PlayerDatabase();
+    private final PlayerDatabase testSubject = new PlayerDatabase();
 
     @Test
     public void addUpdateAndGetByZoneName() throws Exception {
@@ -27,10 +27,10 @@ public class PlayerDatabaseTest {
         assertThat(actual1).isEqualTo(expected1);
 
         final String zoneName2 = "another name";
-        final PlayerDto player2 = new PlayerDto(zoneId, zoneName2, PlayerStatus.PLAYING);
-        testSubject.update(player2);
+        final PlayerDto expected2 = new PlayerDto(zoneId, zoneName2, PlayerStatus.PLAYING);
+        testSubject.update(expected2);
         final Optional<PlayerDto> actual2 = testSubject.getByZoneName(zoneName2);
-        assertThat(actual2).isEqualTo(Optional.of(player2));
+        assertThat(actual2).isEqualTo(Optional.of(expected2));
 
         final Optional<PlayerDto> actual3 = testSubject.getByZoneName(zoneName);
         final Optional<PlayerDto> expected3 = Optional.<PlayerDto>empty();
