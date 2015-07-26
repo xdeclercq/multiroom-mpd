@@ -43,7 +43,7 @@ public class PlayersViewTest {
 
 
     @Test(expected = InstanceNotFoundException.class)
-    public void handlePlayedForUnkownZone() throws Exception {
+    public void handlePlayedForUnknownZone() throws Exception {
         final UUID zoneId = UUID.randomUUID();
 
         when(playerDatabase.getByZoneId(zoneId)).thenReturn(Optional.empty());

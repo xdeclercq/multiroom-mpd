@@ -41,7 +41,7 @@ public class ZonePlaylistsViewTest {
     }
 
     @Test(expected = InstanceNotFoundException.class)
-    public void handleZonePlaylistUpdatedForUnkownZone() throws Exception {
+    public void handleZonePlaylistUpdatedForUnknownZone() throws Exception {
         final UUID zoneId = UUID.randomUUID();
 
         when(zonePlaylistDatabase.getByZoneId(zoneId)).thenReturn(Optional.empty());
