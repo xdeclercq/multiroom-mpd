@@ -1,0 +1,23 @@
+{
+
+  "_links": {
+    "curies": {
+      "name": "mr",
+      "href": "http://server:3421/multiroom-mpd/docs/#/relations/{rel}",
+      "templated": true
+    },
+    "self": {
+      "href": "http://server:3421/multiroom-mpd/api/zones/Kitchen/playlist"
+    }
+  },
+  "_embedded" : {
+    "mr:song": [
+      {
+        "title": "song A"
+      },
+      {
+        "title": "song B"
+      }
+    ]
+  }
+}
