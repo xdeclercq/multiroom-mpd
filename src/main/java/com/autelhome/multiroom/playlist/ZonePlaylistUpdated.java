@@ -44,7 +44,7 @@ public class ZonePlaylistUpdated extends AbstractEvent {
         if (id != that.id) {
             return false;
         }
-        if (newPlaylist != that.newPlaylist) {
+        if (!Objects.equals(newPlaylist, that.newPlaylist)) {
             return false;
         }
 
