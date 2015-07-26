@@ -29,6 +29,9 @@ public class ZonePlaylistResourceIntegrationTest {
     private static final String LINKS_CURIES_NAME_PATH = "_links.curies.name";
     private static final String LINKS_CURIES_HREF_PATH = "_links.curies.href";
     private static final String LINKS_CURIES_TEMPLATED_PATH = "_links.curies.templated";
+    private static final String LINKS_MR_ERROR_INFO_HREF_PATH = "_links[\"mr:error-info\"].href";
+    private static final String ERROR_CODE_PATH = "errorCode";
+    private static final String MESSAGE_PATH = "message";
 
     @Rule
 	public final DropwizardAppRule<ApplicationConfiguration> rule =
@@ -77,9 +80,9 @@ public class ZonePlaylistResourceIntegrationTest {
                 .and().body(LINKS_CURIES_NAME_PATH, is(equalTo("mr")))
                 .and().body(LINKS_CURIES_HREF_PATH, is(equalTo(docsUrl)))
                 .and().body(LINKS_CURIES_TEMPLATED_PATH, is(equalTo(true)))
-                .and().body("_links[\"mr:error-info\"].href", is(equalTo(errorInfoUrl)))
-                .and().body("errorCode", is(equalTo("Resource Not Found")))
-                .and().body("message", is(equalTo("The 'unknown' zone was not found")));
+                .and().body(LINKS_MR_ERROR_INFO_HREF_PATH, is(equalTo(errorInfoUrl)))
+                .and().body(ERROR_CODE_PATH, is(equalTo("Resource Not Found")))
+                .and().body(MESSAGE_PATH, is(equalTo("The 'unknown' zone was not found")));
     }
 
 }
