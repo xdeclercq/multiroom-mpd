@@ -39,7 +39,6 @@ public class PlayersViewTest {
         testSubject.handlePlayed(new Played(zoneId));
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING));
-
     }
 
 
@@ -62,8 +61,6 @@ public class PlayersViewTest {
         testSubject.handlePaused(new Paused(zoneId));
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PAUSED));
-
-
     }
 
     @Test
@@ -76,7 +73,6 @@ public class PlayersViewTest {
         testSubject.handleStopped(new Stopped(zoneId));
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.STOPPED));
-
     }
 
     @Test
@@ -89,7 +85,5 @@ public class PlayersViewTest {
         testSubject.handlePlayerStatusUpdated(new PlayerStatusUpdated(zoneId, PlayerStatus.PAUSED));
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PAUSED));
-
-
     }
 }
