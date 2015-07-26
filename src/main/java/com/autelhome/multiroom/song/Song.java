@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.song;
 
+import com.google.common.base.MoreObjects;
 import org.bff.javampd.objects.MPDSong;
 
 import java.util.Objects;
@@ -53,5 +54,12 @@ public class Song {
     @Override
     public int hashCode() {
         return Objects.hash(title);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("title", title)
+                .toString();
     }
 }

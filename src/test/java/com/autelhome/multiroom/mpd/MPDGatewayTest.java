@@ -1,13 +1,19 @@
 package com.autelhome.multiroom.mpd;
 
 import com.autelhome.multiroom.player.PlayerStatus;
+import com.autelhome.multiroom.playlist.ZonePlaylist;
+import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.ZoneRepository;
 import org.bff.javampd.MPD;
 import org.bff.javampd.Player;
+import org.bff.javampd.Playlist;
 import org.bff.javampd.exception.MPDPlayerException;
+import org.bff.javampd.objects.MPDSong;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -83,6 +89,27 @@ public class MPDGatewayTest {
         doThrow(MPDPlayerException.class).when(mpdPlayer).stop();
         testSubject.stop(MPD_INSTANCE_PORT_NUMBER);
         verify(mpdPlayer).stop();
+    }
+
+    @Test
+    public void getZonePlaylist() throws Exception {
+        final ZonePlaylist expected = new ZonePlaylist(Arrays.asList(new Song("Song A"), new Song("Song B")));
+
+        when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
+
+        final Playlist mpdPlaylist = mock(Playlist.class);
+
+        when(mpd.getPlaylist()).thenReturn(mpdPlaylist);
+
+        final MPDSong mpdSongA = new MPDSong();
+        mpdSongA.setTitle("Song A");
+        final MPDSong mpdSongB = new MPDSong();
+        mpdSongB.setTitle("Song B");
+        when(mpdPlaylist.getSongList()).thenReturn(Arrays.asList(mpdSongA, mpdSongB));
+
+        final ZonePlaylist actual = testSubject.getZonePlaylist(MPD_INSTANCE_PORT_NUMBER);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
 }

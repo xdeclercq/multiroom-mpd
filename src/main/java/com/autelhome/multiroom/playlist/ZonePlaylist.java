@@ -2,6 +2,7 @@ package com.autelhome.multiroom.playlist;
 
 import com.autelhome.multiroom.mpd.MPDException;
 import com.autelhome.multiroom.song.Song;
+import com.google.common.base.MoreObjects;
 import org.bff.javampd.Playlist;
 import org.bff.javampd.exception.MPDPlaylistException;
 import org.bff.javampd.objects.MPDSong;
@@ -69,5 +70,12 @@ public class ZonePlaylist {
     @Override
     public int hashCode() {
         return Objects.hash(songs);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("songs", songs)
+                .toString();
     }
 }
