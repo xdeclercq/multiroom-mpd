@@ -8,7 +8,6 @@ import com.autelhome.multiroom.zone.ZoneRepository;
 import org.bff.javampd.events.PlayerBasicChangeListener;
 import org.bff.javampd.events.PlaylistBasicChangeEvent;
 import org.bff.javampd.events.PlaylistBasicChangeListener;
-import org.bff.javampd.monitor.MPDPlaylistMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,8 +43,7 @@ public class MPDPlaylistChangeListener implements PlaylistBasicChangeListener {
 
     @Override
     public void playlistBasicChange(final PlaylistBasicChangeEvent event) {
-        final MPDPlaylistMonitor source = (MPDPlaylistMonitor) event.getSource();
-        LOGGER.info("[{}] Received MPD playlist basic change event '{}': {}", zoneId, event.getEvent(), source.getSongId());
+        LOGGER.info("[{}] Received MPD playlist basic change event '{}'", zoneId, event.getEvent());
 
         final Zone zone = zoneRepository.getById(zoneId);
 

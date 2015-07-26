@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class MPDListenerTest {
+public class MPDPlayerChangeListenerTest {
 
     private final EventBus eventBus = mock(EventBus.class);
     private final ZoneRepository zoneRepository = mock(ZoneRepository.class);
