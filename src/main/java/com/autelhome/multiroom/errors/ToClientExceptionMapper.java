@@ -1,5 +1,7 @@
 package com.autelhome.multiroom.errors;
 
+import com.autelhome.multiroom.hal.HalJsonMessageBodyWriter;
+
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -20,6 +22,10 @@ public class ToClientExceptionMapper implements ExceptionMapper<ToClientExceptio
 
     @Override
     public Response toResponse(final ToClientException exception) {
-        return Response.status(exception.getStatusCode()).entity(new ErrorRepresentationFactory(uriInfo).newRepresentation(exception.getErrorCode(), exception.getMessage())).build();
+        return Response
+                .status(exception.getStatusCode())
+                .type(HalJsonMessageBodyWriter.HAL_JSON_TYPE)
+                .entity(new ErrorRepresentationFactory(uriInfo).newRepresentation(exception.getErrorCode(), exception.getMessage()))
+                .build();
     }
 }

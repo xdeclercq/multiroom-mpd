@@ -25,7 +25,7 @@ import java.lang.reflect.Type;
 @Produces({RepresentationFactory.HAL_JSON})
 public class HalJsonMessageBodyWriter implements MessageBodyWriter<ReadableRepresentation> {
 
-    private static final MediaType HAL_JSON_TYPE = new MediaType("application", "hal+json");
+    public static final MediaType HAL_JSON_TYPE = new MediaType("application", "hal+json");
 
     @Override
     public boolean isWriteable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {

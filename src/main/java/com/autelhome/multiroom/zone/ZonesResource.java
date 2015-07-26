@@ -29,6 +29,7 @@ import java.util.UUID;
 public class ZonesResource
 {
 
+    private static final String RESOURCE_TYPE = "zone";
     private static final String NAME = "name";
     private final ZoneService zoneService;
     private final ZonesRepresentationFactory zonesRepresentationFactory;
@@ -114,8 +115,8 @@ public class ZonesResource
      */
     @Path("/{name}/player")
     public PlayerResource getPlayerResource(@PathParam(NAME) final String zoneName) {
-        final Optional<ZoneDto> zoneDto = zoneService.getByName(zoneName);
-        return playerResourceFactory.newInstance(zoneDto.get());
+        final ZoneDto zoneDto = getZoneDto(zoneName);
+        return playerResourceFactory.newInstance(zoneDto);
     }
 
     /**
@@ -126,8 +127,16 @@ public class ZonesResource
      */
     @Path("/{name}/playlist")
     public ZonePlaylistResource getZonePlaylistResource(@PathParam(NAME) final String zoneName) {
+        final ZoneDto zoneDto = getZoneDto(zoneName);
+        return zonePlaylistResourceFactory.newInstance(zoneDto);
+    }
+
+    private ZoneDto getZoneDto(final String zoneName) {
         final Optional<ZoneDto> zoneDto = zoneService.getByName(zoneName);
-        return zonePlaylistResourceFactory.newInstance(zoneDto.get());
+        if (!zoneDto.isPresent()) {
+            throw new ResourceNotFoundException(RESOURCE_TYPE, zoneName);
+        }
+        return zoneDto.get();
     }
 
 }
