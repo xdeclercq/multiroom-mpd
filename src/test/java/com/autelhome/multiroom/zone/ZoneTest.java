@@ -3,6 +3,7 @@ package com.autelhome.multiroom.zone;
 import com.autelhome.multiroom.errors.InvalidOperationException;
 import com.autelhome.multiroom.player.*;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
+import com.autelhome.multiroom.playlist.ZonePlaylistUpdated;
 import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.Event;
 import org.hamcrest.MatcherAssert;
@@ -62,6 +63,19 @@ public class ZoneTest {
         final List<Event> actualUncommittedChanges = testSubject.getUncommittedChanges();
         assertThat(actualUncommittedChanges).hasSize(2);
         assertThat(actualUncommittedChanges.get(1)).isEqualTo(new CurrentSongUpdated(id, newCurrentSong));
+    }
+
+    @Test
+    public void changePlaylist() throws Exception {
+        final UUID id = UUID.randomUUID();
+        final Zone testSubject = new Zone(id, NAME, 12, PlayerStatus.PLAYING, PLAYLIST);
+        final List<Event> initialUncommittedChanges = testSubject.getUncommittedChanges();
+        assertThat(initialUncommittedChanges).hasSize(1);
+        final ZonePlaylist newPlaylist = new ZonePlaylist(Arrays.asList(new Song("Song A"), new Song("Song B")));
+        testSubject.changePlaylist(newPlaylist);
+        final List<Event> actualUncommittedChanges = testSubject.getUncommittedChanges();
+        assertThat(actualUncommittedChanges).hasSize(2);
+        assertThat(actualUncommittedChanges.get(1)).isEqualTo(new ZonePlaylistUpdated(id, newPlaylist));
     }
 
     @Test(expected = InvalidOperationException.class)
