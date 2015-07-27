@@ -83,4 +83,16 @@ public class PlayerCommandHandlers {
         zoneRepository.save(zone, changePlayerStatus.getOriginalVersion());
     }
 
+    /**
+     * Changes the player current song.
+     *
+     * @param changeCurrentSong a change player status command.
+     */
+    public void handleChangeCurrentSong(final ChangeCurrentSong changeCurrentSong) {
+        final Zone zone = zoneRepository.getById(changeCurrentSong.getAggregateId());
+        LOGGER.info("[{}] - changing current song to {}", zone.getName(), changeCurrentSong.getNewCurrentSong());
+        zone.changeCurrentSong(changeCurrentSong.getNewCurrentSong());
+        zoneRepository.save(zone, changeCurrentSong.getOriginalVersion());
+    }
+
 }

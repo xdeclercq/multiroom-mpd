@@ -1,6 +1,7 @@
 package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.mpd.MPDGateway;
+import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.zone.Zone;
 import com.autelhome.multiroom.zone.ZoneRepository;
 import org.junit.Test;
@@ -65,7 +66,14 @@ public class PlayerCommandHandlersTest {
         when(zoneRepository.getById(ZONE_ID)).thenReturn(zone);
         testSubject.handleChangePlayerStatus(new ChangePlayerStatus(ZONE_ID, PlayerStatus.STOPPED, 123));
         verify(zoneRepository, times(1)).save(zone, 123);
+    }
 
+    @Test
+    public void handleChangeCurrentSong() throws Exception {
+        final Zone zone = mock(Zone.class);
+        when(zoneRepository.getById(ZONE_ID)).thenReturn(zone);
+        testSubject.handleChangeCurrentSong(new ChangeCurrentSong(ZONE_ID, new Song("Song A"), 123));
+        verify(zoneRepository, times(1)).save(zone, 123);
     }
 
 }
