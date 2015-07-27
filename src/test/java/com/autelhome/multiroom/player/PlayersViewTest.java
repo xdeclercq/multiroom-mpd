@@ -86,4 +86,25 @@ public class PlayersViewTest {
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PAUSED));
     }
+
+    @Test
+    public void handleCurrentSongUpdated() throws Exception {
+        final UUID zoneId = UUID.randomUUID();
+
+        final Optional<PlayerDto> playerDto = Optional.of(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING, new Song("Song A")));
+        when(playerDatabase.getByZoneId(zoneId)).thenReturn(playerDto);
+
+        testSubject.handleCurrentSongUpdated(new CurrentSongUpdated(zoneId, new Song("Song B")));
+
+        verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING, new Song("Song B")));
+    }
+
+    @Test(expected = InstanceNotFoundException.class)
+    public void handleCurrentSongUpdatedForUnknownZone() throws Exception {
+        final UUID zoneId = UUID.randomUUID();
+
+        when(playerDatabase.getByZoneId(zoneId)).thenReturn(Optional.<PlayerDto>empty());
+
+        testSubject.handleCurrentSongUpdated(new CurrentSongUpdated(zoneId, new Song("Song B")));
+    }
 }
