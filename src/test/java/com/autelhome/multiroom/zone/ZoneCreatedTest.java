@@ -8,10 +8,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertNotEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class ZoneCreatedTest {
@@ -27,8 +24,8 @@ public class ZoneCreatedTest {
         final ZoneCreated zoneCreated1 = new ZoneCreated(id, BEDROOM, 789, PlayerStatus.PLAYING, PLAYLIST);
         final ZoneCreated zoneCreated2 = new ZoneCreated(id, BEDROOM, 789, PlayerStatus.PLAYING, PLAYLIST);
 
-        assertThat(zoneCreated1, equalTo(zoneCreated1));
-        assertThat(zoneCreated1, equalTo(zoneCreated2));
+        assertThat(zoneCreated1).isEqualTo(zoneCreated1);
+        assertThat(zoneCreated1).isEqualTo(zoneCreated2);
     }
 
     @Test
@@ -40,13 +37,15 @@ public class ZoneCreatedTest {
         final ZoneCreated zoneCreated3 = new ZoneCreated(id2, KITCHEN, 789, PlayerStatus.PLAYING, PLAYLIST);
         final ZoneCreated zoneCreated4 = new ZoneCreated(id2, KITCHEN, 123, PlayerStatus.PLAYING, PLAYLIST);
         final ZoneCreated zoneCreated5 = new ZoneCreated(id2, KITCHEN, 123, PlayerStatus.PAUSED, PLAYLIST);
+        final ZoneCreated zoneCreated6 = new ZoneCreated(id2, KITCHEN, 123, PlayerStatus.PAUSED, new ZonePlaylist(Arrays.asList(new Song("Song 1"))));
 
-        assertThat(zoneCreated1, not(equalTo(zoneCreated2)));
-        assertThat(zoneCreated1, not(equalTo(null)));
-        assertThat(zoneCreated3, not(equalTo(zoneCreated1)));
-        assertThat(zoneCreated4, not(equalTo(zoneCreated3)));
-        assertThat(zoneCreated4, not(equalTo(zoneCreated5)));
-        assertNotEquals(zoneCreated1, " ");
+        assertThat(zoneCreated1).isNotEqualTo(" ");
+        assertThat(zoneCreated1).isNotEqualTo(null);
+        assertThat(zoneCreated1).isNotEqualTo(zoneCreated2);
+        assertThat(zoneCreated3).isNotEqualTo(zoneCreated1);
+        assertThat(zoneCreated4).isNotEqualTo(zoneCreated3);
+        assertThat(zoneCreated4).isNotEqualTo(zoneCreated5);
+        assertThat(zoneCreated5).isNotEqualTo(zoneCreated6);
     }
 
     @Test
@@ -57,8 +56,8 @@ public class ZoneCreatedTest {
         final int hashCode3 = new ZoneCreated(id, null, 789, PlayerStatus.PLAYING, PLAYLIST).hashCode();
         final int hashCode4 = new ZoneCreated(id, null, 789, PlayerStatus.PLAYING, PLAYLIST).hashCode();
 
-        assertThat(hashCode1, equalTo(hashCode2));
-        assertThat(hashCode3, equalTo(hashCode4));
+        assertThat(hashCode1).isEqualTo(hashCode2);
+        assertThat(hashCode3).isEqualTo(hashCode4);
     }
 
     @Test
@@ -69,11 +68,13 @@ public class ZoneCreatedTest {
         final int hashCode3 = new ZoneCreated(id, BATHROOM, 790, PlayerStatus.PLAYING, PLAYLIST).hashCode();
         final int hashCode4 = new ZoneCreated(id, BATHROOM, 790, PlayerStatus.STOPPED, PLAYLIST).hashCode();
         final int hashCode5 = new ZoneCreated(UUID.randomUUID(), BATHROOM, 790, PlayerStatus.STOPPED, PLAYLIST).hashCode();
+        final int hashCode6 = new ZoneCreated(UUID.randomUUID(), BATHROOM, 790, PlayerStatus.STOPPED, new ZonePlaylist()).hashCode();
 
-        assertThat(hashCode1, not(equalTo(hashCode2)));
-        assertThat(hashCode2, not(equalTo(hashCode3)));
-        assertThat(hashCode3, not(equalTo(hashCode4)));
-        assertThat(hashCode4, not(equalTo(hashCode5)));
+        assertThat(hashCode1).isNotEqualTo(hashCode2);
+        assertThat(hashCode2).isNotEqualTo(hashCode3);
+        assertThat(hashCode3).isNotEqualTo(hashCode4);
+        assertThat(hashCode4).isNotEqualTo(hashCode5);
+        assertThat(hashCode5).isNotEqualTo(hashCode6);
     }
 
 }
