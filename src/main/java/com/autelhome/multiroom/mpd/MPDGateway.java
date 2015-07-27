@@ -2,6 +2,7 @@ package com.autelhome.multiroom.mpd;
 
 import com.autelhome.multiroom.player.PlayerStatus;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
+import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.Zone;
 import com.autelhome.multiroom.zone.ZoneRepository;
@@ -10,8 +11,11 @@ import org.bff.javampd.MPD;
 import org.bff.javampd.Player;
 import org.bff.javampd.StandAloneMonitor;
 import org.bff.javampd.exception.MPDPlayerException;
+import org.bff.javampd.objects.MPDSong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
 
 /**
  * Gateway to MPD instances.
@@ -126,6 +130,23 @@ public class MPDGateway
             LOGGER.error("Error when fetching zone playlist for MPD instance of port {}", mpdInstancePortNumber, e);
         }
         return new ZonePlaylist();
+    }
+
+    /**
+     * Returns the current song for a zone.
+     *
+     * @param mpdInstancePortNumber the MPD instance port number
+     * @return the current {@link Song} related to the MPD instance with port number {@code mpdInstancePortNumber}
+     */
+    public Optional<Song> getCurrentSong(final int mpdInstancePortNumber) {
+        final MPD mpd = mpdProvider.getMPD(mpdInstancePortNumber);
+        try {
+            final MPDSong mpdCurrentSong = mpd.getPlayer().getCurrentSong();
+            return mpdCurrentSong == null ? Optional.<Song>empty() : Optional.of(Song.fromMPDSong(mpdCurrentSong));
+        } catch(final MPDPlayerException e) {
+            LOGGER.error("Error when fetching current song for MPD instance of port {}", mpdInstancePortNumber, e);
+        }
+        return Optional.empty();
     }
 
     /**

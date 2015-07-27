@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.*;
 public class MPDGatewayTest {
 
     private static final int MPD_INSTANCE_PORT_NUMBER = 12;
+    private static final String SONG_A = "Song A";
 
     private final MPDProvider mpdProvider = mock(MPDProvider.class);
     private final EventBus eventBus = mock(EventBus.class);
@@ -93,7 +95,7 @@ public class MPDGatewayTest {
 
     @Test
     public void getZonePlaylist() throws Exception {
-        final ZonePlaylist expected = new ZonePlaylist(Arrays.asList(new Song("Song A"), new Song("Song B")));
+        final ZonePlaylist expected = new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song("Song B")));
 
         when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
 
@@ -102,12 +104,63 @@ public class MPDGatewayTest {
         when(mpd.getPlaylist()).thenReturn(mpdPlaylist);
 
         final MPDSong mpdSongA = new MPDSong();
-        mpdSongA.setTitle("Song A");
+        mpdSongA.setTitle(SONG_A);
         final MPDSong mpdSongB = new MPDSong();
         mpdSongB.setTitle("Song B");
         when(mpdPlaylist.getSongList()).thenReturn(Arrays.asList(mpdSongA, mpdSongB));
 
         final ZonePlaylist actual = testSubject.getZonePlaylist(MPD_INSTANCE_PORT_NUMBER);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void getCurrentSong() throws Exception {
+        final Player mpdPlayer = mock(Player.class);
+        when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
+
+        when(mpd.getPlayer()).thenReturn(mpdPlayer);
+
+        final MPDSong mpdSongA = new MPDSong();
+        mpdSongA.setTitle(SONG_A);
+
+        when(mpdPlayer.getCurrentSong()).thenReturn(mpdSongA);
+
+        final Optional<Song> actual = testSubject.getCurrentSong(MPD_INSTANCE_PORT_NUMBER);
+
+        final Optional<Song> expected = Optional.of(new Song(SONG_A));
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void getCurrentSongWithNullSong() throws Exception {
+        final Player mpdPlayer = mock(Player.class);
+        when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
+
+        when(mpd.getPlayer()).thenReturn(mpdPlayer);
+
+        when(mpdPlayer.getCurrentSong()).thenReturn(null);
+
+        final Optional<Song> actual = testSubject.getCurrentSong(MPD_INSTANCE_PORT_NUMBER);
+
+        final Optional<Song> expected = Optional.empty();
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void getCurrentSongWithMPDPlayerException() throws Exception {
+        final Player mpdPlayer = mock(Player.class);
+        when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
+
+        when(mpd.getPlayer()).thenReturn(mpdPlayer);
+
+        when(mpdPlayer.getCurrentSong()).thenThrow(MPDPlayerException.class);
+
+        final Optional<Song> actual = testSubject.getCurrentSong(MPD_INSTANCE_PORT_NUMBER);
+
+        final Optional<Song> expected = Optional.empty();
 
         assertThat(actual).isEqualTo(expected);
     }
