@@ -4,6 +4,7 @@ import com.autelhome.multiroom.errors.InvalidOperationException;
 import com.autelhome.multiroom.player.*;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.playlist.ZonePlaylistUpdated;
+import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.AbstractAggregateRoot;
 import com.autelhome.multiroom.util.Event;
 import com.google.common.base.MoreObjects;
@@ -57,6 +58,16 @@ public class Zone extends AbstractAggregateRoot {
         }
         applyChange(new PlayerStatusUpdated(id, newPlayerStatus));
     }
+
+    /**
+     * Changes the player current song.
+     *
+     * @param newCurrentSong the new current song
+     */
+    public void changeCurrentSong(final Song newCurrentSong) {
+        applyChange(new CurrentSongUpdated(id, newCurrentSong));
+    }
+
 
     /**
      * Changes the playlist.

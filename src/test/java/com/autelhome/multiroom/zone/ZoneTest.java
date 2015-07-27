@@ -51,6 +51,19 @@ public class ZoneTest {
         assertThat(actualUncommittedChanges.get(1)).isEqualTo(new PlayerStatusUpdated(id, newPlayerStatus));
     }
 
+    @Test
+    public void changeCurrentSong() throws Exception {
+        final UUID id = UUID.randomUUID();
+        final Zone testSubject = new Zone(id, NAME, 12, PlayerStatus.PLAYING, PLAYLIST);
+        final List<Event> initialUncommittedChanges = testSubject.getUncommittedChanges();
+        assertThat(initialUncommittedChanges).hasSize(1);
+        final Song newCurrentSong = new Song("Song A");
+        testSubject.changeCurrentSong(newCurrentSong);
+        final List<Event> actualUncommittedChanges = testSubject.getUncommittedChanges();
+        assertThat(actualUncommittedChanges).hasSize(2);
+        assertThat(actualUncommittedChanges.get(1)).isEqualTo(new CurrentSongUpdated(id, newCurrentSong));
+    }
+
     @Test(expected = InvalidOperationException.class)
     public void changePlayerStatusWithSameStatus() throws Exception {
         final PlayerStatus newPlayerStatus = PlayerStatus.PAUSED;
