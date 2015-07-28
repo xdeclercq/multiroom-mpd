@@ -1,7 +1,9 @@
 package com.autelhome.multiroom.mpd;
 
+import com.autelhome.multiroom.player.ChangeCurrentSong;
 import com.autelhome.multiroom.playlist.ChangeZonePlaylist;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
+import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.Zone;
 import com.autelhome.multiroom.zone.ZoneRepository;
@@ -11,6 +13,7 @@ import org.bff.javampd.events.PlaylistBasicChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -38,20 +41,22 @@ public class MPDPlaylistChangeListener implements PlaylistBasicChangeListener {
         this.eventBus = eventBus;
         this.zoneRepository = zoneRepository;
         this.mpdGateway = mpdGateway;
-
     }
 
     @Override
     public void playlistBasicChange(final PlaylistBasicChangeEvent event) {
-        LOGGER.info("[{}] Received MPD playlist basic change event '{}'", zoneId, event.getEvent());
+        final PlaylistBasicChangeEvent.Event eventEvent = event.getEvent();
+        LOGGER.info("[{}] Received MPD playlist basic change event '{}'", zoneId, eventEvent);
 
         final Zone zone = zoneRepository.getById(zoneId);
-
-        final ZonePlaylist newPlaylist = mpdGateway.getZonePlaylist(zone.getMpdInstancePortNumber());
-        final ChangeZonePlaylist changeZonePlaylist = new ChangeZonePlaylist(zone.getId(), newPlaylist, zone.getVersion());
-
-        eventBus.send(changeZonePlaylist);
+        if (eventEvent.equals(PlaylistBasicChangeEvent.Event.SONG_CHANGED)) {
+            final Optional<Song> currentSong = mpdGateway.getCurrentSong(zone.getMpdInstancePortNumber());
+            final ChangeCurrentSong changeCurrentSong = new ChangeCurrentSong(zone.getId(), currentSong.get(), zone.getVersion());
+            eventBus.send(changeCurrentSong);
+        } else {
+            final ZonePlaylist newPlaylist = mpdGateway.getZonePlaylist(zone.getMpdInstancePortNumber());
+            final ChangeZonePlaylist changeZonePlaylist = new ChangeZonePlaylist(zone.getId(), newPlaylist, zone.getVersion());
+            eventBus.send(changeZonePlaylist);
+        }
     }
-
-
 }
