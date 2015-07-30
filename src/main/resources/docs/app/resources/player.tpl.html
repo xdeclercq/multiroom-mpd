@@ -4,22 +4,7 @@
   <p>A player of a zone.</p>
 
   <h4>Properties</h4>
-  <table>
-    <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Type</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td>name</td>
-      <td>The zone name</td>
-      <td>String</td>
-    </tr>
-    </tbody>
-  </table>
+  <p>This resource has no properties.</p>
 
   <h4>Links</h4>
   <table>
@@ -82,6 +67,12 @@
       <td>WS</td>
       <td>No</td>
     </tr>
+    <tr>
+      <td><a ui-sref="root.relations.details({ name: 'mr-current-song' })">mr:current-song</a></td>
+      <td>The current <a ui-sref="root.resources.details({ name: 'song' })">song</a> resource of this player</td>
+      <td>WS</td>
+      <td>No</td>
+    </tr>
     </tbody>
   </table>
 
@@ -116,6 +107,9 @@
         }
       },
       "status": "PAUSED"
+    },
+    "mr:current-song": {
+      "title": "Yesterday"
     }
   }
 }</pre>
