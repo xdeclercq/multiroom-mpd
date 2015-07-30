@@ -1,11 +1,9 @@
 package com.autelhome.multiroom.song;
 
 import org.bff.javampd.objects.MPDSong;
-import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
 
 public class SongTest {
 
@@ -71,7 +69,7 @@ public class SongTest {
     public void toStringShouldContainFieldsValue() throws Exception {
         final String actual = new Song(SONG_A).toString();
 
-        MatcherAssert.assertThat(actual, containsString(SONG_A));
+        assertThat(actual).contains(SONG_A);
     }
 
 }

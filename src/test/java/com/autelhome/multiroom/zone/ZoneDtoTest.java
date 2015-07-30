@@ -4,14 +4,7 @@ import org.junit.Test;
 
 import java.util.UUID;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
-import static org.hamcrest.number.OrderingComparison.lessThan;
-import static org.junit.Assert.assertNotEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ZoneDtoTest {
 
@@ -26,7 +19,7 @@ public class ZoneDtoTest {
 
         final String actual = zone.getName();
 
-        assertThat(actual, equalTo(expected));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -39,10 +32,10 @@ public class ZoneDtoTest {
         final ZoneDto zone5 = new ZoneDto(id, BEDROOM, 789, 1);
         final ZoneDto zone6 = new ZoneDto(id, BEDROOM, 789, 1);
 
-        assertThat(zone1, equalTo(zone1));
-        assertThat(zone1, equalTo(zone2));
-        assertThat(zone3, equalTo(zone4));
-        assertThat(zone5, equalTo(zone6));
+        assertThat(zone1).isEqualTo(zone1);
+        assertThat(zone1).isEqualTo(zone2);
+        assertThat(zone3).isEqualTo(zone4);
+        assertThat(zone5).isEqualTo(zone6);
     }
 
     @Test
@@ -57,14 +50,14 @@ public class ZoneDtoTest {
         final ZoneDto zone6 = new ZoneDto(null, KITCHEN, 123, 1);
         final ZoneDto zone7 = new ZoneDto(id2, KITCHEN, 789, 2);
 
-        assertThat(zone1, not(equalTo(zone2)));
-        assertThat(zone1, not(equalTo(null)));
-        assertThat(zone3, not(equalTo(zone1)));
-        assertThat(zone4, not(equalTo(zone1)));
-        assertThat(zone5, not(equalTo(zone4)));
-        assertThat(zone6, not(equalTo(zone5)));
-        assertThat(zone4, not(equalTo(zone7)));
-        assertNotEquals(zone1, " ");
+        assertThat(zone1).isNotEqualTo(" ");
+        assertThat(zone1).isNotEqualTo(null);
+        assertThat(zone1).isNotEqualTo(zone2);
+        assertThat(zone3).isNotEqualTo(zone1);
+        assertThat(zone4).isNotEqualTo(zone1);
+        assertThat(zone5).isNotEqualTo(zone4);
+        assertThat(zone6).isNotEqualTo(zone5);
+        assertThat(zone4).isNotEqualTo(zone7);
     }
 
     @Test
@@ -75,8 +68,8 @@ public class ZoneDtoTest {
         final int hashCode3 = new ZoneDto(id, null, 789, 1).hashCode();
         final int hashCode4 = new ZoneDto(id, null, 789, 1).hashCode();
 
-        assertThat(hashCode1, equalTo(hashCode2));
-        assertThat(hashCode3, equalTo(hashCode4));
+        assertThat(hashCode1).isEqualTo(hashCode2);
+        assertThat(hashCode3).isEqualTo(hashCode4);
     }
 
     @Test
@@ -88,10 +81,10 @@ public class ZoneDtoTest {
         final int hashCode4 = new ZoneDto(id, BATHROOM, 234, 23).hashCode();
         final int hashCode5 = new ZoneDto(UUID.randomUUID(), BATHROOM, 234, 23).hashCode();
 
-        assertThat(hashCode1, not(equalTo(hashCode2)));
-        assertThat(hashCode2, not(equalTo(hashCode3)));
-        assertThat(hashCode3, not(equalTo(hashCode4)));
-        assertThat(hashCode4, not(equalTo(hashCode5)));
+        assertThat(hashCode1).isNotEqualTo(hashCode2);
+        assertThat(hashCode2).isNotEqualTo(hashCode3);
+        assertThat(hashCode3).isNotEqualTo(hashCode4);
+        assertThat(hashCode4).isNotEqualTo(hashCode5);
     }
 
     @Test
@@ -104,11 +97,11 @@ public class ZoneDtoTest {
         final UUID id2 = UUID.randomUUID();
         final ZoneDto zone5 = new ZoneDto(id2, "Office", 789, 1);
 
-        assertThat(zone1, greaterThan(zone2));
-        assertThat(zone1, comparesEqualTo(zone3));
-        assertThat(zone1, lessThan(zone4));
-        assertThat(zone2, lessThan(zone4));
-        assertThat(zone4.compareTo(zone5), equalTo(id1.compareTo(id2)));
+        assertThat(zone1).isGreaterThan(zone2);
+        assertThat(zone1).usingDefaultComparator().isEqualTo(zone3);
+        assertThat(zone1).isLessThan(zone4);
+        assertThat(zone2).isLessThan(zone4);
+        assertThat(zone4.compareTo(zone5)).isEqualTo(id1.compareTo(id2));
     }
 
     @Test
@@ -119,9 +112,9 @@ public class ZoneDtoTest {
         final int version = 123434;
         final String actual = new ZoneDto(id, zoneName, mpdInstancePortNumber, version).toString();
 
-        assertThat(actual, containsString(id.toString()));
-        assertThat(actual, containsString(zoneName));
-        assertThat(actual, containsString(Integer.toString(mpdInstancePortNumber)));
-        assertThat(actual, containsString(Integer.toString(version)));
+        assertThat(actual).contains(id.toString());
+        assertThat(actual).contains(zoneName);
+        assertThat(actual).contains(Integer.toString(mpdInstancePortNumber));
+        assertThat(actual).contains(Integer.toString(version));
     }
 }

@@ -1,13 +1,11 @@
 package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.song.Song;
-import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
 
 public class ChangeCurrentSongTest {
 
@@ -77,8 +75,8 @@ public class ChangeCurrentSongTest {
         final int originalVersion = 38408352;
         final String actual = new ChangeCurrentSong(id, newCurrentSong,  originalVersion).toString();
 
-        MatcherAssert.assertThat(actual, containsString(id.toString()));
-        MatcherAssert.assertThat(actual, containsString(newCurrentSong.toString()));
-        MatcherAssert.assertThat(actual, containsString(Integer.toString(originalVersion)));
+        assertThat(actual).contains(id.toString());
+        assertThat(actual).contains(newCurrentSong.toString());
+        assertThat(actual).contains(Integer.toString(originalVersion));
     }
 }

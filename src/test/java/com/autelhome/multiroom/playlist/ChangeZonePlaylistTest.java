@@ -1,7 +1,6 @@
 package com.autelhome.multiroom.playlist;
 
 import com.autelhome.multiroom.song.Song;
-import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -9,7 +8,6 @@ import java.util.Collection;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertNotEquals;
 
 public class ChangeZonePlaylistTest {
@@ -74,9 +72,9 @@ public class ChangeZonePlaylistTest {
         final int originalVersion = 38408352;
         final String actual = new ChangeZonePlaylist(id, newPlaylist,  originalVersion).toString();
 
-        MatcherAssert.assertThat(actual, containsString(id.toString()));
-        MatcherAssert.assertThat(actual, containsString(newPlaylist.toString()));
-        MatcherAssert.assertThat(actual, containsString(Integer.toString(originalVersion)));
+        assertThat(actual).contains(id.toString());
+        assertThat(actual).contains(newPlaylist.toString());
+        assertThat(actual).contains(Integer.toString(originalVersion));
     }
 
     @Test

@@ -1,12 +1,10 @@
 package com.autelhome.multiroom.player;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertNotEquals;
 
 public class ChangePlayerStatusTest {
@@ -65,9 +63,9 @@ public class ChangePlayerStatusTest {
         final int originalVersion = 38408352;
         final String actual = new ChangePlayerStatus(id, playerStatus, originalVersion).toString();
 
-        MatcherAssert.assertThat(actual, containsString(id.toString()));
-        MatcherAssert.assertThat(actual, containsString(playerStatus.toString()));
-        MatcherAssert.assertThat(actual, containsString(Integer.toString(originalVersion)));
+        assertThat(actual).contains(id.toString());
+        assertThat(actual).contains(playerStatus.toString());
+        assertThat(actual).contains(Integer.toString(originalVersion));
     }
 
 

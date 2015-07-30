@@ -6,7 +6,6 @@ import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.playlist.ZonePlaylistUpdated;
 import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.Event;
-import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -15,10 +14,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertNotEquals;
 
 public class ZoneTest {
 
@@ -208,8 +203,8 @@ public class ZoneTest {
         final Zone zone1 = new Zone(id, BEDROOM, 789, PlayerStatus.PLAYING, PLAYLIST);
         final Zone zone2 = new Zone(id, BEDROOM, 789, PlayerStatus.PLAYING, PLAYLIST);
 
-        MatcherAssert.assertThat(zone1, equalTo(zone1));
-        MatcherAssert.assertThat(zone1, equalTo(zone2));
+        assertThat(zone1).isEqualTo(zone1);
+        assertThat(zone1).isEqualTo(zone2);
     }
 
     @Test
@@ -228,16 +223,16 @@ public class ZoneTest {
         final Zone zone7 = new Zone(null, KITCHEN, 123, PlayerStatus.PLAYING, PLAYLIST);
         final Zone zone8 = new Zone(id2, null, 123, PlayerStatus.PLAYING, PLAYLIST);
 
-        MatcherAssert.assertThat(zone1, not(equalTo(zone2)));
-        MatcherAssert.assertThat(zone1, not(equalTo(null)));
-        MatcherAssert.assertThat(zone3, not(equalTo(zone1)));
-        MatcherAssert.assertThat(zone4, not(equalTo(zone3)));
-        MatcherAssert.assertThat(zone4, not(equalTo(zone5)));
-        MatcherAssert.assertThat(zone5, not(equalTo(zone6)));
-        MatcherAssert.assertThat(zone6, not(equalTo(zone7)));
-        MatcherAssert.assertThat(zone7, not(equalTo(zone6)));
-        MatcherAssert.assertThat(zone8, not(equalTo(zone6)));
-        assertNotEquals(zone1, " ");
+        assertThat(zone1).isNotEqualTo(" ");
+        assertThat(zone1).isNotEqualTo(null);
+        assertThat(zone1).isNotEqualTo(zone2);
+        assertThat(zone3).isNotEqualTo(zone1);
+        assertThat(zone4).isNotEqualTo(zone3);
+        assertThat(zone4).isNotEqualTo(zone5);
+        assertThat(zone5).isNotEqualTo(zone6);
+        assertThat(zone6).isNotEqualTo(zone7);
+        assertThat(zone7).isNotEqualTo(zone6);
+        assertThat(zone8).isNotEqualTo(zone6);
     }
 
     @Test
@@ -248,8 +243,8 @@ public class ZoneTest {
         final int hashCode3 = new Zone(id, null, 789, PlayerStatus.PLAYING, PLAYLIST).hashCode();
         final int hashCode4 = new Zone(id, null, 789, PlayerStatus.PLAYING, PLAYLIST).hashCode();
 
-        MatcherAssert.assertThat(hashCode1, equalTo(hashCode2));
-        MatcherAssert.assertThat(hashCode3, equalTo(hashCode4));
+        assertThat(hashCode1).isEqualTo(hashCode2);
+        assertThat(hashCode3).isEqualTo(hashCode4);
     }
 
     @Test
@@ -261,10 +256,10 @@ public class ZoneTest {
         final int hashCode4 = new Zone(id, BATHROOM, 790, PlayerStatus.STOPPED, PLAYLIST).hashCode();
         final int hashCode5 = new Zone(UUID.randomUUID(), BATHROOM, 790, PlayerStatus.STOPPED, PLAYLIST).hashCode();
 
-        MatcherAssert.assertThat(hashCode1, not(equalTo(hashCode2)));
-        MatcherAssert.assertThat(hashCode2, not(equalTo(hashCode3)));
-        MatcherAssert.assertThat(hashCode3, not(equalTo(hashCode4)));
-        MatcherAssert.assertThat(hashCode4, not(equalTo(hashCode5)));
+        assertThat(hashCode1).isNotEqualTo(hashCode2);
+        assertThat(hashCode2).isNotEqualTo(hashCode3);
+        assertThat(hashCode3).isNotEqualTo(hashCode4);
+        assertThat(hashCode4).isNotEqualTo(hashCode5);
     }
 
     @Test
@@ -276,11 +271,11 @@ public class ZoneTest {
         final Zone zone = new Zone(id, zoneName, mpdInstancePortNumber, playerStatus, PLAYLIST);
         final String actual = zone.toString();
 
-        MatcherAssert.assertThat(actual, containsString(id.toString()));
-        MatcherAssert.assertThat(actual, containsString(zoneName));
-        MatcherAssert.assertThat(actual, containsString(Integer.toString(mpdInstancePortNumber)));
-        MatcherAssert.assertThat(actual, containsString(Integer.toString(zone.getVersion())));
-        MatcherAssert.assertThat(actual, containsString("version"));
-        MatcherAssert.assertThat(actual, containsString(playerStatus.toString()));
+        assertThat(actual).contains(id.toString());
+        assertThat(actual).contains(zoneName);
+        assertThat(actual).contains(Integer.toString(mpdInstancePortNumber));
+        assertThat(actual).contains(Integer.toString(zone.getVersion()));
+        assertThat(actual).contains("version");
+        assertThat(actual).contains(playerStatus.toString());
     }
 }

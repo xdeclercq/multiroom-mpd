@@ -9,8 +9,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.io.File;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ApplicationConfigurationTest {
 
@@ -23,7 +22,7 @@ public class ApplicationConfigurationTest {
 
         final String actual = configuration.getMPDHost();
 
-        assertThat(actual, equalTo(expected));
+        assertThat(actual).isEqualTo(expected);
     }
 
 
@@ -38,6 +37,6 @@ public class ApplicationConfigurationTest {
 
 
 
-        assertThat(actual.getMPDHost(), equalTo("localhost"));
+        assertThat(actual.getMPDHost()).isEqualTo("localhost");
     }
 }
