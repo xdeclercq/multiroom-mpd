@@ -2,6 +2,7 @@ package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.hal.HalJsonMessageBodyWriter;
 import com.autelhome.multiroom.playlist.ZonePlaylistResourceFactory;
+import com.autelhome.multiroom.song.SongRepresentationFactory;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.*;
 import com.google.common.base.Charsets;
@@ -40,7 +41,8 @@ public class PlayerResourceTest {
     private final PlayerResourceFactory playerResourceFactory = mock(PlayerResourceFactory.class);
     private final EventBus eventBus = mock(EventBus.class);
     private final PlayerStatusRepresentationFactory playerStatusRepresentationFactory = new PlayerStatusRepresentationFactory(uriInfo);
-    private final PlayerRepresentationFactory playerRepresentationFactory = new PlayerRepresentationFactory(uriInfo, playerStatusRepresentationFactory);
+    private final SongRepresentationFactory songRepresentationFactory = new SongRepresentationFactory(uriInfo);
+    private final PlayerRepresentationFactory playerRepresentationFactory = new PlayerRepresentationFactory(uriInfo, playerStatusRepresentationFactory, songRepresentationFactory);
     private final PlayerService playerService = mock(PlayerService.class);
     private final ZonePlaylistResourceFactory zonePlaylistResourceFactory = mock(ZonePlaylistResourceFactory.class);
 

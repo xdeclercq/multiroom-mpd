@@ -1,6 +1,8 @@
 package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.hal.BaseRepresentationFactory;
+import com.autelhome.multiroom.song.Song;
+import com.autelhome.multiroom.song.SongRepresentationFactory;
 import com.autelhome.multiroom.zone.ZonesResource;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
@@ -17,17 +19,20 @@ public class PlayerRepresentationFactory extends BaseRepresentationFactory
 {
 
     private final PlayerStatusRepresentationFactory playerStatusRepresentationFactory;
+    private final SongRepresentationFactory songRepresentationFactory;
 
     /**
      * Constructor.
      *
      * @param uriInfo the {@link UriInfo} related to the request
      * @param playerStatusRepresentationFactory a {@link PlayerStatusRepresentationFactory} instance
+     * @param songRepresentationFactory a {@link SongRepresentationFactory} instance
      */
     @Inject
-    public PlayerRepresentationFactory(final UriInfo uriInfo, final PlayerStatusRepresentationFactory playerStatusRepresentationFactory) {
+    public PlayerRepresentationFactory(final UriInfo uriInfo, final PlayerStatusRepresentationFactory playerStatusRepresentationFactory, final SongRepresentationFactory songRepresentationFactory) {
         super(uriInfo);
         this.playerStatusRepresentationFactory = playerStatusRepresentationFactory;
+        this.songRepresentationFactory = songRepresentationFactory;
     }
 
     /**
@@ -62,12 +67,20 @@ public class PlayerRepresentationFactory extends BaseRepresentationFactory
                 .path(PlayerResource.class, "stop")
                 .build(zoneName);
 
-        return newRepresentation(self.toString())
+        final Representation representation = newRepresentation(self.toString())
                 .withNamespace("mr", getMRNamespace())
                 .withLink("mr:play", play)
                 .withLink("mr:pause", pause)
                 .withLink("mr:stop", stop)
                 .withRepresentation("mr:status", playerStatusRepresentationFactory.newRepresentation(playerDto.getStatus(), zoneName));
+
+        final Song currentSong = playerDto.getCurrentSong();
+
+        if (currentSong != null) {
+            representation.withRepresentation("mr:current-song", songRepresentationFactory.newRepresentation(currentSong));
+        }
+
+        return representation;
     }
 
 }

@@ -62,6 +62,10 @@ public class PlayerDto
         return zoneId;
     }
 
+    public Song getCurrentSong() {
+        return currentSong;
+    }
+
     @Override
     public int hashCode()
     {
