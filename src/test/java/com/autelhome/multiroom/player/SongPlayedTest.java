@@ -62,11 +62,11 @@ public class SongPlayedTest {
     @Test
     public void toStringShouldContainFieldsValue() throws Exception {
         final UUID id = UUID.randomUUID();
-        final Song newCurrentSong = new Song(SONG_A);
-        final String actual = new SongPlayed(id, newCurrentSong).toString();
+        final Song song = new Song(SONG_A);
+        final String actual = new SongPlayed(id, song).toString();
 
         assertThat(actual).contains(id.toString());
-        assertThat(actual).contains(newCurrentSong.toString());
+        assertThat(actual).contains(song.toString());
     }
 
 }
