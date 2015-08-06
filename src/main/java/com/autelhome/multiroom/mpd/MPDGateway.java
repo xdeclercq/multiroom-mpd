@@ -9,8 +9,10 @@ import com.autelhome.multiroom.zone.ZoneRepository;
 import com.google.inject.Inject;
 import org.bff.javampd.MPD;
 import org.bff.javampd.Player;
+import org.bff.javampd.Playlist;
 import org.bff.javampd.StandAloneMonitor;
 import org.bff.javampd.exception.MPDPlayerException;
+import org.bff.javampd.exception.MPDPlaylistException;
 import org.bff.javampd.objects.MPDSong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,6 +74,28 @@ public class MPDGateway
             mpdPlayer.play();
         } catch (MPDPlayerException e) {
             LOGGER.error("Error when handling play command for MPD instance of port {}", mpdInstancePortNumber, e);
+        }
+    }
+
+    /**
+     * Issues a play command to the appropriate MPD instance.
+     *
+     * @param mpdInstancePortNumber the MPD instance port number
+     * @param song the song to play
+     */
+    public void playSong(final int mpdInstancePortNumber, final Song song) {
+        final Player mpdPlayer = getMPDPlayer(mpdInstancePortNumber);
+        try {
+            final MPD mpd = mpdProvider.getMPD(mpdInstancePortNumber);
+            final Playlist mpdPlaylist = mpd.getPlaylist();
+            final Optional<MPDSong> mpdSong = mpdPlaylist.getSongList().stream().filter(s -> Song.fromMPDSong(s).equals(song)).findFirst();
+            if (!mpdSong.isPresent()) {
+                LOGGER.error("Error when handling play song command for MPD instance of port {}: song is not part playlist", mpdInstancePortNumber);
+                return;
+            }
+            mpdPlayer.playId(mpdSong.get());
+        } catch (MPDPlayerException | MPDPlaylistException e) {
+            LOGGER.error("Error when handling play song command for MPD instance of port {}", mpdInstancePortNumber, e);
         }
     }
 

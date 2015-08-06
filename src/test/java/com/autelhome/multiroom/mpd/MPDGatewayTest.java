@@ -23,6 +23,7 @@ public class MPDGatewayTest {
 
     private static final int MPD_INSTANCE_PORT_NUMBER = 12;
     private static final String SONG_A = "Song A";
+    private static final String SONG_B = "Song B";
 
     private final MPDProvider mpdProvider = mock(MPDProvider.class);
     private final EventBus eventBus = mock(EventBus.class);
@@ -52,6 +53,42 @@ public class MPDGatewayTest {
         final PlayerStatus actual = testSubject.getPlayerStatus(MPD_INSTANCE_PORT_NUMBER);
 
         assertThat(actual).isEqualTo(PlayerStatus.UNKNOWN);
+    }
+
+    @Test
+    public void playSong() throws Exception {
+        when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
+
+        final Playlist mpdPlaylist = mock(Playlist.class);
+
+        when(mpd.getPlaylist()).thenReturn(mpdPlaylist);
+
+        final MPDSong mpdSongA = new MPDSong();
+        mpdSongA.setTitle(SONG_A);
+        final MPDSong mpdSongB = new MPDSong();
+        mpdSongB.setTitle(SONG_B);
+        when(mpdPlaylist.getSongList()).thenReturn(Arrays.asList(mpdSongA, mpdSongB));
+
+        testSubject.playSong(MPD_INSTANCE_PORT_NUMBER, new Song(SONG_A));
+        verify(mpdPlayer).playId(mpdSongA);
+    }
+
+    @Test
+    public void playSongNotInPlaylist() throws Exception {
+        when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
+
+        final Playlist mpdPlaylist = mock(Playlist.class);
+
+        when(mpd.getPlaylist()).thenReturn(mpdPlaylist);
+
+        final MPDSong mpdSongA = new MPDSong();
+        mpdSongA.setTitle(SONG_A);
+        final MPDSong mpdSongB = new MPDSong();
+        mpdSongB.setTitle(SONG_B);
+        when(mpdPlaylist.getSongList()).thenReturn(Arrays.asList(mpdSongA, mpdSongB));
+
+        testSubject.playSong(MPD_INSTANCE_PORT_NUMBER, new Song("Song C"));
+        verify(mpdPlayer, never()).playId(any());
     }
 
     @Test
@@ -106,7 +143,7 @@ public class MPDGatewayTest {
         final MPDSong mpdSongA = new MPDSong();
         mpdSongA.setTitle(SONG_A);
         final MPDSong mpdSongB = new MPDSong();
-        mpdSongB.setTitle("Song B");
+        mpdSongB.setTitle(SONG_B);
         when(mpdPlaylist.getSongList()).thenReturn(Arrays.asList(mpdSongA, mpdSongB));
 
         final ZonePlaylist actual = testSubject.getZonePlaylist(MPD_INSTANCE_PORT_NUMBER);
