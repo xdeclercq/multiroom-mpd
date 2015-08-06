@@ -28,7 +28,7 @@ import java.util.Optional;
 public class PlayerStatusEndpoint implements SenderEndpoint<PlayerStatus> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlayerStatusEndpoint.class);
-    public static final String WS_PLAYER_STATUS_RESOURCE_ID_FORMAT = "zones/%s/player/status";
+    public static final String WS_PLAYER_STATUS_RESOURCE_ID_FORMAT = "/zones/%s/player/status";
 
     private final EndpointRegistry endpointRegistry;
     private final PlayerService playerService;

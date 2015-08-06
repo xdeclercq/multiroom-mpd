@@ -16,6 +16,8 @@ import static org.mockito.Mockito.*;
 public class PlayersViewTest {
 
     public static final String ZONE_NAME = "a zone";
+    private static final String ZONES_PLAYER_STATUS_KEY_FORMAT = "/zones/%s/player/status";
+    private static final String SONG_B = "Song B";
     private final PlayerDatabase playerDatabase = mock(PlayerDatabase.class);
     private final SocketBroadcaster socketBroadcaster = mock(SocketBroadcaster.class);
     private final PlayersView testSubject = new PlayersView(playerDatabase, socketBroadcaster);
@@ -39,8 +41,8 @@ public class PlayersViewTest {
         testSubject.handlePlayed(new Played(zoneId));
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING));
+        verify(socketBroadcaster).broadcast(String.format(ZONES_PLAYER_STATUS_KEY_FORMAT, ZONE_NAME), PlayerStatus.PLAYING);
     }
-
 
     @Test(expected = InstanceNotFoundException.class)
     public void handlePlayedForUnknownZone() throws Exception {
@@ -50,6 +52,7 @@ public class PlayersViewTest {
 
         testSubject.handlePlayed(new Played(zoneId));
     }
+
 
     @Test
     public void handlePaused() throws Exception {
@@ -61,6 +64,7 @@ public class PlayersViewTest {
         testSubject.handlePaused(new Paused(zoneId));
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PAUSED));
+        verify(socketBroadcaster).broadcast(String.format(ZONES_PLAYER_STATUS_KEY_FORMAT, ZONE_NAME), PlayerStatus.PAUSED);
     }
 
     @Test
@@ -73,6 +77,20 @@ public class PlayersViewTest {
         testSubject.handleStopped(new Stopped(zoneId));
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.STOPPED));
+        verify(socketBroadcaster).broadcast(String.format(ZONES_PLAYER_STATUS_KEY_FORMAT, ZONE_NAME), PlayerStatus.STOPPED);
+    }
+
+    @Test
+    public void handleSongPlayed() throws Exception {
+        final UUID zoneId = UUID.randomUUID();
+
+        final Optional<PlayerDto> playerDto = Optional.of(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PAUSED));
+        when(playerDatabase.getByZoneId(zoneId)).thenReturn(playerDto);
+
+        testSubject.handleSongPlayed(new SongPlayed(zoneId, new Song(SONG_B)));
+
+        verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING, new Song(SONG_B)));
+        verify(socketBroadcaster).broadcast(String.format(ZONES_PLAYER_STATUS_KEY_FORMAT, ZONE_NAME), PlayerStatus.PLAYING);
     }
 
     @Test
@@ -85,6 +103,7 @@ public class PlayersViewTest {
         testSubject.handlePlayerStatusUpdated(new PlayerStatusUpdated(zoneId, PlayerStatus.PAUSED));
 
         verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PAUSED));
+        verify(socketBroadcaster).broadcast(String.format(ZONES_PLAYER_STATUS_KEY_FORMAT, ZONE_NAME), PlayerStatus.PAUSED);
     }
 
     @Test
@@ -94,9 +113,9 @@ public class PlayersViewTest {
         final Optional<PlayerDto> playerDto = Optional.of(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING, new Song("Song A")));
         when(playerDatabase.getByZoneId(zoneId)).thenReturn(playerDto);
 
-        testSubject.handleCurrentSongUpdated(new CurrentSongUpdated(zoneId, new Song("Song B")));
+        testSubject.handleCurrentSongUpdated(new CurrentSongUpdated(zoneId, new Song(SONG_B)));
 
-        verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING, new Song("Song B")));
+        verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING, new Song(SONG_B)));
     }
 
     @Test(expected = InstanceNotFoundException.class)
@@ -105,6 +124,6 @@ public class PlayersViewTest {
 
         when(playerDatabase.getByZoneId(zoneId)).thenReturn(Optional.<PlayerDto>empty());
 
-        testSubject.handleCurrentSongUpdated(new CurrentSongUpdated(zoneId, new Song("Song B")));
+        testSubject.handleCurrentSongUpdated(new CurrentSongUpdated(zoneId, new Song(SONG_B)));
     }
 }
