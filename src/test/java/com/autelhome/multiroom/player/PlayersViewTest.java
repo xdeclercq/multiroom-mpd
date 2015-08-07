@@ -93,6 +93,15 @@ public class PlayersViewTest {
         verify(socketBroadcaster).broadcast(String.format(ZONES_PLAYER_STATUS_KEY_FORMAT, ZONE_NAME), PlayerStatus.PLAYING);
     }
 
+    @Test(expected = InstanceNotFoundException.class)
+    public void handleSongPlayedForUnknownZone() throws Exception {
+        final UUID zoneId = UUID.randomUUID();
+
+        when(playerDatabase.getByZoneId(zoneId)).thenReturn(Optional.empty());
+
+        testSubject.handleSongPlayed(new SongPlayed(zoneId, new Song(SONG_B)));
+    }
+
     @Test
     public void handlePlayerStatusUpdated() throws Exception {
         final UUID zoneId = UUID.randomUUID();

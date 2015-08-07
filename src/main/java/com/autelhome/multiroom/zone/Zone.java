@@ -91,6 +91,15 @@ public class Zone extends AbstractAggregateRoot {
     }
 
     /**
+     * Plays a song.
+     *
+     * @param song the song played
+     */
+    public void playSong(final Song song) {
+        applyChange(new SongPlayed(id, song));
+    }
+
+    /**
      * Pauses.
      *
      * @throws InvalidOperationException if player is not playing
@@ -131,6 +140,9 @@ public class Zone extends AbstractAggregateRoot {
         if (event instanceof  PlayerStatusUpdated) {
             applyPlayerStatusUpdated((PlayerStatusUpdated) event);
         }
+        if (event instanceof  SongPlayed) {
+            applySongPlayed();
+        }
     }
 
     private void applyZoneCreated(final ZoneCreated zoneCreated) {
@@ -154,6 +166,10 @@ public class Zone extends AbstractAggregateRoot {
 
     private void applyPlayerStatusUpdated(final PlayerStatusUpdated playerStatusUpdated) {
         playerStatus = playerStatusUpdated.getNewPlayerStatus();
+    }
+
+    private void applySongPlayed() {
+        playerStatus = PlayerStatus.PLAYING;
     }
 
     public int getMpdInstancePortNumber() {

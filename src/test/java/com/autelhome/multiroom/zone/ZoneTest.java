@@ -61,6 +61,19 @@ public class ZoneTest {
     }
 
     @Test
+    public void playSong() throws Exception {
+        final UUID id = UUID.randomUUID();
+        final Zone testSubject = new Zone(id, NAME, 12, PlayerStatus.PLAYING, PLAYLIST);
+        final List<Event> initialUncommittedChanges = testSubject.getUncommittedChanges();
+        assertThat(initialUncommittedChanges).hasSize(1);
+        final Song song = new Song("Song A");
+        testSubject.playSong(song);
+        final List<Event> actualUncommittedChanges = testSubject.getUncommittedChanges();
+        assertThat(actualUncommittedChanges).hasSize(2);
+        assertThat(actualUncommittedChanges.get(1)).isEqualTo(new SongPlayed(id, song));
+    }
+
+    @Test
     public void changePlaylist() throws Exception {
         final UUID id = UUID.randomUUID();
         final Zone testSubject = new Zone(id, NAME, 12, PlayerStatus.PLAYING, PLAYLIST);
