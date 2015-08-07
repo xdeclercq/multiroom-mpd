@@ -38,6 +38,7 @@ public class CurrentSongRepresentationFactory extends BaseRepresentationFactory
     public Representation newRepresentation(final CurrentSong currentSong) {
 
         return newRepresentation()
+                .withNamespace("mr", getMRNamespace())
                 .withRepresentation("mr:song", songRepresentationFactory.newRepresentation(currentSong.getSong()))
                 .withProperty("position", currentSong.getPosition());
     }
