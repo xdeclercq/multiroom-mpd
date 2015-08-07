@@ -73,6 +73,26 @@ public class MPDGatewayTest {
         verify(mpdPlayer).playId(mpdSongA);
     }
 
+
+    @Test
+    public void playSongWithException() throws Exception {
+        when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
+
+        final Playlist mpdPlaylist = mock(Playlist.class);
+
+        when(mpd.getPlaylist()).thenReturn(mpdPlaylist);
+
+        final MPDSong mpdSongA = new MPDSong();
+        mpdSongA.setTitle(SONG_A);
+        final MPDSong mpdSongB = new MPDSong();
+        mpdSongB.setTitle(SONG_B);
+        when(mpdPlaylist.getSongList()).thenReturn(Arrays.asList(mpdSongA, mpdSongB));
+
+        doThrow(MPDPlayerException.class).when(mpdPlayer).playId(mpdSongA);
+        testSubject.playSong(MPD_INSTANCE_PORT_NUMBER, new Song(SONG_A));
+        verify(mpdPlayer).playId(mpdSongA);
+    }
+
     @Test
     public void playSongNotInPlaylist() throws Exception {
         when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
