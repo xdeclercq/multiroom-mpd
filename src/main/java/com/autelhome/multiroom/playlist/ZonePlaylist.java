@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class ZonePlaylist {
 
-    private final Collection<Song> songs;
+    private final List<Song> songs;
 
     /**
      * Constructor.
@@ -34,7 +34,7 @@ public class ZonePlaylist {
      *
      * @param songs a collection of songs
      */
-    public ZonePlaylist(final Collection<Song> songs) {
+    public ZonePlaylist(final List<Song> songs) {
         this.songs = songs;
     }
 
@@ -42,10 +42,14 @@ public class ZonePlaylist {
         return songs;
     }
 
+    public Song getSongAtPosition(final int position) {
+        return songs.get(position);
+    }
+
     public static ZonePlaylist fromMPDPlaylist(final Playlist mpdPlaylist) {
         try {
             final List<MPDSong> mpdSongs = mpdPlaylist.getSongList();
-            final Collection<Song> songs = mpdSongs.stream().map( mpdSong -> Song.fromMPDSong(mpdSong)).collect(Collectors.toList());
+            final List<Song> songs = mpdSongs.stream().map( mpdSong -> Song.fromMPDSong(mpdSong)).collect(Collectors.toList());
             return new ZonePlaylist(songs);
 
         } catch (MPDPlaylistException e) {

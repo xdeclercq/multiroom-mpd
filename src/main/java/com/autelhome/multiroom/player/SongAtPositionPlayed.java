@@ -1,6 +1,5 @@
 package com.autelhome.multiroom.player;
 
-import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.AbstractEvent;
 import com.google.common.base.MoreObjects;
 
@@ -12,23 +11,23 @@ import java.util.UUID;
  *
  * @author xdeclercq
  */
-public class SongPlayed extends AbstractEvent {
+public class SongAtPositionPlayed extends AbstractEvent {
 
-    private final Song song;
+    private final CurrentSong currentSong;
 
     /**
      * Constructor.
      *
      * @param zoneId the zone id
-     * @param song then new current song
+     * @param currentSong the current song
      */
-    public SongPlayed(final UUID zoneId, final Song song) {
+    public SongAtPositionPlayed(final UUID zoneId, final CurrentSong currentSong) {
         super(zoneId);
-        this.song = song;
+        this.currentSong = currentSong;
     }
 
-    public Song getSong() {
-        return song;
+    public CurrentSong getCurrentSong() {
+        return currentSong;
     }
 
     @Override
@@ -40,25 +39,25 @@ public class SongPlayed extends AbstractEvent {
             return false;
         }
 
-        final SongPlayed that = (SongPlayed) o;
+        final SongAtPositionPlayed that = (SongAtPositionPlayed) o;
 
         if (id != that.id) {
             return false;
         }
 
-        return Objects.equals(song, that.song);
+        return Objects.equals(currentSong, that.currentSong);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, song);
+        return Objects.hash(id, currentSong);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
-                .add("song", song)
+                .add("currentSong", currentSong)
                 .toString();
     }
 }

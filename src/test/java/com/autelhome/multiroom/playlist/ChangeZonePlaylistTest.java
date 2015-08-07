@@ -4,7 +4,7 @@ import com.autelhome.multiroom.song.Song;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -67,7 +67,7 @@ public class ChangeZonePlaylistTest {
     @Test
     public void toStringShouldContainFieldsValue() throws Exception {
         final UUID id = UUID.randomUUID();
-        final Collection<Song> songs = Arrays.asList(new Song(SONG_A), new Song(SONG_B));
+        final List<Song> songs = Arrays.asList(new Song(SONG_A), new Song(SONG_B));
         final ZonePlaylist newPlaylist = new ZonePlaylist(songs);
         final int originalVersion = 38408352;
         final String actual = new ChangeZonePlaylist(id, newPlaylist,  originalVersion).toString();

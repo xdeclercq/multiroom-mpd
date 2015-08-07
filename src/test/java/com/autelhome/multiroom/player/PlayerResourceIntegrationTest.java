@@ -2,6 +2,7 @@ package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.app.ApplicationConfiguration;
 import com.autelhome.multiroom.app.MultiroomMPDApplication;
+import com.jayway.restassured.response.Response;
 import com.squarespace.jersey2.guice.BootstrapUtils;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.junit.DropwizardAppRule;
@@ -95,7 +96,9 @@ public class PlayerResourceIntegrationTest {
         final String stopUrl = String.format(STOP_URL_FORMAT, rule.getLocalPort());
         final String statusUrl = String.format(STATUS_URL_FORMAT, rule.getLocalPort());
 
-        when().post(url)
+        final Response response = when().post(url);
+        response.prettyPrint();
+        response
                 .then().assertThat()
                 .statusCode(is(equalTo(202)))
                 .and().body(LINKS_SELF_HREF_PATH, is(equalTo(playerUrl)))

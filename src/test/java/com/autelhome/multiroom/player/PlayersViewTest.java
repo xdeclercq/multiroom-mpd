@@ -87,9 +87,9 @@ public class PlayersViewTest {
         final Optional<PlayerDto> playerDto = Optional.of(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PAUSED));
         when(playerDatabase.getByZoneId(zoneId)).thenReturn(playerDto);
 
-        testSubject.handleSongPlayed(new SongPlayed(zoneId, new Song(SONG_B)));
+        testSubject.handleSongPlayed(new SongAtPositionPlayed(zoneId, new CurrentSong(new Song(SONG_B), 2)));
 
-        verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING, new Song(SONG_B)));
+        verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING, new CurrentSong(new Song(SONG_B), 2)));
         verify(socketBroadcaster).broadcast(String.format(ZONES_PLAYER_STATUS_KEY_FORMAT, ZONE_NAME), PlayerStatus.PLAYING);
     }
 
@@ -99,7 +99,7 @@ public class PlayersViewTest {
 
         when(playerDatabase.getByZoneId(zoneId)).thenReturn(Optional.empty());
 
-        testSubject.handleSongPlayed(new SongPlayed(zoneId, new Song(SONG_B)));
+        testSubject.handleSongPlayed(new SongAtPositionPlayed(zoneId, new CurrentSong(new Song(SONG_B), 2)));
     }
 
     @Test
@@ -119,12 +119,12 @@ public class PlayersViewTest {
     public void handleCurrentSongUpdated() throws Exception {
         final UUID zoneId = UUID.randomUUID();
 
-        final Optional<PlayerDto> playerDto = Optional.of(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING, new Song("Song A")));
+        final Optional<PlayerDto> playerDto = Optional.of(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING, new CurrentSong(new Song("Song A"), 1)));
         when(playerDatabase.getByZoneId(zoneId)).thenReturn(playerDto);
 
-        testSubject.handleCurrentSongUpdated(new CurrentSongUpdated(zoneId, new Song(SONG_B)));
+        testSubject.handleCurrentSongUpdated(new CurrentSongUpdated(zoneId, new CurrentSong(new Song(SONG_B), 2)));
 
-        verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING, new Song(SONG_B)));
+        verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING, new CurrentSong(new Song(SONG_B), 2)));
     }
 
     @Test(expected = InstanceNotFoundException.class)
@@ -133,6 +133,6 @@ public class PlayersViewTest {
 
         when(playerDatabase.getByZoneId(zoneId)).thenReturn(Optional.<PlayerDto>empty());
 
-        testSubject.handleCurrentSongUpdated(new CurrentSongUpdated(zoneId, new Song(SONG_B)));
+        testSubject.handleCurrentSongUpdated(new CurrentSongUpdated(zoneId, new CurrentSong(new Song(SONG_B), 2)));
     }
 }

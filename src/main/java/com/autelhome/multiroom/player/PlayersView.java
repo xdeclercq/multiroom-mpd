@@ -53,17 +53,17 @@ public class PlayersView {
     /**
      * Updates database with a song played event.
      *
-     * @param songPlayed a song played event
+     * @param songAtPositionPlayed a song played event
      */
-    public void handleSongPlayed(final SongPlayed songPlayed) {
-        final UUID zoneId = songPlayed.getId();
+    public void handleSongPlayed(final SongAtPositionPlayed songAtPositionPlayed) {
+        final UUID zoneId = songAtPositionPlayed.getId();
         final Optional<PlayerDto> playerOptional = playerDatabase.getByZoneId(zoneId);
         if (!playerOptional.isPresent()) {
             throw new InstanceNotFoundException("The zone '" + zoneId + "' is not present in the database");
         }
         final PlayerDto player = playerOptional.get();
         final String zoneName = player.getZoneName();
-        final PlayerDto newPlayer = new PlayerDto(zoneId, zoneName, PlayerStatus.PLAYING, songPlayed.getSong());
+        final PlayerDto newPlayer = new PlayerDto(zoneId, zoneName, PlayerStatus.PLAYING, songAtPositionPlayed.getCurrentSong());
         playerDatabase.update(newPlayer);
         broadcast(zoneName, PlayerStatus.PLAYING);
     }

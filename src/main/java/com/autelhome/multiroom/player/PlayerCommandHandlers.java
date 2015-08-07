@@ -44,16 +44,16 @@ public class PlayerCommandHandlers {
     /**
      * Issues a play song command to the appropriate MPD instance.
      *
-     * @param playSong a play song command
+     * @param playSongAtPosition a play song command
      */
-    public void handlePlaySong(final PlaySong playSong) {
-        final Zone zone = zoneRepository.getById(playSong.getAggregateId());
-        zone.playSong(playSong.getSong());
-        mpdGateway.playSong(zone.getMpdInstancePortNumber(), playSong.getSong());
+    public void handlePlaySong(final PlaySongAtPosition playSongAtPosition) {
+        final Zone zone = zoneRepository.getById(playSongAtPosition.getAggregateId());
+        zone.playSongAtPosition(playSongAtPosition.getPosition());
+        mpdGateway.playSongAtPosition(zone.getMpdInstancePortNumber(), playSongAtPosition.getPosition());
         final String zoneName = zone.getName();
         LOGGER.info("zone {} - handle play song", zoneName);
 
-        zoneRepository.save(zone, playSong.getOriginalVersion());
+        zoneRepository.save(zone, playSongAtPosition.getOriginalVersion());
     }
 
     /**

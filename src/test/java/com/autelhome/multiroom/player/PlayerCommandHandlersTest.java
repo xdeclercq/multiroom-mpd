@@ -72,7 +72,7 @@ public class PlayerCommandHandlersTest {
     public void handleChangeCurrentSong() throws Exception {
         final Zone zone = mock(Zone.class);
         when(zoneRepository.getById(ZONE_ID)).thenReturn(zone);
-        testSubject.handleChangeCurrentSong(new ChangeCurrentSong(ZONE_ID, new Song("Song A"), 123));
+        testSubject.handleChangeCurrentSong(new ChangeCurrentSong(ZONE_ID, new CurrentSong(new Song("Song A"), 1), 123));
         verify(zoneRepository, times(1)).save(zone, 123);
     }
 
@@ -83,10 +83,9 @@ public class PlayerCommandHandlersTest {
         final int mpdInstancePortNumber = 12;
         when(zone.getMpdInstancePortNumber()).thenReturn(mpdInstancePortNumber);
 
-        final Song song = new Song("Song A");
-        testSubject.handlePlaySong(new PlaySong(ZONE_ID, song, 123));
+        testSubject.handlePlaySong(new PlaySongAtPosition(ZONE_ID, 1, 123));
 
         verify(zoneRepository, times(1)).save(zone, 123);
-        verify(mpdGateway, times(1)).playSong(mpdInstancePortNumber, song);
+        verify(mpdGateway, times(1)).playSongAtPosition(mpdInstancePortNumber, 1);
     }
 }

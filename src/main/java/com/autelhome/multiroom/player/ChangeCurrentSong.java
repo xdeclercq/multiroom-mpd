@@ -1,6 +1,5 @@
 package com.autelhome.multiroom.player;
 
-import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.AbstractCommand;
 import com.google.common.base.MoreObjects;
 
@@ -14,7 +13,7 @@ import java.util.UUID;
  */
 public class ChangeCurrentSong extends AbstractCommand {
 
-    private final Song newCurrentSong;
+    private final CurrentSong newCurrentSong;
 
     /**
      * Constructor.
@@ -23,13 +22,13 @@ public class ChangeCurrentSong extends AbstractCommand {
      * @param newCurrentSong the player new current song
      * @param originalVersion the zone version on which this command applies
      */
-    public ChangeCurrentSong(final UUID id, final Song newCurrentSong, final int originalVersion) {
+    public ChangeCurrentSong(final UUID id, final CurrentSong newCurrentSong, final int originalVersion) {
         super(id, originalVersion);
 
         this.newCurrentSong = newCurrentSong;
     }
 
-    public Song getNewCurrentSong() {
+    public CurrentSong getNewCurrentSong() {
         return newCurrentSong;
     }
 

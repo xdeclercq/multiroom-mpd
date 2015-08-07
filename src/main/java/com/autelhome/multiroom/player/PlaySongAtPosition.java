@@ -1,6 +1,5 @@
 package com.autelhome.multiroom.player;
 
-import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.AbstractCommand;
 import com.google.common.base.MoreObjects;
 
@@ -12,24 +11,24 @@ import java.util.UUID;
  *
  * @author xdeclercq
  */
-public class PlaySong extends AbstractCommand {
+public class PlaySongAtPosition extends AbstractCommand {
 
-    private final Song song;
+    private final int position;
 
     /**
      * Constructor.
      *
      * @param id the player id
-     * @param song the song to play
+     * @param position the position in the playlist of the song to play
      * @param originalVersion the zone version on which this command applies
      */
-    public PlaySong(final UUID id, final Song song, final int originalVersion) {
+    public PlaySongAtPosition(final UUID id, final int position, final int originalVersion) {
         super(id, originalVersion);
-        this.song = song;
+        this.position = position;
     }
 
-    public Song getSong() {
-        return song;
+    public int getPosition() {
+        return position;
     }
 
     @Override
@@ -41,7 +40,7 @@ public class PlaySong extends AbstractCommand {
             return false;
         }
 
-        final PlaySong that = (PlaySong) o;
+        final PlaySongAtPosition that = (PlaySongAtPosition) o;
 
         if (aggregateId != that.aggregateId) {
             return false;
@@ -49,12 +48,12 @@ public class PlaySong extends AbstractCommand {
         if (originalVersion != that.originalVersion) {
             return false;
         }
-        return Objects.equals(song, that.song);
+        return position == that.position;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(aggregateId, originalVersion, song);
+        return Objects.hash(aggregateId, originalVersion, position);
     }
 
     @Override
@@ -62,7 +61,7 @@ public class PlaySong extends AbstractCommand {
         return MoreObjects.toStringHelper(this)
                 .add("aggregateId", aggregateId)
                 .add("originalVersion", originalVersion)
-                .add("song", song)
+                .add("position", position)
                 .toString();
     }
 }

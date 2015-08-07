@@ -4,7 +4,6 @@ import com.autelhome.multiroom.errors.InvalidOperationException;
 import com.autelhome.multiroom.player.*;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.playlist.ZonePlaylistUpdated;
-import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.AbstractAggregateRoot;
 import com.autelhome.multiroom.util.Event;
 import com.google.common.base.MoreObjects;
@@ -24,6 +23,7 @@ public class Zone extends AbstractAggregateRoot {
     private int mpdInstancePortNumber;
     private String name;
     private PlayerStatus playerStatus;
+    private ZonePlaylist playlist;
 
     /**
      * Constructor.
@@ -64,7 +64,7 @@ public class Zone extends AbstractAggregateRoot {
      *
      * @param newCurrentSong the new current song
      */
-    public void changeCurrentSong(final Song newCurrentSong) {
+    public void changeCurrentSong(final CurrentSong newCurrentSong) {
         applyChange(new CurrentSongUpdated(id, newCurrentSong));
     }
 
@@ -93,10 +93,11 @@ public class Zone extends AbstractAggregateRoot {
     /**
      * Plays a song.
      *
-     * @param song the song played
+     * @param position the position of the song to be played
      */
-    public void playSong(final Song song) {
-        applyChange(new SongPlayed(id, song));
+    public void playSongAtPosition(final int position) {
+        final CurrentSong currentSong = new CurrentSong(playlist.getSongAtPosition(position), position);
+        applyChange(new SongAtPositionPlayed(id, currentSong));
     }
 
     /**
@@ -128,19 +129,22 @@ public class Zone extends AbstractAggregateRoot {
         if (event instanceof  ZoneCreated) {
             applyZoneCreated((ZoneCreated) event);
         }
-        if (event instanceof  Played) {
+        if (event instanceof Played) {
             applyPlayed();
         }
-        if (event instanceof  Paused) {
+        if (event instanceof Paused) {
             applyPaused();
         }
-        if (event instanceof  Stopped) {
+        if (event instanceof Stopped) {
             applyStopped();
         }
-        if (event instanceof  PlayerStatusUpdated) {
+        if (event instanceof PlayerStatusUpdated) {
             applyPlayerStatusUpdated((PlayerStatusUpdated) event);
         }
-        if (event instanceof  SongPlayed) {
+        if (event instanceof ZonePlaylistUpdated) {
+            applyZonePlaylistsUpdated((ZonePlaylistUpdated) event);
+        }
+        if (event instanceof SongAtPositionPlayed) {
             applySongPlayed();
         }
     }
@@ -150,6 +154,7 @@ public class Zone extends AbstractAggregateRoot {
         name = zoneCreated.getName();
         mpdInstancePortNumber = zoneCreated.getMpdInstancePortNumber();
         playerStatus = zoneCreated.getPlayerStatus();
+        playlist = zoneCreated.getPlaylist();
     }
 
     private void applyPlayed() {
@@ -166,6 +171,10 @@ public class Zone extends AbstractAggregateRoot {
 
     private void applyPlayerStatusUpdated(final PlayerStatusUpdated playerStatusUpdated) {
         playerStatus = playerStatusUpdated.getNewPlayerStatus();
+    }
+
+    private void applyZonePlaylistsUpdated(final ZonePlaylistUpdated zonePlaylistUpdated) {
+        playlist = zonePlaylistUpdated.getNewPlaylist();
     }
 
     private void applySongPlayed() {

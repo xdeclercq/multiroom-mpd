@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.mpd;
 
+import com.autelhome.multiroom.player.CurrentSong;
 import com.autelhome.multiroom.player.PlayerStatus;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.song.Song;
@@ -17,6 +18,7 @@ import org.bff.javampd.objects.MPDSong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -81,19 +83,21 @@ public class MPDGateway
      * Issues a play command to the appropriate MPD instance.
      *
      * @param mpdInstancePortNumber the MPD instance port number
-     * @param song the song to play
+     * @param position the position of the song to play
      */
-    public void playSong(final int mpdInstancePortNumber, final Song song) {
+    public void playSongAtPosition(final int mpdInstancePortNumber, final int position) {
         final Player mpdPlayer = getMPDPlayer(mpdInstancePortNumber);
         try {
             final MPD mpd = mpdProvider.getMPD(mpdInstancePortNumber);
             final Playlist mpdPlaylist = mpd.getPlaylist();
-            final Optional<MPDSong> mpdSong = mpdPlaylist.getSongList().stream().filter(s -> Song.fromMPDSong(s).equals(song)).findFirst();
-            if (!mpdSong.isPresent()) {
-                LOGGER.error("Error when handling play song command for MPD instance of port {}: song is not part playlist", mpdInstancePortNumber);
+            final List<MPDSong> mpdSongs = mpdPlaylist.getSongList();
+            final int index = position - 1;
+            if (index<0 || index>=mpdSongs.size()) {
+                LOGGER.error("Error when handling play song command for MPD instance of port {}: position (%d) out of playlist", mpdInstancePortNumber, position);
                 return;
             }
-            mpdPlayer.playId(mpdSong.get());
+            final MPDSong mpdSong = mpdSongs.get(index);
+            mpdPlayer.playId(mpdSong);
         } catch (MPDPlayerException | MPDPlaylistException e) {
             LOGGER.error("Error when handling play song command for MPD instance of port {}", mpdInstancePortNumber, e);
         }
@@ -162,11 +166,11 @@ public class MPDGateway
      * @param mpdInstancePortNumber the MPD instance port number
      * @return the current {@link Song} related to the MPD instance with port number {@code mpdInstancePortNumber}
      */
-    public Optional<Song> getCurrentSong(final int mpdInstancePortNumber) {
+    public Optional<CurrentSong> getCurrentSong(final int mpdInstancePortNumber) {
         final MPD mpd = mpdProvider.getMPD(mpdInstancePortNumber);
         try {
             final MPDSong mpdCurrentSong = mpd.getPlayer().getCurrentSong();
-            return mpdCurrentSong == null ? Optional.<Song>empty() : Optional.of(Song.fromMPDSong(mpdCurrentSong));
+            return mpdCurrentSong == null ? Optional.<CurrentSong>empty() : Optional.of(CurrentSong.fromMPDSong(mpdCurrentSong));
         } catch(final MPDPlayerException e) {
             LOGGER.error("Error when fetching current song for MPD instance of port {}", mpdInstancePortNumber, e);
         }

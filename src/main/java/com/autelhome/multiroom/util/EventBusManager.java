@@ -61,6 +61,7 @@ public class EventBusManager implements Managed {
         eventBus.register(playerCommandHandlers::handlePause, Pause.class);
         eventBus.register(playerCommandHandlers::handleChangePlayerStatus, ChangePlayerStatus.class);
         eventBus.register(playerCommandHandlers::handleChangeCurrentSong, ChangeCurrentSong.class);
+        eventBus.register(playerCommandHandlers::handlePlaySong, PlaySongAtPosition.class);
         eventBus.register(zonePlaylistCommandHandlers::handleChangeZonePlaylist, ChangeZonePlaylist.class);
 
 
@@ -75,6 +76,7 @@ public class EventBusManager implements Managed {
         eventBus.register(playersView::handleStopped, Stopped.class);
         eventBus.register(playersView::handlePlayerStatusUpdated, PlayerStatusUpdated.class);
         eventBus.register(playersView::handleCurrentSongUpdated, CurrentSongUpdated.class);
+        eventBus.register(playersView::handleSongPlayed, SongAtPositionPlayed.class);
         eventBus.register(zonePlaylistsView::handleCreated, ZoneCreated.class);
         eventBus.register(zonePlaylistsView::handleZonePlaylistUpdated, ZonePlaylistUpdated.class);
     }

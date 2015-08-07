@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.mpd;
 
+import com.autelhome.multiroom.player.CurrentSong;
 import com.autelhome.multiroom.player.PlayerStatus;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.song.Song;
@@ -56,7 +57,7 @@ public class MPDGatewayTest {
     }
 
     @Test
-    public void playSong() throws Exception {
+    public void playSongAtPosition() throws Exception {
         when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
 
         final Playlist mpdPlaylist = mock(Playlist.class);
@@ -69,13 +70,13 @@ public class MPDGatewayTest {
         mpdSongB.setTitle(SONG_B);
         when(mpdPlaylist.getSongList()).thenReturn(Arrays.asList(mpdSongA, mpdSongB));
 
-        testSubject.playSong(MPD_INSTANCE_PORT_NUMBER, new Song(SONG_A));
+        testSubject.playSongAtPosition(MPD_INSTANCE_PORT_NUMBER, 1);
         verify(mpdPlayer).playId(mpdSongA);
     }
 
 
     @Test
-    public void playSongWithException() throws Exception {
+    public void playSongAtPositionWithException() throws Exception {
         when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
 
         final Playlist mpdPlaylist = mock(Playlist.class);
@@ -89,12 +90,12 @@ public class MPDGatewayTest {
         when(mpdPlaylist.getSongList()).thenReturn(Arrays.asList(mpdSongA, mpdSongB));
 
         doThrow(MPDPlayerException.class).when(mpdPlayer).playId(mpdSongA);
-        testSubject.playSong(MPD_INSTANCE_PORT_NUMBER, new Song(SONG_A));
+        testSubject.playSongAtPosition(MPD_INSTANCE_PORT_NUMBER, 1);
         verify(mpdPlayer).playId(mpdSongA);
     }
 
     @Test
-    public void playSongNotInPlaylist() throws Exception {
+    public void playSongAtPositionTooBig() throws Exception {
         when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
 
         final Playlist mpdPlaylist = mock(Playlist.class);
@@ -107,9 +108,28 @@ public class MPDGatewayTest {
         mpdSongB.setTitle(SONG_B);
         when(mpdPlaylist.getSongList()).thenReturn(Arrays.asList(mpdSongA, mpdSongB));
 
-        testSubject.playSong(MPD_INSTANCE_PORT_NUMBER, new Song("Song C"));
+        testSubject.playSongAtPosition(MPD_INSTANCE_PORT_NUMBER, 3);
         verify(mpdPlayer, never()).playId(any());
     }
+
+    @Test
+    public void playSongAtPositionTooSmall() throws Exception {
+        when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
+
+        final Playlist mpdPlaylist = mock(Playlist.class);
+
+        when(mpd.getPlaylist()).thenReturn(mpdPlaylist);
+
+        final MPDSong mpdSongA = new MPDSong();
+        mpdSongA.setTitle(SONG_A);
+        final MPDSong mpdSongB = new MPDSong();
+        mpdSongB.setTitle(SONG_B);
+        when(mpdPlaylist.getSongList()).thenReturn(Arrays.asList(mpdSongA, mpdSongB));
+
+        testSubject.playSongAtPosition(MPD_INSTANCE_PORT_NUMBER, 0);
+        verify(mpdPlayer, never()).playId(any());
+    }
+
 
     @Test
     public void play() throws Exception {
@@ -180,12 +200,13 @@ public class MPDGatewayTest {
 
         final MPDSong mpdSongA = new MPDSong();
         mpdSongA.setTitle(SONG_A);
+        mpdSongA.setPosition(3);
 
         when(mpdPlayer.getCurrentSong()).thenReturn(mpdSongA);
 
-        final Optional<Song> actual = testSubject.getCurrentSong(MPD_INSTANCE_PORT_NUMBER);
+        final Optional<CurrentSong> actual = testSubject.getCurrentSong(MPD_INSTANCE_PORT_NUMBER);
 
-        final Optional<Song> expected = Optional.of(new Song(SONG_A));
+        final Optional<CurrentSong> expected = Optional.of(new CurrentSong(new Song(SONG_A), 3));
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -199,9 +220,9 @@ public class MPDGatewayTest {
 
         when(mpdPlayer.getCurrentSong()).thenReturn(null);
 
-        final Optional<Song> actual = testSubject.getCurrentSong(MPD_INSTANCE_PORT_NUMBER);
+        final Optional<CurrentSong> actual = testSubject.getCurrentSong(MPD_INSTANCE_PORT_NUMBER);
 
-        final Optional<Song> expected = Optional.empty();
+        final Optional<CurrentSong> expected = Optional.empty();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -215,9 +236,9 @@ public class MPDGatewayTest {
 
         when(mpdPlayer.getCurrentSong()).thenThrow(MPDPlayerException.class);
 
-        final Optional<Song> actual = testSubject.getCurrentSong(MPD_INSTANCE_PORT_NUMBER);
+        final Optional<CurrentSong> actual = testSubject.getCurrentSong(MPD_INSTANCE_PORT_NUMBER);
 
-        final Optional<Song> expected = Optional.empty();
+        final Optional<CurrentSong> expected = Optional.empty();
 
         assertThat(actual).isEqualTo(expected);
     }

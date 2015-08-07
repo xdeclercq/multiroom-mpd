@@ -37,8 +37,8 @@ public class PlayerDtoTest {
     @Test
     public void hashCodeShouldBeTheSame() throws Exception {
         final UUID zoneId = UUID.randomUUID();
-        final int hashCode1 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new Song(SONG_A)).hashCode();
-        final int hashCode2 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new Song(SONG_A)).hashCode();
+        final int hashCode1 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 1)).hashCode();
+        final int hashCode2 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 1)).hashCode();
 
         assertThat(hashCode1).isEqualTo(hashCode2);
     }
@@ -46,11 +46,11 @@ public class PlayerDtoTest {
     @Test
     public void hashCodeShouldNotBeTheSame() throws Exception {
         final UUID zoneId = UUID.randomUUID();
-        final int hashCode1 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new Song(SONG_A)).hashCode();
-        final int hashCode2 = new PlayerDto(UUID.randomUUID(), MY_ZONE, PlayerStatus.PAUSED, new Song(SONG_A)).hashCode();
-        final int hashCode3 = new PlayerDto(zoneId, "antoher zone", PlayerStatus.PAUSED, new Song(SONG_A)).hashCode();
-        final int hashCode4 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PLAYING, new Song(SONG_A)).hashCode();
-        final int hashCode5 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new Song(SONG_B)).hashCode();
+        final int hashCode1 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 1)).hashCode();
+        final int hashCode2 = new PlayerDto(UUID.randomUUID(), MY_ZONE, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 1)).hashCode();
+        final int hashCode3 = new PlayerDto(zoneId, "antoher zone", PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 1)).hashCode();
+        final int hashCode4 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PLAYING, new CurrentSong(new Song(SONG_A), 1)).hashCode();
+        final int hashCode5 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_B), 2)).hashCode();
 
         assertThat(hashCode1).isNotEqualTo(hashCode2);
         assertThat(hashCode1).isNotEqualTo(hashCode3);
@@ -61,8 +61,8 @@ public class PlayerDtoTest {
     @Test
     public void shouldBeEqual() throws Exception {
         final UUID zoneId = UUID.randomUUID();
-        final PlayerDto player1 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new Song(SONG_A));
-        final PlayerDto player2 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new Song(SONG_A));
+        final PlayerDto player1 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 1));
+        final PlayerDto player2 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 1));
 
         assertThat(player1).isEqualTo(player1);
         assertThat(player1).isEqualTo(player2);
@@ -71,11 +71,11 @@ public class PlayerDtoTest {
     @Test
     public void shouldNotBeEqual() throws Exception {
         final UUID zoneId = UUID.randomUUID();
-        final PlayerDto player1 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new Song(SONG_A));
-        final PlayerDto player2 = new PlayerDto(UUID.randomUUID(), MY_ZONE, PlayerStatus.PAUSED, new Song(SONG_A));
-        final PlayerDto player3 = new PlayerDto(zoneId, "antoher zone", PlayerStatus.PAUSED, new Song(SONG_A));
-        final PlayerDto player4 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PLAYING, new Song(SONG_A));
-        final PlayerDto player5 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new Song(SONG_B));
+        final PlayerDto player1 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 1));
+        final PlayerDto player2 = new PlayerDto(UUID.randomUUID(), MY_ZONE, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 1));
+        final PlayerDto player3 = new PlayerDto(zoneId, "antoher zone", PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 1));
+        final PlayerDto player4 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PLAYING, new CurrentSong(new Song(SONG_A), 1));
+        final PlayerDto player5 = new PlayerDto(zoneId, MY_ZONE, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_B), 1));
 
         assertThat(player1).isNotEqualTo(" ");
         assertThat(player1).isNotEqualTo(null);
@@ -90,7 +90,7 @@ public class PlayerDtoTest {
         final UUID zoneId = UUID.randomUUID();
         final String zoneName = "another zone";
         final PlayerStatus status = PlayerStatus.PAUSED;
-        final Song currentSong = new Song(SONG_A);
+        final CurrentSong currentSong = new CurrentSong(new Song(SONG_A), 1);
         final String actual = new PlayerDto(zoneId, zoneName, status, currentSong).toString();
         assertThat(actual).contains(zoneId.toString());
         assertThat(actual).contains(zoneName);

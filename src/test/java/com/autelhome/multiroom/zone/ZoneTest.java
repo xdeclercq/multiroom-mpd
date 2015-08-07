@@ -53,7 +53,7 @@ public class ZoneTest {
         final Zone testSubject = new Zone(id, NAME, 12, PlayerStatus.PLAYING, PLAYLIST);
         final List<Event> initialUncommittedChanges = testSubject.getUncommittedChanges();
         assertThat(initialUncommittedChanges).hasSize(1);
-        final Song newCurrentSong = new Song("Song A");
+        final CurrentSong newCurrentSong = new CurrentSong(new Song("Song A"), 1);
         testSubject.changeCurrentSong(newCurrentSong);
         final List<Event> actualUncommittedChanges = testSubject.getUncommittedChanges();
         assertThat(actualUncommittedChanges).hasSize(2);
@@ -66,11 +66,10 @@ public class ZoneTest {
         final Zone testSubject = new Zone(id, NAME, 12, PlayerStatus.PLAYING, PLAYLIST);
         final List<Event> initialUncommittedChanges = testSubject.getUncommittedChanges();
         assertThat(initialUncommittedChanges).hasSize(1);
-        final Song song = new Song("Song A");
-        testSubject.playSong(song);
+        testSubject.playSongAtPosition(1);
         final List<Event> actualUncommittedChanges = testSubject.getUncommittedChanges();
         assertThat(actualUncommittedChanges).hasSize(2);
-        assertThat(actualUncommittedChanges.get(1)).isEqualTo(new SongPlayed(id, song));
+        assertThat(actualUncommittedChanges.get(1)).isEqualTo(new SongAtPositionPlayed(id, new CurrentSong(new Song("b"), 1)));
     }
 
     @Test

@@ -42,7 +42,8 @@ public class PlayerResourceTest {
     private final EventBus eventBus = mock(EventBus.class);
     private final PlayerStatusRepresentationFactory playerStatusRepresentationFactory = new PlayerStatusRepresentationFactory(uriInfo);
     private final SongRepresentationFactory songRepresentationFactory = new SongRepresentationFactory(uriInfo);
-    private final PlayerRepresentationFactory playerRepresentationFactory = new PlayerRepresentationFactory(uriInfo, playerStatusRepresentationFactory, songRepresentationFactory);
+    private final CurrentSongRepresentationFactory currentSongRepresentationFactory = new CurrentSongRepresentationFactory(uriInfo, songRepresentationFactory);
+    private final PlayerRepresentationFactory playerRepresentationFactory = new PlayerRepresentationFactory(uriInfo, playerStatusRepresentationFactory, currentSongRepresentationFactory);
     private final PlayerService playerService = mock(PlayerService.class);
     private final ZonePlaylistResourceFactory zonePlaylistResourceFactory = mock(ZonePlaylistResourceFactory.class);
 

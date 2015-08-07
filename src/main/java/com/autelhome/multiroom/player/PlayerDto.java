@@ -1,6 +1,5 @@
 package com.autelhome.multiroom.player;
 
-import com.autelhome.multiroom.song.Song;
 import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
@@ -19,7 +18,7 @@ public class PlayerDto
     private final UUID zoneId;
     private final String zoneName;
     private final PlayerStatus status;
-    private final Song currentSong;
+    private final CurrentSong currentSong;
 
     /**
      * Constructor.
@@ -41,7 +40,7 @@ public class PlayerDto
      * @param status the player status
      * @param currentSong the current song
      */
-    public PlayerDto(final UUID zoneId, final String zoneName, final PlayerStatus status, final Song currentSong)
+    public PlayerDto(final UUID zoneId, final String zoneName, final PlayerStatus status, final CurrentSong currentSong)
     {
         this.zoneId = zoneId;
         this.zoneName = zoneName;
@@ -62,7 +61,7 @@ public class PlayerDto
         return zoneId;
     }
 
-    public Song getCurrentSong() {
+    public CurrentSong getCurrentSong() {
         return currentSong;
     }
 
