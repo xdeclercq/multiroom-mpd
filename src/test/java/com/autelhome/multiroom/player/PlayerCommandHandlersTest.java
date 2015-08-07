@@ -76,4 +76,17 @@ public class PlayerCommandHandlersTest {
         verify(zoneRepository, times(1)).save(zone, 123);
     }
 
+    @Test
+    public void handlePlaySong() throws Exception {
+        final Zone zone = mock(Zone.class);
+        when(zoneRepository.getById(ZONE_ID)).thenReturn(zone);
+        final int mpdInstancePortNumber = 12;
+        when(zone.getMpdInstancePortNumber()).thenReturn(mpdInstancePortNumber);
+
+        final Song song = new Song("Song A");
+        testSubject.handlePlaySong(new PlaySong(ZONE_ID, song, 123));
+
+        verify(zoneRepository, times(1)).save(zone, 123);
+        verify(mpdGateway, times(1)).playSong(mpdInstancePortNumber, song);
+    }
 }

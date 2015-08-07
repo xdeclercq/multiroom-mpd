@@ -42,6 +42,21 @@ public class PlayerCommandHandlers {
     }
 
     /**
+     * Issues a play song command to the appropriate MPD instance.
+     *
+     * @param playSong a play song command
+     */
+    public void handlePlaySong(final PlaySong playSong) {
+        final Zone zone = zoneRepository.getById(playSong.getAggregateId());
+        zone.playSong(playSong.getSong());
+        mpdGateway.playSong(zone.getMpdInstancePortNumber(), playSong.getSong());
+        final String zoneName = zone.getName();
+        LOGGER.info("zone {} - handle play song", zoneName);
+
+        zoneRepository.save(zone, playSong.getOriginalVersion());
+    }
+
+    /**
      * Issues a pause command to the appropriate MPD instance.
      *
      * @param pause a pause command
