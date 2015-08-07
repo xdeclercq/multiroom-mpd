@@ -32,7 +32,7 @@ public class CurrentSong {
      * @return a new song
      */
     public static CurrentSong fromMPDSong(final MPDSong mpdSong) {
-        return new CurrentSong(Song.fromMPDSong(mpdSong), mpdSong.getPosition());
+        return new CurrentSong(Song.fromMPDSong(mpdSong), mpdSong.getPosition() + 1);
     }
 
     public Song getSong() {

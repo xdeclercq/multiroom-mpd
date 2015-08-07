@@ -206,7 +206,7 @@ public class MPDGatewayTest {
 
         final Optional<CurrentSong> actual = testSubject.getCurrentSong(MPD_INSTANCE_PORT_NUMBER);
 
-        final Optional<CurrentSong> expected = Optional.of(new CurrentSong(new Song(SONG_A), 3));
+        final Optional<CurrentSong> expected = Optional.of(new CurrentSong(new Song(SONG_A), 4));
 
         assertThat(actual).isEqualTo(expected);
     }

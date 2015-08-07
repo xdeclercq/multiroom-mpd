@@ -13,7 +13,7 @@ public class CurrentSongTest {
 
     @Test
     public void fromMPDSong() throws Exception {
-        final CurrentSong expected = new CurrentSong(new Song(SONG_A), 1);
+        final CurrentSong expected = new CurrentSong(new Song(SONG_A), 2);
 
         final MPDSong mpdSongA = new MPDSong();
         mpdSongA.setTitle(SONG_A);
