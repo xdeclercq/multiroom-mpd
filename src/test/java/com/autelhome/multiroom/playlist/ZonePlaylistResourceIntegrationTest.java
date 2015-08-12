@@ -23,6 +23,7 @@ public class ZonePlaylistResourceIntegrationTest {
 
     private static final String DOCS_URL_FORMAT = "http://localhost:%d/multiroom-mpd/docs/#/relations/{rel}";
     private static final String PLAYLIST_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/Kitchen/playlist";
+    private static final String PLAY_SONG_AT_POSITION_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/Kitchen/playlist/1/play";
     private static final String UNKNOWN_PLAYLIST_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/unknown/playlist";
     private static final String ERROR_INFO_URL_FORMAT = "http://localhost:%d/multiroom-mpd/docs/#/errors/resource-not-found";
     private static final String LINKS_SELF_HREF_PATH = "_links.self.href";
@@ -66,6 +67,21 @@ public class ZonePlaylistResourceIntegrationTest {
 			.and().body(LINKS_CURIES_NAME_PATH, is(equalTo("mr")))
             .and().body(LINKS_CURIES_HREF_PATH, is(equalTo(docsUrl)))
             .and().body(LINKS_CURIES_TEMPLATED_PATH, is(equalTo(true)));
+    }
+
+    @Test
+    public void playSongAtPosition() throws Exception {
+        final String selfUrl = String.format(PLAYLIST_URL_FORMAT, rule.getLocalPort());
+        final String playSongAtPositionUrl = String.format(PLAY_SONG_AT_POSITION_URL_FORMAT, rule.getLocalPort());
+        final String docsUrl = String.format(DOCS_URL_FORMAT, rule.getLocalPort());
+
+        when().post(playSongAtPositionUrl)
+                .then().assertThat()
+                .statusCode(is(equalTo(202)))
+                .and().body(LINKS_SELF_HREF_PATH, is(equalTo(selfUrl)))
+                .and().body(LINKS_CURIES_NAME_PATH, is(equalTo("mr")))
+                .and().body(LINKS_CURIES_HREF_PATH, is(equalTo(docsUrl)))
+                .and().body(LINKS_CURIES_TEMPLATED_PATH, is(equalTo(true)));
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.autelhome.multiroom.playlist;
 
 import com.autelhome.multiroom.song.Song;
+import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.ZoneDto;
 import org.junit.Test;
 
@@ -16,7 +17,8 @@ public class ZonePlaylistResourceFactoryTest {
 
     private final ZonePlaylistService zonePlaylistService = mock(ZonePlaylistService.class);
     private final ZonePlaylistRepresentationFactory zonePlaylistRepresentationFactory = mock(ZonePlaylistRepresentationFactory.class);
-    private final ZonePlaylistResourceFactory testSubject = new ZonePlaylistResourceFactory(zonePlaylistService, zonePlaylistRepresentationFactory);
+    private final EventBus eventBus = mock(EventBus.class);
+    private final ZonePlaylistResourceFactory testSubject = new ZonePlaylistResourceFactory(zonePlaylistService, zonePlaylistRepresentationFactory, eventBus);
 
     @Test
     public void newInstance() throws Exception {
@@ -25,7 +27,7 @@ public class ZonePlaylistResourceFactoryTest {
         final ZoneDto kitchen = new ZoneDto(zoneId, zoneName, 7912, 1);
 
         when(zonePlaylistService.getPlaylistByZoneName(zoneName)).thenReturn(Optional.of(new ZonePlaylistDto(zoneId, zoneName, new ZonePlaylist(Arrays.asList(new Song("Song A"), new Song("Song B"))))));
-        final ZonePlaylistResource expected = new ZonePlaylistResource(kitchen, zonePlaylistService, zonePlaylistRepresentationFactory);
+        final ZonePlaylistResource expected = new ZonePlaylistResource(kitchen, zonePlaylistService, zonePlaylistRepresentationFactory, eventBus);
         final ZonePlaylistResource actual = testSubject.newInstance(kitchen);
 
         assertThat(actual).isEqualTo(expected);

@@ -113,8 +113,6 @@ public class PlayerResourceTest {
         resources.client().target("/zones/Kitchen/player/play").request().accept(RepresentationFactory.HAL_JSON).post(null);
     }
 
-
-
     @Test
     public void pause() throws Exception {
         final UUID zoneId = UUID.randomUUID();

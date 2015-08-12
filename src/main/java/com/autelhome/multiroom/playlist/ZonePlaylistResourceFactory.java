@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.playlist;
 
+import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.ZoneDto;
 import com.google.inject.Inject;
 
@@ -13,18 +14,21 @@ public class ZonePlaylistResourceFactory
 
     private final ZonePlaylistService zonePlaylistService;
     private final ZonePlaylistRepresentationFactory zonePlaylistRepresentationFactory;
+    private final EventBus eventBus;
 
     /**
      * Constructor.
      *
      * @param zonePlaylistService a {@link ZonePlaylistService} instance
      * @param zonePlaylistRepresentationFactory a {@link ZonePlaylistRepresentationFactory} instance
+     * @param eventBus the event bus
      */
     @Inject
-    public ZonePlaylistResourceFactory(final ZonePlaylistService zonePlaylistService, final ZonePlaylistRepresentationFactory zonePlaylistRepresentationFactory)
+    public ZonePlaylistResourceFactory(final ZonePlaylistService zonePlaylistService, final ZonePlaylistRepresentationFactory zonePlaylistRepresentationFactory, final EventBus eventBus)
     {
         this.zonePlaylistService = zonePlaylistService;
         this.zonePlaylistRepresentationFactory = zonePlaylistRepresentationFactory;
+        this.eventBus = eventBus;
     }
 
     /**
@@ -35,6 +39,6 @@ public class ZonePlaylistResourceFactory
      */
     public ZonePlaylistResource newInstance(final ZoneDto zoneDto)
     {
-        return new ZonePlaylistResource(zoneDto, zonePlaylistService, zonePlaylistRepresentationFactory);
+        return new ZonePlaylistResource(zoneDto, zonePlaylistService, zonePlaylistRepresentationFactory, eventBus);
     }
 }

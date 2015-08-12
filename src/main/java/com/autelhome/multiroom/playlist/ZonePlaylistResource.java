@@ -1,11 +1,12 @@
 package com.autelhome.multiroom.playlist;
 
 import com.autelhome.multiroom.errors.ResourceNotFoundException;
+import com.autelhome.multiroom.player.PlaySongAtPosition;
+import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.ZoneDto;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class ZonePlaylistResource {
     private final ZonePlaylistRepresentationFactory zonePlaylistRepresentationFactory;
 	private final ZoneDto zoneDto;
     private final ZonePlaylistService zonePlaylistService;
+    private final EventBus eventBus;
 
     /**
 	 * Constructor.
@@ -29,17 +31,19 @@ public class ZonePlaylistResource {
 	 * @param zoneDto the zone to which the player is related
      * @param zonePlaylistService a {@link ZonePlaylistService} instance
 	 * @param zonePlaylistRepresentationFactory a {@link ZonePlaylistRepresentationFactory} instance
+     * @param eventBus the event bus
 	 */
-	public ZonePlaylistResource(final ZoneDto zoneDto, final ZonePlaylistService zonePlaylistService, final ZonePlaylistRepresentationFactory zonePlaylistRepresentationFactory) {
+	public ZonePlaylistResource(final ZoneDto zoneDto, final ZonePlaylistService zonePlaylistService, final ZonePlaylistRepresentationFactory zonePlaylistRepresentationFactory, final EventBus eventBus) {
         this.zoneDto = zoneDto;
         this.zonePlaylistService = zonePlaylistService;
         this.zonePlaylistRepresentationFactory = zonePlaylistRepresentationFactory;
+        this.eventBus = eventBus;
 	}
 
 	/**
-	 * Returns a representation of the player.
+	 * Returns a representation of the playlist.
 	 *
-	 * @return a representation of the player
+	 * @return a representation of the playlist
 	 */
 	@GET
 	public Response getPlaylist() {
@@ -47,6 +51,21 @@ public class ZonePlaylistResource {
 
         return Response.ok(zonePlaylistRepresentationFactory.newRepresentation(playlistDto.get())).build();
 	}
+
+    /**
+     * Plays the song at the defined position and returns a representation of the playlist.
+     *
+     * @param position the position of the song to be played (starts at 1)
+     * @return an HTTP 202 with representation of the playlist
+     */
+    @POST
+    @Path("{position}/play")
+    public Response playSongAtPosition(final @PathParam("position") Integer position) {
+        eventBus.send(new PlaySongAtPosition(zoneDto.getId(), position, zoneDto.getVersion()));
+        final Optional<ZonePlaylistDto> playlistDto = getPlaylistDto();
+
+        return Response.status(202).entity(zonePlaylistRepresentationFactory.newRepresentation(playlistDto.get())).build();
+    }
 
 	@Override
 	public boolean equals(final Object o) {

@@ -67,7 +67,7 @@ public class ZonePlaylistResourceTest {
         when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
         final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new Song("song A"), new Song("song B")));
         when(zonePlaylistService.getPlaylistByZoneName(KITCHEN)).thenReturn(Optional.of(new ZonePlaylistDto(zoneId, KITCHEN, playlist)));
-        when(zonePlaylistResourceFactory.newInstance(kitchen)).thenReturn(new ZonePlaylistResource(kitchen, zonePlaylistService, zonePlaylistRepresentationFactory));
+        when(zonePlaylistResourceFactory.newInstance(kitchen)).thenReturn(new ZonePlaylistResource(kitchen, zonePlaylistService, zonePlaylistRepresentationFactory, eventBus));
 
         final Response actualResponse = resources.client().target("/zones/Kitchen/playlist").request().accept(RepresentationFactory.HAL_JSON).get();
 
@@ -88,18 +88,39 @@ public class ZonePlaylistResourceTest {
 
         when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
         when(zonePlaylistService.getPlaylistByZoneName(KITCHEN)).thenReturn(Optional.empty());
-        when(zonePlaylistResourceFactory.newInstance(kitchen)).thenReturn(new ZonePlaylistResource(kitchen, zonePlaylistService, zonePlaylistRepresentationFactory));
+        when(zonePlaylistResourceFactory.newInstance(kitchen)).thenReturn(new ZonePlaylistResource(kitchen, zonePlaylistService, zonePlaylistRepresentationFactory, eventBus));
 
         resources.client().target("/zones/Kitchen/playlist").request().accept(RepresentationFactory.HAL_JSON).get();
+    }
+
+    @Test
+    public void playSongAtPosition() throws Exception {
+        final UUID zoneId = UUID.randomUUID();
+        final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
+        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new Song("song A"), new Song("song B")));
+
+        when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
+        when(zonePlaylistService.getPlaylistByZoneName(KITCHEN)).thenReturn(Optional.of(new ZonePlaylistDto(zoneId, KITCHEN, playlist)));
+        when(zonePlaylistResourceFactory.newInstance(kitchen)).thenReturn(new ZonePlaylistResource(kitchen, zonePlaylistService, zonePlaylistRepresentationFactory, eventBus));
+
+        final Response actualResponse = resources.client().target("/zones/Kitchen/playlist/1/play").request().accept(RepresentationFactory.HAL_JSON).post(null);
+
+        final String expectedContent = Resources.toString(Resources.getResource(getClass(), PLAYLIST_JSON_FILE_NAME), Charsets.UTF_8);
+        final String actualContent = actualResponse.readEntity(String.class);
+
+        assertEquals(expectedContent, actualContent, true);
+
+        final int actualStatus = actualResponse.getStatus();
+        assertThat(actualStatus).isEqualTo(202);
     }
 
 
     @Test
     public void shouldBeEqual() throws Exception {
-        final ZonePlaylistResource zonePlaylistResource1 = new ZonePlaylistResource(KITCHEN_DTO, null, null);
-        final ZonePlaylistResource zonePlaylistResource2 = new ZonePlaylistResource(KITCHEN_DTO, null, null);
-        final ZonePlaylistResource zonePlaylistResource3 = new ZonePlaylistResource(null, null, null);
-        final ZonePlaylistResource zonePlaylistResource4 = new ZonePlaylistResource(null, null, null);
+        final ZonePlaylistResource zonePlaylistResource1 = new ZonePlaylistResource(KITCHEN_DTO, null, null, null);
+        final ZonePlaylistResource zonePlaylistResource2 = new ZonePlaylistResource(KITCHEN_DTO, null, null, null);
+        final ZonePlaylistResource zonePlaylistResource3 = new ZonePlaylistResource(null, null, null, null);
+        final ZonePlaylistResource zonePlaylistResource4 = new ZonePlaylistResource(null, null, null, null);
 
         assertThat(zonePlaylistResource1).isEqualTo(zonePlaylistResource1);
         assertThat(zonePlaylistResource1).isEqualTo(zonePlaylistResource2);
@@ -109,9 +130,9 @@ public class ZonePlaylistResourceTest {
     @Test
     @SuppressFBWarnings("EC_UNRELATED_TYPES")
     public void shouldNotBeEqual() throws Exception {
-        final ZonePlaylistResource zonePlaylistResource1 = new ZonePlaylistResource(KITCHEN_DTO, null, null);
-        final ZonePlaylistResource zonePlaylistResource2 = new ZonePlaylistResource(BATHROOM_DTO, null, null);
-        final ZonePlaylistResource zonePlaylistResource3 = new ZonePlaylistResource(null, null, null);
+        final ZonePlaylistResource zonePlaylistResource1 = new ZonePlaylistResource(KITCHEN_DTO, null, null, null);
+        final ZonePlaylistResource zonePlaylistResource2 = new ZonePlaylistResource(BATHROOM_DTO, null, null, null);
+        final ZonePlaylistResource zonePlaylistResource3 = new ZonePlaylistResource(null, null, null, null);
 
         assertThat(zonePlaylistResource1).isNotEqualTo(zonePlaylistResource2);
         assertThat(zonePlaylistResource1).isNotEqualTo(zonePlaylistResource3);
@@ -121,10 +142,10 @@ public class ZonePlaylistResourceTest {
 
     @Test
     public void hashCodeShouldBeTheSame() throws Exception {
-        final int hashCode1 = new ZonePlaylistResource(KITCHEN_DTO, null, null).hashCode();
-        final int hashCode2 = new ZonePlaylistResource(KITCHEN_DTO, null, null).hashCode();
-        final int hashCode3 = new ZonePlaylistResource(null, null, null).hashCode();
-        final int hashCode4 = new ZonePlaylistResource(null, null, null).hashCode();
+        final int hashCode1 = new ZonePlaylistResource(KITCHEN_DTO, null, null, null).hashCode();
+        final int hashCode2 = new ZonePlaylistResource(KITCHEN_DTO, null, null, null).hashCode();
+        final int hashCode3 = new ZonePlaylistResource(null, null, null, null).hashCode();
+        final int hashCode4 = new ZonePlaylistResource(null, null, null, null).hashCode();
 
         assertThat(hashCode1).isEqualTo(hashCode2);
         assertThat(hashCode3).isEqualTo(hashCode4);
@@ -132,9 +153,9 @@ public class ZonePlaylistResourceTest {
 
     @Test
     public void hashCodeShouldNotBeTheSame() throws Exception {
-        final int hashCode1 = new ZonePlaylistResource(KITCHEN_DTO, null, null).hashCode();
-        final int hashCode2 = new ZonePlaylistResource(BATHROOM_DTO, null, null).hashCode();
-        final int hashCode3 = new ZonePlaylistResource(null, null, null).hashCode();
+        final int hashCode1 = new ZonePlaylistResource(KITCHEN_DTO, null, null, null).hashCode();
+        final int hashCode2 = new ZonePlaylistResource(BATHROOM_DTO, null, null, null).hashCode();
+        final int hashCode3 = new ZonePlaylistResource(null, null, null, null).hashCode();
 
         assertThat(hashCode1).isNotEqualTo(hashCode2);
         assertThat(hashCode1).isNotEqualTo(hashCode3);
