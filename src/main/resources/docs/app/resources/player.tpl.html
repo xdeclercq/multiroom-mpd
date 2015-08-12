@@ -41,12 +41,6 @@
       <td>POST</td>
       <td>No</td>
     </tr>
-    <tr>
-      <td><a ui-sref="root.relations.details({ name: 'mr-status' })">mr:status</a></td>
-      <td>A link to the <a ui-sref="root.resources.details({ name: 'status' })">status</a> resource of this player</td>
-      <td>WS</td>
-      <td>No</td>
-    </tr>
     </tbody>
   </table>
 
@@ -64,13 +58,13 @@
     <tr>
       <td><a ui-sref="root.relations.details({ name: 'mr-status' })">mr:status</a></td>
       <td>The <a ui-sref="root.resources.details({ name: 'status' })">status</a> resource of this player</td>
-      <td>WS</td>
+      <td>None</td>
       <td>No</td>
     </tr>
     <tr>
       <td><a ui-sref="root.relations.details({ name: 'mr-current-song' })">mr:current-song</a></td>
-      <td>The current <a ui-sref="root.resources.details({ name: 'song' })">song</a> resource of this player</td>
-      <td>WS</td>
+      <td>The <a ui-sref="root.resources.details({ name: 'current-song' })">current song</a> resource of this player</td>
+      <td>None</td>
       <td>No</td>
     </tr>
     </tbody>
@@ -109,7 +103,12 @@
       "status": "PAUSED"
     },
     "mr:current-song": {
-      "title": "Yesterday"
+      "position": 3
+      "_embedded": {
+        "mr:song": {
+          "title": "Yesterday"
+        }
+      }
     }
   }
 }</pre>
