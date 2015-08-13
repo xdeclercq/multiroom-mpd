@@ -20,7 +20,7 @@ public class CurrentSongRepresentationFactory extends BaseRepresentationFactory
     /**
      * Constructor.
      *
-     * @param uriInfo the {@link javax.ws.rs.core.UriInfo} related to the request
+     * @param uriInfo the {@link UriInfo} related to the request
      * @param songRepresentationFactory a {@link SongRepresentationFactory} instance
      */
     @Inject
@@ -30,7 +30,7 @@ public class CurrentSongRepresentationFactory extends BaseRepresentationFactory
     }
 
     /**
-     * Returns a new {@link com.theoryinpractise.halbuilder.api.Representation} of a song.
+     * Returns a new {@link Representation} of a song.
      *
      * @param currentSong a current song
      * @return a new {@link Representation} of the current song

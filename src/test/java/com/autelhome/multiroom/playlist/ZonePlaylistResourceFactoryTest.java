@@ -26,7 +26,7 @@ public class ZonePlaylistResourceFactoryTest {
         final UUID zoneId = UUID.randomUUID();
         final ZoneDto kitchen = new ZoneDto(zoneId, zoneName, 7912, 1);
 
-        when(zonePlaylistService.getPlaylistByZoneName(zoneName)).thenReturn(Optional.of(new ZonePlaylistDto(zoneId, zoneName, new ZonePlaylist(Arrays.asList(new Song("Song A"), new Song("Song B"))))));
+        when(zonePlaylistService.getPlaylistByZoneName(zoneName)).thenReturn(Optional.of(new ZonePlaylistDto(zoneId, zoneName, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("Song A"), 1), new PlaylistSong(new Song("Song B"), 2))))));
         final ZonePlaylistResource expected = new ZonePlaylistResource(kitchen, zonePlaylistService, zonePlaylistRepresentationFactory, eventBus);
         final ZonePlaylistResource actual = testSubject.newInstance(kitchen);
 

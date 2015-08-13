@@ -1,6 +1,5 @@
 package com.autelhome.multiroom.playlist;
 
-import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.zone.Zone;
 import com.autelhome.multiroom.zone.ZoneRepository;
 import com.google.inject.Inject;
@@ -35,8 +34,8 @@ public class ZonePlaylistCommandHandlers {
     public void handleChangeZonePlaylist(final ChangeZonePlaylist changeZonePlaylist) {
         final Zone zone = zoneRepository.getById(changeZonePlaylist.getAggregateId());
         final ZonePlaylist newPlaylist = changeZonePlaylist.getNewPlaylist();
-        final Collection<Song> newSongs = newPlaylist.getSongs();
-        LOGGER.info("[{}] - changing playlist - {} songs", zone.getName(), newSongs.size());
+        final Collection<PlaylistSong> newPlaylistSongs = newPlaylist.getPlaylistSongs();
+        LOGGER.info("[{}] - changing playlist - {} songs", zone.getName(), newPlaylistSongs.size());
         zone.changePlaylist(newPlaylist);
         zoneRepository.save(zone, changeZonePlaylist.getOriginalVersion());
     }

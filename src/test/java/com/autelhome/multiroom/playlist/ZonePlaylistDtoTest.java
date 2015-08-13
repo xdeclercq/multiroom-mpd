@@ -20,29 +20,29 @@ public class ZonePlaylistDtoTest {
     @Test
     public void getZoneName() throws Exception {
         final String expected = "a zone";
-        final ZonePlaylistDto playlist = new ZonePlaylistDto(UUID.randomUUID(), expected, new ZonePlaylist(Arrays.asList(new Song("song 1"), new Song("song 2"))));
+        final ZonePlaylistDto playlist = new ZonePlaylistDto(UUID.randomUUID(), expected, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2))));
         assertThat(playlist.getZoneName()).isEqualTo(expected);
     }
 
     @Test
     public void getSongs() throws Exception {
-        final ZonePlaylist expected = new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B)));
+        final ZonePlaylist expected = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2)));
         final ZonePlaylistDto playlist = new ZonePlaylistDto(UUID.randomUUID(), "a zone", expected);
-        assertThat(playlist.getSongs()).isEqualTo(Arrays.asList(new Song(SONG_A), new Song(SONG_B)));
+        assertThat(playlist.getSongs()).isEqualTo(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2)));
     }
 
     @Test
     public void getZoneId() throws Exception {
         final UUID expected = UUID.randomUUID();
-        final ZonePlaylistDto playlist = new ZonePlaylistDto(expected, "a zone", new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B))));
+        final ZonePlaylistDto playlist = new ZonePlaylistDto(expected, "a zone", new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2))));
         assertThat(playlist.getZoneId()).isEqualTo(expected);
     }
 
     @Test
     public void shouldBeEqual() throws Exception {
         final UUID zoneId = UUID.randomUUID();
-        final ZonePlaylistDto zonePlaylistDto1 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B))));
-        final ZonePlaylistDto zonePlaylistDto2 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B))));
+        final ZonePlaylistDto zonePlaylistDto1 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2))));
+        final ZonePlaylistDto zonePlaylistDto2 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2))));
 
         assertThat(zonePlaylistDto1).isEqualTo(zonePlaylistDto1);
         assertThat(zonePlaylistDto1).isEqualTo(zonePlaylistDto2);
@@ -51,10 +51,10 @@ public class ZonePlaylistDtoTest {
     @Test
     public void shouldNotBeEqual() throws Exception {
         final UUID zoneId = UUID.randomUUID();
-        final ZonePlaylistDto zonePlaylistDto1 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B))));
-        final ZonePlaylistDto zonePlaylistDto2 = new ZonePlaylistDto(UUID.randomUUID(), MY_ZONE, new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B))));
-        final ZonePlaylistDto zonePlaylistDto3 = new ZonePlaylistDto(zoneId, "another zone", new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B))));
-        final ZonePlaylistDto zonePlaylistDto4 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_C))));
+        final ZonePlaylistDto zonePlaylistDto1 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2))));
+        final ZonePlaylistDto zonePlaylistDto2 = new ZonePlaylistDto(UUID.randomUUID(), MY_ZONE, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2))));
+        final ZonePlaylistDto zonePlaylistDto3 = new ZonePlaylistDto(zoneId, "another zone", new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2))));
+        final ZonePlaylistDto zonePlaylistDto4 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_C), 2))));
 
         assertNotEquals(zonePlaylistDto1, " ");
         assertNotEquals(zonePlaylistDto1, null);
@@ -66,8 +66,8 @@ public class ZonePlaylistDtoTest {
     @Test
     public void hashCodeShouldBeTheSame() throws Exception {
         final UUID zoneId = UUID.randomUUID();
-        final int hashCode1 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B)))).hashCode();
-        final int hashCode2 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B)))).hashCode();
+        final int hashCode1 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2)))).hashCode();
+        final int hashCode2 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2)))).hashCode();
 
         assertThat(hashCode1).isEqualTo(hashCode2);
     }
@@ -75,10 +75,10 @@ public class ZonePlaylistDtoTest {
     @Test
     public void hashCodeShouldNotBeTheSame() throws Exception {
         final UUID zoneId = UUID.randomUUID();
-        final int hashCode1 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B)))).hashCode();
-        final int hashCode2 = new ZonePlaylistDto(UUID.randomUUID(), MY_ZONE, new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B)))).hashCode();
-        final int hashCode3 = new ZonePlaylistDto(zoneId, "another zone", new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B)))).hashCode();
-        final int hashCode4 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_C)))).hashCode();
+        final int hashCode1 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2)))).hashCode();
+        final int hashCode2 = new ZonePlaylistDto(UUID.randomUUID(), MY_ZONE, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2)))).hashCode();
+        final int hashCode3 = new ZonePlaylistDto(zoneId, "another zone", new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2)))).hashCode();
+        final int hashCode4 = new ZonePlaylistDto(zoneId, MY_ZONE, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_C), 2)))).hashCode();
 
         assertThat(hashCode1).isNotEqualTo(hashCode2);
         assertThat(hashCode2).isNotEqualTo(hashCode3);
@@ -89,7 +89,7 @@ public class ZonePlaylistDtoTest {
     public void toStringShouldContainFields() throws Exception {
         final UUID zoneId = UUID.randomUUID();
         final String zoneName = "another zone";
-        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song(SONG_B)));
+        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song(SONG_B), 2)));
         final String actual = new ZonePlaylistDto(zoneId, zoneName, playlist).toString();
         assertThat(actual).contains(zoneId.toString());
         assertThat(actual).contains(zoneName);

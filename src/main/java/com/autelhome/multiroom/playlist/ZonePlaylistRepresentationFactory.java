@@ -1,8 +1,6 @@
 package com.autelhome.multiroom.playlist;
 
 import com.autelhome.multiroom.hal.BaseRepresentationFactory;
-import com.autelhome.multiroom.song.Song;
-import com.autelhome.multiroom.song.SongRepresentationFactory;
 import com.autelhome.multiroom.zone.ZonesResource;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
@@ -19,16 +17,17 @@ import java.util.Collection;
 public class ZonePlaylistRepresentationFactory extends BaseRepresentationFactory
 {
 
-    private final SongRepresentationFactory songRepresentationFactory;
+    private final PlaylistSongRepresentationFactory playlistSongRepresentationFactory;
     /**
      * Constructor.
      *
      * @param uriInfo the {@link UriInfo} related to the request
+     * @param playlistSongRepresentationFactory a {@link PlaylistSongRepresentationFactory} instance
      */
     @Inject
-    public ZonePlaylistRepresentationFactory(final UriInfo uriInfo, final SongRepresentationFactory songRepresentationFactory) {
+    public ZonePlaylistRepresentationFactory(final UriInfo uriInfo, final PlaylistSongRepresentationFactory playlistSongRepresentationFactory) {
         super(uriInfo);
-        this.songRepresentationFactory = songRepresentationFactory;
+        this.playlistSongRepresentationFactory = playlistSongRepresentationFactory;
     }
 
     /**
@@ -48,11 +47,9 @@ public class ZonePlaylistRepresentationFactory extends BaseRepresentationFactory
         final Representation representation = newRepresentation(self.toString())
                 .withNamespace("mr", getMRNamespace());
 
-        final Collection<Song> songs = zonePlaylistDto.getSongs();
-        songs.forEach(song -> representation.withRepresentation("mr:song", songRepresentationFactory.newRepresentation(song)));
+        final Collection<PlaylistSong> playlistSongs = zonePlaylistDto.getSongs();
+        playlistSongs.forEach(song -> representation.withRepresentation("mr:playlist-song", playlistSongRepresentationFactory.newRepresentation(song)));
         return representation;
-
-
     }
 
 }

@@ -1,6 +1,7 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.player.PlayerStatus;
+import com.autelhome.multiroom.playlist.PlaylistSong;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.song.Song;
 import org.junit.Test;
@@ -16,7 +17,7 @@ public class ZoneCreatedTest {
     private static final String BEDROOM = "Bedroom";
     private static final String KITCHEN = "Kitchen";
     private static final String BATHROOM = "Bathroom";
-    private static final ZonePlaylist PLAYLIST = new ZonePlaylist(Arrays.asList(new Song("a"), new Song("b")));
+    private static final ZonePlaylist PLAYLIST = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("a"), 1), new PlaylistSong(new Song("b"), 2)));
 
     @Test
     public void shouldBeEqual() throws Exception {
@@ -37,7 +38,7 @@ public class ZoneCreatedTest {
         final ZoneCreated zoneCreated3 = new ZoneCreated(id2, KITCHEN, 789, PlayerStatus.PLAYING, PLAYLIST);
         final ZoneCreated zoneCreated4 = new ZoneCreated(id2, KITCHEN, 123, PlayerStatus.PLAYING, PLAYLIST);
         final ZoneCreated zoneCreated5 = new ZoneCreated(id2, KITCHEN, 123, PlayerStatus.PAUSED, PLAYLIST);
-        final ZoneCreated zoneCreated6 = new ZoneCreated(id2, KITCHEN, 123, PlayerStatus.PAUSED, new ZonePlaylist(Arrays.asList(new Song("Song 1"))));
+        final ZoneCreated zoneCreated6 = new ZoneCreated(id2, KITCHEN, 123, PlayerStatus.PAUSED, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("Song 1"), 1))));
 
         assertThat(zoneCreated1).isNotEqualTo(" ");
         assertThat(zoneCreated1).isNotEqualTo(null);

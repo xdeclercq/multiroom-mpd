@@ -2,6 +2,7 @@ package com.autelhome.multiroom.mpd;
 
 import com.autelhome.multiroom.player.CurrentSong;
 import com.autelhome.multiroom.player.PlayerStatus;
+import com.autelhome.multiroom.playlist.PlaylistSong;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.EventBus;
@@ -172,7 +173,7 @@ public class MPDGatewayTest {
 
     @Test
     public void getZonePlaylist() throws Exception {
-        final ZonePlaylist expected = new ZonePlaylist(Arrays.asList(new Song(SONG_A), new Song("Song B")));
+        final ZonePlaylist expected = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song(SONG_A), 1), new PlaylistSong(new Song("Song B"), 2)));
 
         when(mpdProvider.getMPD(MPD_INSTANCE_PORT_NUMBER)).thenReturn(mpd);
 
@@ -182,8 +183,10 @@ public class MPDGatewayTest {
 
         final MPDSong mpdSongA = new MPDSong();
         mpdSongA.setTitle(SONG_A);
+        mpdSongA.setPosition(0);
         final MPDSong mpdSongB = new MPDSong();
         mpdSongB.setTitle(SONG_B);
+        mpdSongB.setPosition(1);
         when(mpdPlaylist.getSongList()).thenReturn(Arrays.asList(mpdSongA, mpdSongB));
 
         final ZonePlaylist actual = testSubject.getZonePlaylist(MPD_INSTANCE_PORT_NUMBER);

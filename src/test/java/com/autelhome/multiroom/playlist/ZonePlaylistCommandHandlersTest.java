@@ -19,7 +19,7 @@ public class ZonePlaylistCommandHandlersTest {
     public void handleChangeZonePlaylist() throws Exception {
         final Zone zone = mock(Zone.class);
         when(zoneRepository.getById(ZONE_ID)).thenReturn(zone);
-        testSubject.handleChangeZonePlaylist(new ChangeZonePlaylist(ZONE_ID, new ZonePlaylist(Arrays.asList(new Song("song 1"))), 123));
+        testSubject.handleChangeZonePlaylist(new ChangeZonePlaylist(ZONE_ID, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("song 1"), 1))), 123));
         verify(zoneRepository, times(1)).save(zone, 123);
     }
 }

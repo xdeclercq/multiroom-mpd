@@ -2,6 +2,7 @@ package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.errors.InvalidOperationException;
 import com.autelhome.multiroom.player.*;
+import com.autelhome.multiroom.playlist.PlaylistSong;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.playlist.ZonePlaylistUpdated;
 import com.autelhome.multiroom.song.Song;
@@ -21,7 +22,7 @@ public class ZoneTest {
     private static final String BEDROOM = "Bedroom";
     private static final String KITCHEN = "Kitchen";
     private static final String BATHROOM = "Bathroom";
-    private static final ZonePlaylist PLAYLIST = new ZonePlaylist(Arrays.asList(new Song("a"), new Song("b")));
+    private static final ZonePlaylist PLAYLIST = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("a"), 1), new PlaylistSong(new Song("b"), 2)));
 
 
     @Test
@@ -78,7 +79,7 @@ public class ZoneTest {
         final Zone testSubject = new Zone(id, NAME, 12, PlayerStatus.PLAYING, PLAYLIST);
         final List<Event> initialUncommittedChanges = testSubject.getUncommittedChanges();
         assertThat(initialUncommittedChanges).hasSize(1);
-        final ZonePlaylist newPlaylist = new ZonePlaylist(Arrays.asList(new Song("Song A"), new Song("Song B")));
+        final ZonePlaylist newPlaylist = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("Song A"), 1), new PlaylistSong(new Song("Song B"), 2)));
         testSubject.changePlaylist(newPlaylist);
         final List<Event> actualUncommittedChanges = testSubject.getUncommittedChanges();
         assertThat(actualUncommittedChanges).hasSize(2);

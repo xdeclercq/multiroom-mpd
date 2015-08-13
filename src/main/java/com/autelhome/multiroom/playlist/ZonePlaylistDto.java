@@ -1,6 +1,5 @@
 package com.autelhome.multiroom.playlist;
 
-import com.autelhome.multiroom.song.Song;
 import com.google.common.base.MoreObjects;
 
 import java.util.Collection;
@@ -40,8 +39,8 @@ public class ZonePlaylistDto
         return zoneName;
     }
 
-    public Collection<Song> getSongs() {
-        return playlist.getSongs();
+    public Collection<PlaylistSong> getSongs() {
+        return playlist.getPlaylistSongs();
     }
 
     public UUID getZoneId() {

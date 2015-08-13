@@ -19,7 +19,8 @@ import static org.mockito.Mockito.when;
 public class ZonePlaylistRepresentationFactoryTest {
     private final UriInfo uriInfo = getUriInfo();
     private final SongRepresentationFactory songRepresentationFactory = new SongRepresentationFactory(uriInfo);
-    private final ZonePlaylistRepresentationFactory testSubject = new ZonePlaylistRepresentationFactory(uriInfo, songRepresentationFactory);
+    private final PlaylistSongRepresentationFactory playlistSongRepresentationFactory = new PlaylistSongRepresentationFactory(uriInfo, songRepresentationFactory);
+    private final ZonePlaylistRepresentationFactory testSubject = new ZonePlaylistRepresentationFactory(uriInfo, playlistSongRepresentationFactory);
 
     public static final String BASE_URI = "http://myserver:1234/api";
 
@@ -39,11 +40,12 @@ public class ZonePlaylistRepresentationFactoryTest {
                 .withFlag(RepresentationFactory.COALESCE_ARRAYS)
                 .newRepresentation(self)
                 .withNamespace("mr", "http://myserver:1234/multiroom-mpd/docs/#/relations/{rel}")
-                .withRepresentation("mr:song", songRepresentationFactory.newRepresentation(new Song("Song A")))
-                .withRepresentation("mr:song", songRepresentationFactory.newRepresentation(new Song("Song B")))
+                .withRepresentation("mr:playlist-song",
+                        playlistSongRepresentationFactory.newRepresentation(new PlaylistSong(new Song("Song A"), 1)))
+                .withRepresentation("mr:playlist-song", playlistSongRepresentationFactory.newRepresentation(new PlaylistSong(new Song("Song B"), 2)))
                 .toString(RepresentationFactory.HAL_JSON);
 
-        final ZonePlaylistDto zonePlaylistDto = new ZonePlaylistDto(UUID.randomUUID(), "myZone", new ZonePlaylist(Arrays.asList(new Song("Song A"), new Song("Song B"))));
+        final ZonePlaylistDto zonePlaylistDto = new ZonePlaylistDto(UUID.randomUUID(), "myZone", new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("Song A"), 1), new PlaylistSong(new Song("Song B"), 2))));
 
         final String actual = testSubject.newRepresentation(zonePlaylistDto).toString(RepresentationFactory.HAL_JSON);
 

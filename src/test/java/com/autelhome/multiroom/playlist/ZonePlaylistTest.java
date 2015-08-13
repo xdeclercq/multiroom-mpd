@@ -16,15 +16,15 @@ import static org.mockito.Mockito.mock;
 
 public class ZonePlaylistTest {
 
-    private static final Song SONG_A = new Song("Song A");
-    private static final Song SONG_B = new Song("Song B");
-    private static final Song SONG_C = new Song("Song C");
+    private static final PlaylistSong SONG_A = new PlaylistSong(new Song("Song A"), 1);
+    private static final PlaylistSong SONG_B = new PlaylistSong(new Song("Song B"), 2);
+    private static final PlaylistSong SONG_C = new PlaylistSong(new Song("Song C"), 2);
 
     @Test
-    public void getSongs() throws Exception {
-        final List<Song> expected = Arrays.asList(SONG_A, SONG_B);
+    public void getPlaylistSongs() throws Exception {
+        final List<PlaylistSong> expected = Arrays.asList(SONG_A, SONG_B);
         final ZonePlaylist testSubject = new ZonePlaylist(expected);
-        final Collection<Song> actual = testSubject.getSongs();
+        final Collection<PlaylistSong> actual = testSubject.getPlaylistSongs();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -34,13 +34,15 @@ public class ZonePlaylistTest {
         final Playlist mpdPlaylist = mock(Playlist.class);
         final MPDSong mpdSong1 = new MPDSong();
         mpdSong1.setTitle("Song 1");
+        mpdSong1.setPosition(0);
         final MPDSong mpdSong2 = new MPDSong();
         mpdSong2.setTitle("Song 2");
+        mpdSong2.setPosition(1);
         Mockito.when(mpdPlaylist.getSongList()).thenReturn(Arrays.asList(mpdSong1, mpdSong2));
 
         final ZonePlaylist actual = ZonePlaylist.fromMPDPlaylist(mpdPlaylist);
 
-        final ZonePlaylist expected = new ZonePlaylist(Arrays.asList(new Song("Song 1"), new Song("Song 2")));
+        final ZonePlaylist expected = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("Song 1"), 1), new PlaylistSong(new Song("Song 2"), 2)));
 
         assertThat(actual).isEqualTo(expected);
     }

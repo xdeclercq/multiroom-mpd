@@ -1,6 +1,7 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.player.PlayerStatus;
+import com.autelhome.multiroom.playlist.PlaylistSong;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.Event;
@@ -26,7 +27,7 @@ public class ZonesViewTest {
         final int mpdInstancePortNumber = 1984;
         final PlayerStatus playerStatus = PlayerStatus.PLAYING;
         final int version = 543;
-        final ZoneCreated zoneCreated = new ZoneCreated(id, name, mpdInstancePortNumber, playerStatus, new ZonePlaylist(Arrays.asList(new Song("a"), new Song("b"))));
+        final ZoneCreated zoneCreated = new ZoneCreated(id, name, mpdInstancePortNumber, playerStatus, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("a"), 1), new PlaylistSong(new Song("b"), 2))));
         zoneCreated.setVersion(543);
 
         testSubject.handleCreated(zoneCreated);

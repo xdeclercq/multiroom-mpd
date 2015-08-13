@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.player;
 
+import com.autelhome.multiroom.playlist.PlaylistSong;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.InstanceNotFoundException;
@@ -26,7 +27,7 @@ public class PlayersViewTest {
     public void handleCreated() throws Exception {
         final UUID zoneId = UUID.randomUUID();
         final PlayerStatus playerStatus = PlayerStatus.STOPPED;
-        testSubject.handleCreated(new ZoneCreated(zoneId, ZONE_NAME, 2323, playerStatus, new ZonePlaylist(Arrays.asList(new Song("a"), new Song("b")))));
+        testSubject.handleCreated(new ZoneCreated(zoneId, ZONE_NAME, 2323, playerStatus, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("a"), 1), new PlaylistSong(new Song("b"), 2)))));
 
         verify(playerDatabase).add(new PlayerDto(zoneId, ZONE_NAME, playerStatus));
     }

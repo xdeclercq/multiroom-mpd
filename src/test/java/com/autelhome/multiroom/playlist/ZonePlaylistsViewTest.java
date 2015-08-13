@@ -21,7 +21,7 @@ public class ZonePlaylistsViewTest {
     public void handleCreated() throws Exception {
         final UUID zoneId = UUID.randomUUID();
         final PlayerStatus playerStatus = PlayerStatus.STOPPED;
-        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new Song("a"), new Song("b")));
+        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("a"), 1), new PlaylistSong(new Song("b"), 2)));
         testSubject.handleCreated(new ZoneCreated(zoneId, ZONE_NAME, 2323, playerStatus, playlist));
 
         verify(zonePlaylistDatabase).add(new ZonePlaylistDto(zoneId, ZONE_NAME, playlist));
@@ -31,10 +31,10 @@ public class ZonePlaylistsViewTest {
     public void handleZonePlaylistUpdated() throws Exception {
         final UUID zoneId = UUID.randomUUID();
 
-        final Optional<ZonePlaylistDto> playlistDto = Optional.of(new ZonePlaylistDto(zoneId, ZONE_NAME, new ZonePlaylist(Arrays.asList(new Song("a"), new Song("b")))));
+        final Optional<ZonePlaylistDto> playlistDto = Optional.of(new ZonePlaylistDto(zoneId, ZONE_NAME, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("a"), 1), new PlaylistSong(new Song("b"), 2)))));
         when(zonePlaylistDatabase.getByZoneId(zoneId)).thenReturn(playlistDto);
 
-        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new Song("C"), new Song("D")));
+        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("C"), 1), new PlaylistSong(new Song("D"), 2)));
         testSubject.handleZonePlaylistUpdated(new ZonePlaylistUpdated(zoneId, playlist));
 
         verify(zonePlaylistDatabase).update(new ZonePlaylistDto(zoneId, ZONE_NAME, playlist));
@@ -46,6 +46,6 @@ public class ZonePlaylistsViewTest {
 
         when(zonePlaylistDatabase.getByZoneId(zoneId)).thenReturn(Optional.empty());
 
-        testSubject.handleZonePlaylistUpdated(new ZonePlaylistUpdated(zoneId, new ZonePlaylist(Arrays.asList(new Song("song 1"), new Song("song 2")))));
+        testSubject.handleZonePlaylistUpdated(new ZonePlaylistUpdated(zoneId, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("song 1"), 1), new PlaylistSong(new Song("song 2"), 2)))));
     }
 }

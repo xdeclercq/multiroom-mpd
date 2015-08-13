@@ -1,6 +1,7 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.player.PlayerStatus;
+import com.autelhome.multiroom.playlist.PlaylistSong;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.Event;
@@ -40,7 +41,7 @@ public class ZoneRepositoryTest {
         final String name = "a zone";
         final int mpdInstancePortNumber = 1984;
         final PlayerStatus playerStatus = PlayerStatus.STOPPED;
-        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new Song("a"), new Song("b")));
+        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("a"), 1), new PlaylistSong(new Song("b"), 2)));
         final Zone expected = new Zone(id, name, mpdInstancePortNumber, playerStatus, playlist);
         when(eventStore.getEventsForAggregate(id)).thenReturn(Arrays.asList(new ZoneCreated(id, name, mpdInstancePortNumber, playerStatus, playlist)));
         final Zone actual = testSubject.getById(id);

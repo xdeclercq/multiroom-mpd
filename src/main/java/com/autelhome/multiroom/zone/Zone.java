@@ -96,7 +96,7 @@ public class Zone extends AbstractAggregateRoot {
      * @param position the position of the song to be played
      */
     public void playSongAtPosition(final int position) {
-        final CurrentSong currentSong = new CurrentSong(playlist.getSongAtPosition(position), position);
+        final CurrentSong currentSong = new CurrentSong(playlist.getSongAtPosition(position).getSong(), position);
         applyChange(new SongAtPositionPlayed(id, currentSong));
     }
 

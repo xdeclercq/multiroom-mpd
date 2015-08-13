@@ -43,7 +43,8 @@ public class ZonePlaylistResourceTest {
     private final PlayerResourceFactory playerResourceFactory = mock(PlayerResourceFactory.class);
     private final EventBus eventBus = mock(EventBus.class);
     private final SongRepresentationFactory songRepresentationFactory = new SongRepresentationFactory(uriInfo);
-    private final ZonePlaylistRepresentationFactory  zonePlaylistRepresentationFactory = new ZonePlaylistRepresentationFactory(uriInfo, songRepresentationFactory);
+    private final PlaylistSongRepresentationFactory playlistSongRepresentationFactory = new PlaylistSongRepresentationFactory(uriInfo, songRepresentationFactory);
+    private final ZonePlaylistRepresentationFactory  zonePlaylistRepresentationFactory = new ZonePlaylistRepresentationFactory(uriInfo, playlistSongRepresentationFactory);
     private final ZonePlaylistService zonePlaylistService= mock(ZonePlaylistService.class);
     private final ZonePlaylistResourceFactory zonePlaylistResourceFactory = mock(ZonePlaylistResourceFactory.class);
 
@@ -65,7 +66,7 @@ public class ZonePlaylistResourceTest {
         final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
 
         when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
-        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new Song("song A"), new Song("song B")));
+        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("song A"), 1), new PlaylistSong(new Song("song B"), 2)));
         when(zonePlaylistService.getPlaylistByZoneName(KITCHEN)).thenReturn(Optional.of(new ZonePlaylistDto(zoneId, KITCHEN, playlist)));
         when(zonePlaylistResourceFactory.newInstance(kitchen)).thenReturn(new ZonePlaylistResource(kitchen, zonePlaylistService, zonePlaylistRepresentationFactory, eventBus));
 
@@ -97,7 +98,7 @@ public class ZonePlaylistResourceTest {
     public void playSongAtPosition() throws Exception {
         final UUID zoneId = UUID.randomUUID();
         final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
-        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new Song("song A"), new Song("song B")));
+        final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("song A"), 1), new PlaylistSong(new Song("song B"), 2)));
 
         when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
         when(zonePlaylistService.getPlaylistByZoneName(KITCHEN)).thenReturn(Optional.of(new ZonePlaylistDto(zoneId, KITCHEN, playlist)));

@@ -11,12 +11,22 @@
     }
   },
   "_embedded" : {
-    "mr:song": [
+    "mr:playlist-song": [
       {
-        "title": "song A"
+        "position": 1,
+        "_embedded": {
+          "mr:song": {
+            "title": "song A"
+          }
+        }
       },
       {
-        "title": "song B"
+        "position": 2,
+        "_embedded": {
+          "mr:song": {
+            "title": "song B"
+          }
+        }
       }
     ]
   }

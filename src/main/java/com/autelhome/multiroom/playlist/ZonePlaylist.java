@@ -1,7 +1,6 @@
 package com.autelhome.multiroom.playlist;
 
 import com.autelhome.multiroom.mpd.MPDException;
-import com.autelhome.multiroom.song.Song;
 import com.google.common.base.MoreObjects;
 import org.bff.javampd.Playlist;
 import org.bff.javampd.exception.MPDPlaylistException;
@@ -20,37 +19,37 @@ import java.util.stream.Collectors;
  */
 public class ZonePlaylist {
 
-    private final List<Song> songs;
+    private final List<PlaylistSong> playlistSongs;
 
     /**
      * Constructor.
      */
     public ZonePlaylist() {
-        songs = new ArrayList<>();
+        playlistSongs = new ArrayList<>();
     }
 
     /**
      * Constructor.
      *
-     * @param songs a collection of songs
+     * @param playlistSongs a collection of playlist songs
      */
-    public ZonePlaylist(final List<Song> songs) {
-        this.songs = songs;
+    public ZonePlaylist(final List<PlaylistSong> playlistSongs) {
+        this.playlistSongs = playlistSongs;
     }
 
-    public Collection<Song> getSongs() {
-        return songs;
+    public Collection<PlaylistSong> getPlaylistSongs() {
+        return playlistSongs;
     }
 
-    public Song getSongAtPosition(final int position) {
-        return songs.get(position);
+    public PlaylistSong getSongAtPosition(final int position) {
+        return playlistSongs.get(position);
     }
 
     public static ZonePlaylist fromMPDPlaylist(final Playlist mpdPlaylist) {
         try {
             final List<MPDSong> mpdSongs = mpdPlaylist.getSongList();
-            final List<Song> songs = mpdSongs.stream().map( mpdSong -> Song.fromMPDSong(mpdSong)).collect(Collectors.toList());
-            return new ZonePlaylist(songs);
+            final List<PlaylistSong> playlistSongs = mpdSongs.stream().map( mpdSong -> PlaylistSong.fromMPDSong(mpdSong)).collect(Collectors.toList());
+            return new ZonePlaylist(playlistSongs);
 
         } catch (MPDPlaylistException e) {
             throw new MPDException("Unable to fetch list of songs of MPD playlist", e);
@@ -68,18 +67,18 @@ public class ZonePlaylist {
 
         final ZonePlaylist that = (ZonePlaylist) o;
 
-        return Objects.equals(songs, that.songs);
+        return Objects.equals(playlistSongs, that.playlistSongs);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(songs);
+        return Objects.hash(playlistSongs);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("songs", songs)
+                .add("playlistSongs", playlistSongs)
                 .toString();
     }
 }

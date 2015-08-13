@@ -3,6 +3,7 @@ package com.autelhome.multiroom.mpd;
 import com.autelhome.multiroom.player.ChangeCurrentSong;
 import com.autelhome.multiroom.player.CurrentSong;
 import com.autelhome.multiroom.playlist.ChangeZonePlaylist;
+import com.autelhome.multiroom.playlist.PlaylistSong;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.EventBus;
@@ -36,7 +37,7 @@ public class MPDPlaylistChangeListenerTest {
         when(zone.getVersion()).thenReturn(ZONE_VERSION);
         when(zone.getMpdInstancePortNumber()).thenReturn(MPD_INSTANCE_PORT_NUMBER);
         when(zone.getId()).thenReturn(ZONE_ID);
-        final ZonePlaylist newPlaylist = new ZonePlaylist(Arrays.asList(new Song("Song A"), new Song("Song B")));
+        final ZonePlaylist newPlaylist = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("Song A"), 1), new PlaylistSong(new Song("Song B"), 2)));
         when(mpdGateway.getZonePlaylist(MPD_INSTANCE_PORT_NUMBER)).thenReturn(newPlaylist);
         testSubject.playlistBasicChange(event);
 

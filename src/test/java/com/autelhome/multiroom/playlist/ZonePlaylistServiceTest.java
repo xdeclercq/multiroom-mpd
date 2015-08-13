@@ -19,7 +19,7 @@ public class ZonePlaylistServiceTest {
     public void getPlayerByZoneName() throws Exception {
         final String zoneName = "some zone";
 
-        final Optional<ZonePlaylistDto> expected = Optional.of(new ZonePlaylistDto(UUID.randomUUID(), zoneName, new ZonePlaylist(Arrays.asList(new Song("Song A"), new Song("Song B")))));
+        final Optional<ZonePlaylistDto> expected = Optional.of(new ZonePlaylistDto(UUID.randomUUID(), zoneName, new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("Song A"), 1), new PlaylistSong(new Song("Song B"), 2)))));
         when(zonePlaylistDatabase.getByZoneName(zoneName)).thenReturn(expected);
         final Optional<ZonePlaylistDto> actual = testSubject.getPlaylistByZoneName(zoneName);
 
