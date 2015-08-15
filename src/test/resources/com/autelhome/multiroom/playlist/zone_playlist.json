@@ -1,5 +1,4 @@
 {
-
   "_links": {
     "curies": {
       "name": "mr",
@@ -13,6 +12,11 @@
   "_embedded" : {
     "mr:playlist-song": [
       {
+        "_links": {
+          "mr:play": {
+            "href": "http://server:3421/multiroom-mpd/api/zones/Kitchen/playlist/1/play"
+          }
+        },
         "position": 1,
         "_embedded": {
           "mr:song": {
@@ -21,6 +25,11 @@
         }
       },
       {
+        "_links": {
+          "mr:play": {
+            "href": "http://server:3421/multiroom-mpd/api/zones/Kitchen/playlist/2/play"
+          }
+        },
         "position": 2,
         "_embedded": {
           "mr:song": {

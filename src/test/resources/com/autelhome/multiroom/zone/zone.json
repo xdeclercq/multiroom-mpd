@@ -11,7 +11,7 @@
     "mr:player": {
       "href": "http://server:6789/api/zones/Bedroom/player"
     },
-    "mr:zoneplaylist": {
+    "mr:zone-playlist": {
       "href": "http://server:6789/api/zones/Bedroom/playlist"
     }
   },

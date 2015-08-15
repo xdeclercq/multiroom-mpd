@@ -43,7 +43,7 @@ public class ZoneRepresentationFactoryTest {
                 .withProperty("name", "myZone")
                 .withProperty("mpdInstancePort", 7912)
                 .withLink("mr:player", playerLink)
-                .withLink("mr:zoneplaylist", playlistLink)
+                .withLink("mr:zone-playlist", playlistLink)
                 .toString(RepresentationFactory.HAL_JSON);
 
         final ZoneDto zone = new ZoneDto(UUID.randomUUID(), "myZone", 7912, 1);

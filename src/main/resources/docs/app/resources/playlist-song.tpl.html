@@ -1,0 +1,85 @@
+<div>
+  <h3>Resource 'playlist song'</h3>
+
+  <p>A song in a playlist.</p>
+
+  <h4>Properties</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>position</td>
+        <td>The song position in the playlist</td>
+        <td>Integer</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Links</h4>
+  <table>
+    <thead>
+    <tr>
+      <th>Relation</th>
+      <th>Description</th>
+      <th>Methods</th>
+      <th>Templated</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td><a ui-sref="root.relations.details({ name: 'mr-play' })">mr:play</a></td>
+      <td>A link to play the song a retrieve the playlist</td>
+      <td>POST</td>
+      <td>No</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h4>Embedded</h4>
+  <table>
+    <thead>
+    <tr>
+      <th>Relation</th>
+      <th>Description</th>
+      <th>Methods</th>
+      <th>Templated</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td><a ui-sref="root.relations.details({ name: 'mr-song' })">mr:song</a></td>
+      <td>The current <a ui-sref="root.resources.details({ name: 'song' })">song</a> resource of this player</td>
+      <td>None</td>
+      <td>No</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h4>Example</h4>
+  <pre class="panel">
+{
+  "_links": {
+    "curies": {
+      "href": "http://localhost:8080/multiroom-mpd/docs/#/relations/{rel}",
+      "name": "mr",
+      "templated": true
+    },
+    "mr:play": {
+      "href": "http://localhost:8080/multiroom-mpd/api/zones/Bathroom/playlist/3/play"
+    }
+  }
+  "position": 3
+  "_embedded": {
+    "mr:song": {
+      "title": "Yesterday"
+    }
+  }
+
+}</pre>
+</div>

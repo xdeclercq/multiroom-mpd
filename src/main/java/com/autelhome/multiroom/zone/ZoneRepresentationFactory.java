@@ -53,7 +53,7 @@ public class ZoneRepresentationFactory extends BaseRepresentationFactory
                 .withProperty("name", zone.getName())
                 .withProperty("mpdInstancePort", zone.getMpdInstancePortNumber())
                 .withLink("mr:player", player)
-                .withLink("mr:zoneplaylist", zonePlaylist);
+                .withLink("mr:zone-playlist", zonePlaylist);
     }
 
 }

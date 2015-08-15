@@ -60,7 +60,7 @@ public class ZonePlaylistResource {
      */
     @POST
     @Path("{position}/play")
-    public Response playSongAtPosition(final @PathParam("position") Integer position) {
+    public Response play(final @PathParam("position") Integer position) {
         eventBus.send(new PlaySongAtPosition(zoneDto.getId(), position, zoneDto.getVersion()));
         final Optional<ZonePlaylistDto> playlistDto = getPlaylistDto();
 

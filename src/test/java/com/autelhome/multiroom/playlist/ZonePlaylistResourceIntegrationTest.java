@@ -70,7 +70,7 @@ public class ZonePlaylistResourceIntegrationTest {
     }
 
     @Test
-    public void playSongAtPosition() throws Exception {
+    public void play() throws Exception {
         final String selfUrl = String.format(PLAYLIST_URL_FORMAT, rule.getLocalPort());
         final String playSongAtPositionUrl = String.format(PLAY_SONG_AT_POSITION_URL_FORMAT, rule.getLocalPort());
         final String docsUrl = String.format(DOCS_URL_FORMAT, rule.getLocalPort());

@@ -1,0 +1,94 @@
+<div>
+  <h3>Resource 'zone playlist'</h3>
+
+  <p>A playlist of a zone.</p>
+
+  <h4>Properties</h4>
+  <p>This resource has no properties.</p>
+
+  <h4>Links</h4>
+  <table>
+    <thead>
+    <tr>
+      <th>Relation</th>
+      <th>Description</th>
+      <th>Methods</th>
+      <th>Templated</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>self</td>
+      <td>The playlist</td>
+      <td>GET</td>
+      <td>No</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h4>Embedded</h4>
+  <table>
+    <thead>
+    <tr>
+      <th>Relation</th>
+      <th>Description</th>
+      <th>Methods</th>
+      <th>Templated</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td><a ui-sref="root.relations.details({ name: 'mr-playlist-song' })">mr:playlist-song</a></td>
+      <td>The <a ui-sref="root.resources.details({ name: 'playlist song' })">playlist song</a> resources</td>
+      <td>None</td>
+      <td>No</td>
+    </tr>
+    </tbody>
+  </table>
+
+
+  <h4>Example</h4>
+  <pre class="panel">
+{
+  "_links": {
+    "curies": {
+      "href": "http://localhost:8080/multiroom-mpd/docs/#/relations/{rel}",
+      "name": "mr",
+    "templated": true
+    },
+    "self": {
+      "href": "http://localhost:8080/multiroom-mpd/api/zones/Bathroom/playlist"
+    },
+  },
+  "_embedded": {
+    "mr:playlist-song": [
+      {
+        "_links": {
+          "mr:play": {
+            "href": "http://localhost:8080/multiroom-mpd/api/zones/Bathroom/playlist/1/play"
+          }
+        }
+        "position": 1,
+        "_embedded": {
+          "mr:song": {
+            "title": "song A"
+          }
+        }
+      },
+      {
+        "_links": {
+          "mr:play": {
+            "href": "http://localhost:8080/multiroom-mpd/api/zones/Bathroom/playlist/1/play"
+          }
+        }
+        "position": 2,
+        "_embedded": {
+          "mr:song": {
+            "title": "song B"
+          }
+        }
+      }
+    ]
+  }
+}</pre>
+</div>

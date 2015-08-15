@@ -1,8 +1,11 @@
 <div>
   <h3>Relation 'mr:play'</h3>
 
-  <p>You can use a POST request on the href of this link to request the player to play music.</p>
+  <p>You can use a POST request on the href of this link to request the player to play music
+    or to play a song from a zone playlist.</p>
 
   <h4>Output</h4>
-  <p>The <a ui-sref="root.resources.details({ name: 'player' })">player</a>.</p>
+  <p>The <a ui-sref="root.resources.details({ name: 'player' })">player</a> or the
+    <a ui-sref="root.resources.details({ name: 'zone_playlist' })">zone playlist</a> depending
+    if it is requested from a player or from a playlist song.</p>
 </div>

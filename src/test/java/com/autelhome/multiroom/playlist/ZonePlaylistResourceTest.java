@@ -95,7 +95,7 @@ public class ZonePlaylistResourceTest {
     }
 
     @Test
-    public void playSongAtPosition() throws Exception {
+    public void play() throws Exception {
         final UUID zoneId = UUID.randomUUID();
         final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
         final ZonePlaylist playlist = new ZonePlaylist(Arrays.asList(new PlaylistSong(new Song("song A"), 1), new PlaylistSong(new Song("song B"), 2)));

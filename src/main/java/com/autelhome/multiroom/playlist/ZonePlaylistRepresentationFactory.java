@@ -48,7 +48,7 @@ public class ZonePlaylistRepresentationFactory extends BaseRepresentationFactory
                 .withNamespace("mr", getMRNamespace());
 
         final Collection<PlaylistSong> playlistSongs = zonePlaylistDto.getSongs();
-        playlistSongs.forEach(song -> representation.withRepresentation("mr:playlist-song", playlistSongRepresentationFactory.newRepresentation(song)));
+        playlistSongs.forEach(song -> representation.withRepresentation("mr:playlist-song", playlistSongRepresentationFactory.newRepresentation(zoneName, song)));
         return representation;
     }
 
