@@ -1,5 +1,7 @@
 package com.autelhome.multiroom.util;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -56,5 +58,13 @@ public abstract class AbstractCommand implements Command {
     @Override
     public int hashCode() {
         return Objects.hash(aggregateId, originalVersion);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("aggregateId", aggregateId)
+                .add("originalVersion", originalVersion)
+                .toString();
     }
 }
