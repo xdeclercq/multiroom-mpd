@@ -87,18 +87,6 @@ public class PlayerCommandHandlers {
     }
 
     /**
-     * Changes the player status.
-     *
-     * @param changePlayerStatus a change player status command.
-     */
-    public void handleChangePlayerStatus(final ChangePlayerStatus changePlayerStatus) {
-        final Zone zone = zoneRepository.getById(changePlayerStatus.getAggregateId());
-        LOGGER.info("[{}] - changing status to {}", zone.getName(), changePlayerStatus.getNewStatus());
-        zone.changePlayerStatus(changePlayerStatus.getNewStatus());
-        zoneRepository.save(zone, changePlayerStatus.getOriginalVersion());
-    }
-
-    /**
      * Changes the player current song.
      *
      * @param changeCurrentSong a change player status command.

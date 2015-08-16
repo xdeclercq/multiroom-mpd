@@ -87,15 +87,6 @@ public class PlayersView {
     }
 
     /**
-     * Updates database with a player status updated event.
-     *
-     * @param playerStatusUpdated a player status updated event
-     */
-    public void handlePlayerStatusUpdated(final PlayerStatusUpdated playerStatusUpdated) {
-        handleNewPlayerStatus(playerStatusUpdated.getId(), playerStatusUpdated.getNewPlayerStatus());
-    }
-
-    /**
      * Updates database with a current song updated event.
      *
      * @param currentSongUpdated a current song updated event

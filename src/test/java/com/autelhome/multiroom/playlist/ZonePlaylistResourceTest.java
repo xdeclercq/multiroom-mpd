@@ -115,7 +115,6 @@ public class ZonePlaylistResourceTest {
         assertThat(actualStatus).isEqualTo(202);
     }
 
-
     @Test
     public void shouldBeEqual() throws Exception {
         final ZonePlaylistResource zonePlaylistResource1 = new ZonePlaylistResource(KITCHEN_DTO, null, null, null);

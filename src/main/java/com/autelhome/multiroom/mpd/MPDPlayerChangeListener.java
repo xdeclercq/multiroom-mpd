@@ -1,7 +1,8 @@
 package com.autelhome.multiroom.mpd;
 
-import com.autelhome.multiroom.player.ChangePlayerStatus;
-import com.autelhome.multiroom.player.PlayerStatus;
+import com.autelhome.multiroom.player.Pause;
+import com.autelhome.multiroom.player.Play;
+import com.autelhome.multiroom.player.Stop;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.Zone;
 import com.autelhome.multiroom.zone.ZoneRepository;
@@ -39,10 +40,19 @@ public class MPDPlayerChangeListener implements PlayerBasicChangeListener {
     public void playerBasicChange(final PlayerBasicChangeEvent event) {
         LOGGER.info("[{}] Received MPD player basic change event '{}'", zoneId, event.getStatus());
 
-        final PlayerStatus playerStatus = PlayerStatus.fromMPDChangeEventStatus(event.getStatus());
-
         final Zone zone = zoneRepository.getById(zoneId);
-        eventBus.send(new ChangePlayerStatus(zoneId, playerStatus, zone.getVersion()));
+
+        switch (event.getStatus()) {
+            case PLAYER_STARTED:
+            case PLAYER_UNPAUSED:
+                eventBus.send(new Play(zoneId, zone.getVersion()));
+                break;
+            case PLAYER_PAUSED:
+                eventBus.send(new Pause(zoneId, zone.getVersion()));
+                break;
+            case PLAYER_STOPPED:
+                eventBus.send(new Stop(zoneId, zone.getVersion()));
+        }
     }
 
 

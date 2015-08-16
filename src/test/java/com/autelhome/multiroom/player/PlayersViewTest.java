@@ -104,19 +104,6 @@ public class PlayersViewTest {
     }
 
     @Test
-    public void handlePlayerStatusUpdated() throws Exception {
-        final UUID zoneId = UUID.randomUUID();
-
-        final Optional<PlayerDto> playerDto = Optional.of(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PLAYING));
-        when(playerDatabase.getByZoneId(zoneId)).thenReturn(playerDto);
-
-        testSubject.handlePlayerStatusUpdated(new PlayerStatusUpdated(zoneId, PlayerStatus.PAUSED));
-
-        verify(playerDatabase).update(new PlayerDto(zoneId, ZONE_NAME, PlayerStatus.PAUSED));
-        verify(socketBroadcaster).broadcast(String.format(ZONES_PLAYER_STATUS_KEY_FORMAT, ZONE_NAME), PlayerStatus.PAUSED);
-    }
-
-    @Test
     public void handleCurrentSongUpdated() throws Exception {
         final UUID zoneId = UUID.randomUUID();
 

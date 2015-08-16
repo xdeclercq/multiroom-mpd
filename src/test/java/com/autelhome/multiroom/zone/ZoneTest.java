@@ -34,20 +34,6 @@ public class ZoneTest {
         assertThat(actualUncommittedChanges.get(0)).isEqualTo(new ZoneCreated(id, NAME, 12, PlayerStatus.PLAYING, PLAYLIST));
     }
 
-
-    @Test
-    public void changePlayerStatus() throws Exception {
-        final UUID id = UUID.randomUUID();
-        final Zone testSubject = new Zone(id, NAME, 12, PlayerStatus.PLAYING, PLAYLIST);
-        final List<Event> initialUncommittedChanges = testSubject.getUncommittedChanges();
-        assertThat(initialUncommittedChanges).hasSize(1);
-        final PlayerStatus newPlayerStatus = PlayerStatus.PAUSED;
-        testSubject.changePlayerStatus(newPlayerStatus);
-        final List<Event> actualUncommittedChanges = testSubject.getUncommittedChanges();
-        assertThat(actualUncommittedChanges).hasSize(2);
-        assertThat(actualUncommittedChanges.get(1)).isEqualTo(new PlayerStatusUpdated(id, newPlayerStatus));
-    }
-
     @Test
     public void changeCurrentSong() throws Exception {
         final UUID id = UUID.randomUUID();
@@ -85,14 +71,6 @@ public class ZoneTest {
         assertThat(actualUncommittedChanges).hasSize(2);
         assertThat(actualUncommittedChanges.get(1)).isEqualTo(new ZonePlaylistUpdated(id, newPlaylist));
     }
-
-    @Test(expected = InvalidOperationException.class)
-    public void changePlayerStatusWithSameStatus() throws Exception {
-        final PlayerStatus newPlayerStatus = PlayerStatus.PAUSED;
-        final Zone testSubject = new Zone(UUID.randomUUID(), NAME, 12, newPlayerStatus, PLAYLIST);
-        testSubject.changePlayerStatus(newPlayerStatus);
-    }
-
 
     @Test
     public void play() throws Exception {
@@ -181,7 +159,7 @@ public class ZoneTest {
                 new Stopped(id),
                 new Played(id),
                 new Paused(id),
-                new PlayerStatusUpdated(id, PlayerStatus.STOPPED)));
+                new Stopped(id)));
         final Zone expected = new Zone(id, NAME, 12, PlayerStatus.STOPPED, PLAYLIST);
 
         assertThat(testSubject).isEqualTo(expected);

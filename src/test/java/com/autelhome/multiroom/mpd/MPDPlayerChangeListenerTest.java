@@ -1,7 +1,8 @@
 package com.autelhome.multiroom.mpd;
 
-import com.autelhome.multiroom.player.ChangePlayerStatus;
-import com.autelhome.multiroom.player.PlayerStatus;
+import com.autelhome.multiroom.player.Pause;
+import com.autelhome.multiroom.player.Play;
+import com.autelhome.multiroom.player.Stop;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.Zone;
 import com.autelhome.multiroom.zone.ZoneRepository;
@@ -10,9 +11,7 @@ import org.junit.Test;
 
 import java.util.UUID;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class MPDPlayerChangeListenerTest {
 
@@ -22,7 +21,7 @@ public class MPDPlayerChangeListenerTest {
     private final MPDPlayerChangeListener testSubject = new MPDPlayerChangeListener(zoneId, eventBus, zoneRepository);
 
     @Test
-    public void playerBasicChange() throws Exception {
+    public void playerBasicChangePaused() throws Exception {
         final PlayerBasicChangeEvent event = mock(PlayerBasicChangeEvent.class);
 
         final int zoneVersion = 345;
@@ -32,6 +31,62 @@ public class MPDPlayerChangeListenerTest {
         when(event.getStatus()).thenReturn(PlayerBasicChangeEvent.Status.PLAYER_PAUSED);
         testSubject.playerBasicChange(event);
 
-        verify(eventBus).send(new ChangePlayerStatus(zoneId, PlayerStatus.PAUSED, zoneVersion));
+        verify(eventBus).send(new Pause(zoneId, zoneVersion));
+    }
+
+    @Test
+    public void playerBasicChangeUnpaused() throws Exception {
+        final PlayerBasicChangeEvent event = mock(PlayerBasicChangeEvent.class);
+
+        final int zoneVersion = 345;
+        final Zone zone = mock(Zone.class);
+        when(zoneRepository.getById(zoneId)).thenReturn(zone);
+        when(zone.getVersion()).thenReturn(zoneVersion);
+        when(event.getStatus()).thenReturn(PlayerBasicChangeEvent.Status.PLAYER_UNPAUSED);
+        testSubject.playerBasicChange(event);
+
+        verify(eventBus).send(new Play(zoneId, zoneVersion));
+    }
+
+    @Test
+    public void playerBasicChangeStarted() throws Exception {
+        final PlayerBasicChangeEvent event = mock(PlayerBasicChangeEvent.class);
+
+        final int zoneVersion = 345;
+        final Zone zone = mock(Zone.class);
+        when(zoneRepository.getById(zoneId)).thenReturn(zone);
+        when(zone.getVersion()).thenReturn(zoneVersion);
+        when(event.getStatus()).thenReturn(PlayerBasicChangeEvent.Status.PLAYER_STARTED);
+        testSubject.playerBasicChange(event);
+
+        verify(eventBus).send(new Play(zoneId, zoneVersion));
+    }
+
+    @Test
+    public void playerBasicChangeStopped() throws Exception {
+        final PlayerBasicChangeEvent event = mock(PlayerBasicChangeEvent.class);
+
+        final int zoneVersion = 345;
+        final Zone zone = mock(Zone.class);
+        when(zoneRepository.getById(zoneId)).thenReturn(zone);
+        when(zone.getVersion()).thenReturn(zoneVersion);
+        when(event.getStatus()).thenReturn(PlayerBasicChangeEvent.Status.PLAYER_STOPPED);
+        testSubject.playerBasicChange(event);
+
+        verify(eventBus).send(new Stop(zoneId, zoneVersion));
+    }
+
+    @Test
+    public void playerBasicChangeBitrateChange() throws Exception {
+        final PlayerBasicChangeEvent event = mock(PlayerBasicChangeEvent.class);
+
+        final int zoneVersion = 345;
+        final Zone zone = mock(Zone.class);
+        when(zoneRepository.getById(zoneId)).thenReturn(zone);
+        when(zone.getVersion()).thenReturn(zoneVersion);
+        when(event.getStatus()).thenReturn(PlayerBasicChangeEvent.Status.PLAYER_BITRATE_CHANGE);
+        testSubject.playerBasicChange(event);
+
+        verify(eventBus, never()).send(any());
     }
 }

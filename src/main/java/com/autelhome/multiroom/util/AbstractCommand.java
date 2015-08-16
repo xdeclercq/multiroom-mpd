@@ -1,5 +1,6 @@
 package com.autelhome.multiroom.util;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -32,5 +33,28 @@ public abstract class AbstractCommand implements Command {
     @Override
     public int getOriginalVersion() {
         return originalVersion;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final AbstractCommand that = (AbstractCommand) o;
+
+        if (originalVersion != that.originalVersion) {
+            return false;
+        }
+
+        return Objects.equals(aggregateId, that.aggregateId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(aggregateId, originalVersion);
     }
 }

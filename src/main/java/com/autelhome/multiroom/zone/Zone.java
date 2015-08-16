@@ -47,19 +47,6 @@ public class Zone extends AbstractAggregateRoot {
     }
 
     /**
-     * Changes the player status.
-     *
-     * @param newPlayerStatus the new player status
-     * @throws InvalidOperationException if the new status and current status are the same
-     */
-    public void changePlayerStatus(final PlayerStatus newPlayerStatus) {
-        if (playerStatus.equals(newPlayerStatus)) {
-            throw new InvalidOperationException("Unable to change the player status to " + newPlayerStatus + " as it is already the current status");
-        }
-        applyChange(new PlayerStatusUpdated(id, newPlayerStatus));
-    }
-
-    /**
      * Changes the player current song.
      *
      * @param newCurrentSong the new current song
@@ -138,9 +125,6 @@ public class Zone extends AbstractAggregateRoot {
         if (event instanceof Stopped) {
             applyStopped();
         }
-        if (event instanceof PlayerStatusUpdated) {
-            applyPlayerStatusUpdated((PlayerStatusUpdated) event);
-        }
         if (event instanceof ZonePlaylistUpdated) {
             applyZonePlaylistsUpdated((ZonePlaylistUpdated) event);
         }
@@ -167,10 +151,6 @@ public class Zone extends AbstractAggregateRoot {
 
     private void applyStopped() {
         playerStatus = PlayerStatus.STOPPED;
-    }
-
-    private void applyPlayerStatusUpdated(final PlayerStatusUpdated playerStatusUpdated) {
-        playerStatus = playerStatusUpdated.getNewPlayerStatus();
     }
 
     private void applyZonePlaylistsUpdated(final ZonePlaylistUpdated zonePlaylistUpdated) {

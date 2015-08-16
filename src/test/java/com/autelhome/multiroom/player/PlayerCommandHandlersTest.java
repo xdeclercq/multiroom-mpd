@@ -61,14 +61,6 @@ public class PlayerCommandHandlersTest {
     }
 
     @Test
-    public void handleChangePlayerStatus() throws Exception {
-        final Zone zone = mock(Zone.class);
-        when(zoneRepository.getById(ZONE_ID)).thenReturn(zone);
-        testSubject.handleChangePlayerStatus(new ChangePlayerStatus(ZONE_ID, PlayerStatus.STOPPED, 123));
-        verify(zoneRepository, times(1)).save(zone, 123);
-    }
-
-    @Test
     public void handleChangeCurrentSong() throws Exception {
         final Zone zone = mock(Zone.class);
         when(zoneRepository.getById(ZONE_ID)).thenReturn(zone);
