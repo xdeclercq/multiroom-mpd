@@ -42,7 +42,7 @@ public class ZonePlaylist {
     }
 
     public PlaylistSong getSongAtPosition(final int position) {
-        return playlistSongs.get(position);
+        return playlistSongs.get(position - 1);
     }
 
     public static ZonePlaylist fromMPDPlaylist(final Playlist mpdPlaylist) {

@@ -30,6 +30,15 @@ public class ZonePlaylistTest {
     }
 
     @Test
+    public void getSongAtPosition() throws Exception {
+        final List<PlaylistSong> playlistSongs = Arrays.asList(SONG_A, SONG_B);
+        final ZonePlaylist testSubject = new ZonePlaylist(playlistSongs);
+        final PlaylistSong actual = testSubject.getSongAtPosition(2);
+
+        assertThat(actual).isEqualTo(SONG_B);
+    }
+
+    @Test
     public void fromMPDPlaylist() throws Exception {
         final Playlist mpdPlaylist = mock(Playlist.class);
         final MPDSong mpdSong1 = new MPDSong();
