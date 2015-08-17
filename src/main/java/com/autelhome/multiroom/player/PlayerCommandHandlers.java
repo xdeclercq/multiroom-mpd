@@ -48,10 +48,11 @@ public class PlayerCommandHandlers {
      */
     public void handlePlaySong(final PlaySongAtPosition playSongAtPosition) {
         final Zone zone = zoneRepository.getById(playSongAtPosition.getAggregateId());
-        zone.playSongAtPosition(playSongAtPosition.getPosition());
-        mpdGateway.playSongAtPosition(zone.getMpdInstancePortNumber(), playSongAtPosition.getPosition());
+        final int position = playSongAtPosition.getPosition();
+        zone.playSongAtPosition(position);
+        mpdGateway.playSongAtPosition(zone.getMpdInstancePortNumber(), position);
         final String zoneName = zone.getName();
-        LOGGER.info("zone {} - handle play song", zoneName);
+        LOGGER.info("zone {} - handle play song (position {})", zoneName, position);
 
         zoneRepository.save(zone, playSongAtPosition.getOriginalVersion());
     }
