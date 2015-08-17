@@ -2,6 +2,7 @@ package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.hal.HalJsonMessageBodyWriter;
 import com.autelhome.multiroom.playlist.ZonePlaylistResourceFactory;
+import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.song.SongRepresentationFactory;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.*;
@@ -34,6 +35,7 @@ public class PlayerResourceTest {
     private static final ZoneDto BATHROOM_DTO = new ZoneDto(UUID.randomUUID(), "Bathroom", 7912, 1);
 
     private static final String PLAYER_JSON_FILE_NAME = "player.json";
+    private static final String SONG_A = "Song A";
     private final ZoneService zoneService = mock(ZoneService.class);
     private final UriInfo uriInfo = getUriInfo();
     private final ZoneRepresentationFactory zoneRepresentationFactory = new ZoneRepresentationFactory(uriInfo);
@@ -65,7 +67,7 @@ public class PlayerResourceTest {
         final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
 
         when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
-        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED)));
+        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 3))));
         when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
         final Response actualResponse = resources.client().target("/zones/Kitchen/player").request().accept(RepresentationFactory.HAL_JSON).get();
@@ -78,7 +80,6 @@ public class PlayerResourceTest {
         final int actualStatus = actualResponse.getStatus();
 
         assertThat(actualStatus).isEqualTo(200);
-
     }
 
     @Test
@@ -87,7 +88,7 @@ public class PlayerResourceTest {
         final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
 
         when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
-        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED)));
+        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 3))));
         when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
         final Response actualResponse = resources.client().target("/zones/Kitchen/player/play").request().accept(RepresentationFactory.HAL_JSON).post(null);
@@ -114,12 +115,33 @@ public class PlayerResourceTest {
     }
 
     @Test
+    public void playNext() throws Exception {
+        final UUID zoneId = UUID.randomUUID();
+        final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
+
+        when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
+        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 3))));
+        when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
+
+        final Response actualResponse = resources.client().target("/zones/Kitchen/player/next").request().accept(RepresentationFactory.HAL_JSON).post(null);
+
+        final String expectedContent = Resources.toString(Resources.getResource(getClass(), PLAYER_JSON_FILE_NAME), Charsets.UTF_8);
+        final String actualContent = actualResponse.readEntity(String.class);
+
+        assertEquals(expectedContent, actualContent, true);
+
+        final int actualStatus = actualResponse.getStatus();
+        assertThat(actualStatus).isEqualTo(202);
+    }
+
+
+    @Test
     public void pause() throws Exception {
         final UUID zoneId = UUID.randomUUID();
         final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
 
         when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
-        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED)));
+        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 3))));
         when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
         final Response actualResponse = resources.client().target("/zones/Kitchen/player/pause").request().accept(RepresentationFactory.HAL_JSON).post(null);
@@ -139,7 +161,7 @@ public class PlayerResourceTest {
         final ZoneDto kitchen = new ZoneDto(zoneId, KITCHEN, 789, 1);
 
         when(zoneService.getByName(KITCHEN)).thenReturn(Optional.of(kitchen));
-        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED)));
+        when(playerService.getPlayerByZoneName(KITCHEN)).thenReturn(Optional.of(new PlayerDto(zoneId, KITCHEN, PlayerStatus.PAUSED, new CurrentSong(new Song(SONG_A), 3))));
         when(playerResourceFactory.newInstance(kitchen)).thenReturn(new PlayerResource(kitchen, playerService, playerRepresentationFactory, eventBus));
 
         final Response actualResponse = resources.client().target("/zones/Kitchen/player/stop").request().accept(RepresentationFactory.HAL_JSON).post(null);

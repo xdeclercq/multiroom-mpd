@@ -37,6 +37,7 @@ public class PlayerRepresentationFactoryTest {
 
         final URI self = URI.create(BASE_URI + "/zones/myZone/player");
         final URI play = URI.create(BASE_URI + "/zones/myZone/player/play");
+        final URI playNext = URI.create(BASE_URI + "/zones/myZone/player/next");
         final URI pause = URI.create(BASE_URI + "/zones/myZone/player/pause");
         final URI stop = URI.create(BASE_URI + "/zones/myZone/player/stop");
         when(uriInfo.getBaseUriBuilder()).thenAnswer(i -> UriBuilder.fromPath(BASE_URI));
@@ -48,6 +49,7 @@ public class PlayerRepresentationFactoryTest {
                 .newRepresentation(self)
                 .withNamespace("mr", "http://myserver:1234/multiroom-mpd/docs/#/relations/{rel}")
                 .withLink("mr:play", play)
+                .withLink("mr:play-next", playNext)
                 .withLink("mr:pause", pause)
                 .withLink("mr:stop", stop)
                 .withRepresentation("mr:status", playerStatusRepresentationFactory.newRepresentation(PlayerStatus.PAUSED, "myZone"))

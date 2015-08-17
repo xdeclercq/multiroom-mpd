@@ -52,6 +52,9 @@ public class MPDPlayerChangeListener implements PlayerBasicChangeListener {
                 break;
             case PLAYER_STOPPED:
                 eventBus.send(new Stop(zoneId, zone.getVersion()));
+                break;
+            default:
+                // do nothing
         }
     }
 

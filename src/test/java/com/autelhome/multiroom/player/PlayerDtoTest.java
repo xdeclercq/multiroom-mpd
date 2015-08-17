@@ -3,6 +3,7 @@ package com.autelhome.multiroom.player;
 import com.autelhome.multiroom.song.Song;
 import org.junit.Test;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,10 +13,11 @@ public class PlayerDtoTest {
     private static final String MY_ZONE = "my zone";
     private static final String SONG_A = "Song A";
     private static final String SONG_B = "Song B";
+    private static final String A_ZONE = "a zone";
 
     @Test
     public void getZoneName() throws Exception {
-        final String expected = "a zone";
+        final String expected = A_ZONE;
         final PlayerDto player = new PlayerDto(UUID.randomUUID(), expected, PlayerStatus.PAUSED);
         assertThat(player.getZoneName()).isEqualTo(expected);
     }
@@ -23,15 +25,29 @@ public class PlayerDtoTest {
     @Test
     public void getStatus() throws Exception {
         final PlayerStatus expected = PlayerStatus.PAUSED;
-        final PlayerDto player = new PlayerDto(UUID.randomUUID(), "a zone", expected);
+        final PlayerDto player = new PlayerDto(UUID.randomUUID(), A_ZONE, expected);
         assertThat(player.getStatus()).isEqualTo(expected);
     }
 
     @Test
     public void getZoneId() throws Exception {
         final UUID expected = UUID.randomUUID();
-        final PlayerDto player = new PlayerDto(expected, "a zone", PlayerStatus.PAUSED);
+        final PlayerDto player = new PlayerDto(expected, A_ZONE, PlayerStatus.PAUSED);
         assertThat(player.getZoneId()).isEqualTo(expected);
+    }
+
+    @Test
+    public void getCurrentSong() throws Exception {
+        final Optional<CurrentSong> expected = Optional.of(new CurrentSong(new Song(SONG_A), 23));
+        final PlayerDto player = new PlayerDto(UUID.randomUUID(), A_ZONE, PlayerStatus.PAUSED, expected.get());
+        assertThat(player.getCurrentSong()).isEqualTo(expected);
+    }
+
+    @Test
+    public void getCurrentSongIsEmpty() throws Exception {
+        final Optional<CurrentSong> expected = Optional.empty();
+        final PlayerDto player = new PlayerDto(UUID.randomUUID(), A_ZONE, PlayerStatus.PAUSED);
+        assertThat(player.getCurrentSong()).isEqualTo(expected);
     }
 
     @Test

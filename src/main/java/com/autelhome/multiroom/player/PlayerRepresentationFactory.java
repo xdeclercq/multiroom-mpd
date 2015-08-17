@@ -7,6 +7,7 @@ import com.theoryinpractise.halbuilder.api.Representation;
 
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.Optional;
 
 /**
  * {@link BaseRepresentationFactory} for a {@link PlayerDto}.
@@ -53,6 +54,12 @@ public class PlayerRepresentationFactory extends BaseRepresentationFactory
                 .path(PlayerResource.class, "play")
                 .build(zoneName);
 
+        final URI playNext = getBaseURIBuilder()
+                .path(ZonesResource.class)
+                .path(ZonesResource.class, getPlayerResourceMethod)
+                .path(PlayerResource.class, "playNext")
+                .build(zoneName);
+
         final URI pause = getBaseURIBuilder()
                 .path(ZonesResource.class)
                 .path(ZonesResource.class, getPlayerResourceMethod)
@@ -68,14 +75,15 @@ public class PlayerRepresentationFactory extends BaseRepresentationFactory
         final Representation representation = newRepresentation(self.toString())
                 .withNamespace("mr", getMRNamespace())
                 .withLink("mr:play", play)
+                .withLink("mr:play-next", playNext)
                 .withLink("mr:pause", pause)
                 .withLink("mr:stop", stop)
                 .withRepresentation("mr:status", playerStatusRepresentationFactory.newRepresentation(playerDto.getStatus(), zoneName));
 
-        final CurrentSong currentSong = playerDto.getCurrentSong();
+        final Optional<CurrentSong> currentSong = playerDto.getCurrentSong();
 
-        if (currentSong != null) {
-            representation.withRepresentation("mr:current-song", currentSongRepresentationFactory.newRepresentation(currentSong));
+        if (currentSong.isPresent()) {
+            representation.withRepresentation("mr:current-song", currentSongRepresentationFactory.newRepresentation(currentSong.get()));
         }
 
         return representation;

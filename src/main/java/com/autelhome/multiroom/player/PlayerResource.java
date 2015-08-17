@@ -49,9 +49,27 @@ public class PlayerResource {
     public Response play() {
         eventBus.send(new Play(zoneDto.getId(), zoneDto.getVersion()));
 
-        final Optional<PlayerDto> playerDto = getPlayerDto();
+        final PlayerDto playerDto = getPlayerDto();
 
-        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto.get())).build();
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto)).build();
+    }
+
+    /**
+     * Sends a play song at next position command to the event bus and returns a representation of the player.
+     *
+     * @return HTTP 202 with a representation of the player
+     */
+    @POST
+    @Path("next")
+    public Response playNext() {
+        final PlayerDto playerDto = getPlayerDto();
+
+        final Optional<CurrentSong> currentSong = playerDto.getCurrentSong();
+
+        final int position = currentSong.isPresent() ? currentSong.get().getPosition() + 1 : 1;
+        eventBus.send(new PlaySongAtPosition(zoneDto.getId(), position, zoneDto.getVersion()));
+
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto)).build();
     }
 
     /**
@@ -64,9 +82,9 @@ public class PlayerResource {
     public Response pause() {
         eventBus.send(new Pause(zoneDto.getId(), zoneDto.getVersion()));
 
-        final Optional<PlayerDto> playerDto = getPlayerDto();
+        final PlayerDto playerDto = getPlayerDto();
 
-        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto.get())).build();
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto)).build();
     }
 
     /**
@@ -79,9 +97,9 @@ public class PlayerResource {
     public Response stop() {
         eventBus.send(new Stop(zoneDto.getId(), zoneDto.getVersion()));
 
-        final Optional<PlayerDto> playerDto = getPlayerDto();
+        final PlayerDto playerDto = getPlayerDto();
 
-        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto.get())).build();
+        return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto)).build();
     }
 
 	/**
@@ -91,9 +109,9 @@ public class PlayerResource {
 	 */
 	@GET
 	public Response getPlayer() {
-        final Optional<PlayerDto> playerDto = getPlayerDto();
+        final PlayerDto playerDto = getPlayerDto();
 
-        return Response.ok(playerRepresentationFactory.newRepresentation(playerDto.get())).build();
+        return Response.ok(playerRepresentationFactory.newRepresentation(playerDto)).build();
 	}
 
 	@Override
@@ -115,11 +133,11 @@ public class PlayerResource {
 		return Objects.hashCode(zoneDto);
 	}
 
-    private Optional<PlayerDto> getPlayerDto() {
+    private PlayerDto getPlayerDto() {
         final Optional<PlayerDto> playerDto = playerService.getPlayerByZoneName(zoneDto.getName());
         if (!playerDto.isPresent()) {
             throw new ResourceNotFoundException(RESOURCE_TYPE, zoneDto.getName());
         }
-        return playerDto;
+        return playerDto.get();
     }
 }

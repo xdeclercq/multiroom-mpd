@@ -12,6 +12,9 @@
     "mr:play": {
       "href": "http://server:3421/multiroom-mpd/api/zones/Kitchen/player/play"
     },
+    "mr:play-next": {
+      "href": "http://server:3421/multiroom-mpd/api/zones/Kitchen/player/next"
+    },
     "mr:pause": {
       "href": "http://server:3421/multiroom-mpd/api/zones/Kitchen/player/pause"
     },
@@ -20,6 +23,14 @@
     }
   },
   "_embedded" : {
+    "mr:current-song": {
+      "position": 3,
+      "_embedded": {
+        "mr:song": {
+          "title": "Song A"
+        }
+      }
+    },
     "mr:status": {
       "_links": {
         "self": {

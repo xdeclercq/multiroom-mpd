@@ -25,6 +25,7 @@ public class PlayerResourceIntegrationTest {
     private static final String DOCS_URL_FORMAT = "http://localhost:%d/multiroom-mpd/docs/#/relations/{rel}";
     private static final String PLAYER_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player";
     private static final String PLAY_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player/play";
+    private static final String PLAY_NEXT_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player/next";
     private static final String PAUSE_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player/pause";
     private static final String STOP_URL_FORMAT = "http://localhost:%d/multiroom-mpd/api/zones/Kitchen/player/stop";
     private static final String STATUS_URL_FORMAT = "ws://localhost:%d/multiroom-mpd/ws/zones/Kitchen/player/status";
@@ -33,6 +34,7 @@ public class PlayerResourceIntegrationTest {
     private static final String LINKS_CURIES_HREF_PATH = "_links.curies.href";
     private static final String LINKS_CURIES_TEMPLATED_PATH = "_links.curies.templated";
     private static final String LINKS_MR_PLAY_HREF_PATH = "_links.\"mr:play\".href";
+    private static final String LINKS_MR_PLAY_NEXT_HREF_PATH = "_links['mr:play-next'].href";
     private static final String LINKS_MR_PAUSE_HREF_PATH = "_links.\"mr:pause\".href";
     private static final String LINKS_MR_STOP_HREF_PATH = "_links.\"mr:stop\".href";
     private static final String EMBEDDED_MR_STATUS_STATUS_PATH = "_embedded.\"mr:status\".status";
@@ -109,6 +111,34 @@ public class PlayerResourceIntegrationTest {
                 .and().body(LINKS_MR_PAUSE_HREF_PATH, is(equalTo(pauseUrl)))
                 .and().body(LINKS_MR_STOP_HREF_PATH, is(equalTo(stopUrl)))
                 .and().body(EMBEDDED_MR_STATUS_STATUS_PATH, is(equalTo(PLAYING)))
+                .and().body(EMBEDDED_MR_STATUS_LINKS_SELF_HREF_PATH, is(equalTo(statusUrl)));
+    }
+
+    @Test
+    public void playNext() throws Exception {
+
+        final String url = String.format(PLAY_NEXT_URL_FORMAT, rule.getLocalPort());
+        final String docsUrl = String.format(DOCS_URL_FORMAT, rule.getLocalPort());
+        final String playerUrl = String.format(PLAYER_URL_FORMAT, rule.getLocalPort());
+        final String playUrl = String.format(PLAY_URL_FORMAT, rule.getLocalPort());
+        final String pauseUrl = String.format(PAUSE_URL_FORMAT, rule.getLocalPort());
+        final String stopUrl = String.format(STOP_URL_FORMAT, rule.getLocalPort());
+        final String statusUrl = String.format(STATUS_URL_FORMAT, rule.getLocalPort());
+
+        final Response response = when().post(url);
+        response.prettyPrint();
+        response
+                .then().assertThat()
+                .statusCode(is(equalTo(202)))
+                .and().body(LINKS_SELF_HREF_PATH, is(equalTo(playerUrl)))
+                .and().body(LINKS_CURIES_NAME_PATH, is(equalTo("mr")))
+                .and().body(LINKS_CURIES_HREF_PATH, is(equalTo(docsUrl)))
+                .and().body(LINKS_CURIES_TEMPLATED_PATH, is(equalTo(true)))
+                .and().body(LINKS_MR_PLAY_HREF_PATH, is(equalTo(playUrl)))
+                .and().body(LINKS_MR_PLAY_NEXT_HREF_PATH, is(equalTo(url)))
+                .and().body(LINKS_MR_PAUSE_HREF_PATH, is(equalTo(pauseUrl)))
+                .and().body(LINKS_MR_STOP_HREF_PATH, is(equalTo(stopUrl)))
+                .and().body(EMBEDDED_MR_STATUS_STATUS_PATH, is(equalTo(UNKNOWN)))
                 .and().body(EMBEDDED_MR_STATUS_LINKS_SELF_HREF_PATH, is(equalTo(statusUrl)));
     }
 

@@ -3,6 +3,7 @@ package com.autelhome.multiroom.player;
 import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -61,8 +62,8 @@ public class PlayerDto
         return zoneId;
     }
 
-    public CurrentSong getCurrentSong() {
-        return currentSong;
+    public Optional<CurrentSong> getCurrentSong() {
+        return Optional.ofNullable(currentSong);
     }
 
     @Override
