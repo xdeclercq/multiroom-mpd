@@ -9,8 +9,7 @@ import io.dropwizard.Configuration;
  *
  * @author xdeclercq
  */
-public class ApplicationConfiguration extends Configuration
-{
+public final class ApplicationConfiguration extends Configuration {
     private final String mpdHost;
 
     /**
@@ -19,8 +18,7 @@ public class ApplicationConfiguration extends Configuration
      * @param mpdHost the MPD hostname or IP address
      */
     @JsonCreator
-    public ApplicationConfiguration(@JsonProperty("mpdHost") final String mpdHost)
-    {
+    public ApplicationConfiguration(@JsonProperty("mpdHost") final String mpdHost) {
         this.mpdHost = mpdHost;
     }
 

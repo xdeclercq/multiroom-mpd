@@ -3,19 +3,16 @@ package com.autelhome.multiroom.zone;
 import com.autelhome.multiroom.hal.BaseRepresentationFactory;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
-import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
-
-import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Collection;
+import javax.ws.rs.core.UriInfo;
 
 /**
- * {@link StandardRepresentationFactory} for {@link Zone}s.
+ * {@link BaseRepresentationFactory} for {@link Zone}s.
  *
  * @author xdeclercq
  */
-public class ZonesRepresentationFactory extends BaseRepresentationFactory
-{
+public class ZonesRepresentationFactory extends BaseRepresentationFactory {
     private final ZoneRepresentationFactory zoneRepresentationFactory;
 
     /**
@@ -25,8 +22,7 @@ public class ZonesRepresentationFactory extends BaseRepresentationFactory
      * @param zoneRepresentationFactory an {@link ZoneRepresentationFactory} instance
      */
     @Inject
-    public ZonesRepresentationFactory(final UriInfo uriInfo, final ZoneRepresentationFactory zoneRepresentationFactory)
-    {
+    public ZonesRepresentationFactory(final UriInfo uriInfo, final ZoneRepresentationFactory zoneRepresentationFactory) {
         super(uriInfo);
         this.zoneRepresentationFactory = zoneRepresentationFactory;
     }
@@ -37,8 +33,7 @@ public class ZonesRepresentationFactory extends BaseRepresentationFactory
      * @param zones the {@link Zone}s
      * @return a new {@link Representation} of the zones
      */
-    public Representation newRepresentation(final Collection<ZoneDto> zones)
-    {
+    public Representation newRepresentation(final Collection<ZoneDto> zones) {
         final URI self = getBaseURIBuilder().path(ZonesResource.class).build();
 
         final Representation representation = newRepresentation(self);

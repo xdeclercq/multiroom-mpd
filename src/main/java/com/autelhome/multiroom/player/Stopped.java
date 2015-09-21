@@ -1,7 +1,6 @@
 package com.autelhome.multiroom.player;
 
 import com.autelhome.multiroom.util.AbstractEvent;
-
 import java.util.UUID;
 
 /**

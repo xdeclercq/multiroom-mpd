@@ -4,18 +4,16 @@ import com.autelhome.multiroom.hal.BaseRepresentationFactory;
 import com.autelhome.multiroom.zone.ZonesResource;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
-
-import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Optional;
+import javax.ws.rs.core.UriInfo;
 
 /**
  * {@link BaseRepresentationFactory} for a {@link PlayerDto}.
  *
  * @author xdeclercq
  */
-public class PlayerRepresentationFactory extends BaseRepresentationFactory
-{
+public class PlayerRepresentationFactory extends BaseRepresentationFactory {
 
     private final PlayerStatusRepresentationFactory playerStatusRepresentationFactory;
     private final CurrentSongRepresentationFactory currentSongRepresentationFactory;
@@ -28,7 +26,9 @@ public class PlayerRepresentationFactory extends BaseRepresentationFactory
      * @param currentSongRepresentationFactory a {@link CurrentSongRepresentationFactory} instance
      */
     @Inject
-    public PlayerRepresentationFactory(final UriInfo uriInfo, final PlayerStatusRepresentationFactory playerStatusRepresentationFactory, final CurrentSongRepresentationFactory currentSongRepresentationFactory) {
+    public PlayerRepresentationFactory(final UriInfo uriInfo,
+                                       final PlayerStatusRepresentationFactory playerStatusRepresentationFactory,
+                                       final CurrentSongRepresentationFactory currentSongRepresentationFactory) {
         super(uriInfo);
         this.playerStatusRepresentationFactory = playerStatusRepresentationFactory;
         this.currentSongRepresentationFactory = currentSongRepresentationFactory;

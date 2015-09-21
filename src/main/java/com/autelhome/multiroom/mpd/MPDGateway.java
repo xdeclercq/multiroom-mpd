@@ -3,11 +3,12 @@ package com.autelhome.multiroom.mpd;
 import com.autelhome.multiroom.player.CurrentSong;
 import com.autelhome.multiroom.player.PlayerStatus;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
-import com.autelhome.multiroom.song.Song;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.Zone;
 import com.autelhome.multiroom.zone.ZoneRepository;
 import com.google.inject.Inject;
+import java.util.List;
+import java.util.Optional;
 import org.bff.javampd.MPD;
 import org.bff.javampd.Player;
 import org.bff.javampd.Playlist;
@@ -18,16 +19,14 @@ import org.bff.javampd.objects.MPDSong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Optional;
+
 
 /**
  * Gateway to MPD instances.
  *
  * @author xdeclercq
  */
-public class MPDGateway
-{
+public class MPDGateway {
     private static final Logger LOGGER = LoggerFactory.getLogger(MPDGateway.class);
 
     private final MPDProvider mpdProvider;
@@ -42,15 +41,14 @@ public class MPDGateway
      * @param zoneRepository the zone repository
      */
     @Inject
-    public MPDGateway(final MPDProvider mpdProvider, final EventBus eventBus, final ZoneRepository zoneRepository)
-    {
+    public MPDGateway(final MPDProvider mpdProvider, final EventBus eventBus, final ZoneRepository zoneRepository) {
         this.mpdProvider = mpdProvider;
         this.eventBus = eventBus;
         this.zoneRepository = zoneRepository;
     }
 
     /**
-     * Returns the player current status
+     * Returns the player current status.
      *
      * @param mpdInstancePortNumber the MPD instance port number
      * @return the player current status
@@ -92,8 +90,9 @@ public class MPDGateway
             final Playlist mpdPlaylist = mpd.getPlaylist();
             final List<MPDSong> mpdSongs = mpdPlaylist.getSongList();
             final int index = position - 1;
-            if (index<0 || index>=mpdSongs.size()) {
-                LOGGER.error("Error when handling play song command for MPD instance of port {}: position (%d) out of playlist", mpdInstancePortNumber, position);
+            if (index < 0 || index >= mpdSongs.size()) {
+                LOGGER.error("Error when handling play song command for MPD instance of port {}: "
+                        + "position (%d) out of playlist", mpdInstancePortNumber, position);
                 return;
             }
             final MPDSong mpdSong = mpdSongs.get(index);
@@ -154,7 +153,7 @@ public class MPDGateway
         final MPD mpd = mpdProvider.getMPD(mpdInstancePortNumber);
         try {
             return ZonePlaylist.fromMPDPlaylist(mpd.getPlaylist());
-        } catch(final MPDException e) {
+        } catch (final MPDException e) {
             LOGGER.error("Error when fetching zone playlist for MPD instance of port {}", mpdInstancePortNumber, e);
         }
         return new ZonePlaylist();
@@ -164,14 +163,14 @@ public class MPDGateway
      * Returns the current song for a zone.
      *
      * @param mpdInstancePortNumber the MPD instance port number
-     * @return the current {@link Song} related to the MPD instance with port number {@code mpdInstancePortNumber}
+     * @return the {@link CurrentSong} related to the MPD instance with port number {@code mpdInstancePortNumber}
      */
     public Optional<CurrentSong> getCurrentSong(final int mpdInstancePortNumber) {
         final MPD mpd = mpdProvider.getMPD(mpdInstancePortNumber);
         try {
             final MPDSong mpdCurrentSong = mpd.getPlayer().getCurrentSong();
             return mpdCurrentSong == null ? Optional.<CurrentSong>empty() : Optional.of(CurrentSong.fromMPDSong(mpdCurrentSong));
-        } catch(final MPDPlayerException e) {
+        } catch (final MPDPlayerException e) {
             LOGGER.error("Error when fetching current song for MPD instance of port {}", mpdInstancePortNumber, e);
         }
         return Optional.empty();

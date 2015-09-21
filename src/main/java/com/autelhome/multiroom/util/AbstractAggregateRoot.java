@@ -44,6 +44,11 @@ public abstract class AbstractAggregateRoot implements AggregateRoot {
         }
     }
 
+    /**
+     * Applies an event to this aggregate root.
+     *
+     * @param event the event to be applied
+     */
     protected abstract void apply(Event event);
 
     @Override
@@ -52,7 +57,7 @@ public abstract class AbstractAggregateRoot implements AggregateRoot {
             return;
         }
         history.forEach(event -> applyChange(event, false));
-        version = history.get(history.size()-1).getVersion();
+        version = history.get(history.size() - 1).getVersion();
     }
 
     @Override

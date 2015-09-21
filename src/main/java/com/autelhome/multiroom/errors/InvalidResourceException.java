@@ -5,10 +5,7 @@ package com.autelhome.multiroom.errors;
  *
  * @author xdeclercq
  */
-public class InvalidResourceException extends ToClientException
-{
-
-    public static final String MESSAGE_FORMAT = "The '%s' %s was not found";
+public class InvalidResourceException extends ToClientException {
 
     /**
      * Constructs a new invalid resource exception with the specified resource id and type.

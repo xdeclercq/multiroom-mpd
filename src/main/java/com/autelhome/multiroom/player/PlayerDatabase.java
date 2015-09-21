@@ -3,7 +3,6 @@ package com.autelhome.multiroom.player;
 import com.autelhome.multiroom.util.InstanceAlreadyPresentException;
 import com.autelhome.multiroom.util.InstanceNotFoundException;
 import com.google.inject.Singleton;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

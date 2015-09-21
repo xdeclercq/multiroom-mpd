@@ -3,10 +3,9 @@ package com.autelhome.multiroom.zone;
 import com.autelhome.multiroom.mpd.MPDGateway;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.UUID;
 
 /**
  * Zone related command handlers.
@@ -43,12 +42,14 @@ public class ZoneCommandHandlers {
         final int mpdInstancePortNumber = createZone.getMpdInstancePortNumber();
 
         final UUID id = createZone.getAggregateId();
-        final Zone zone = new Zone(id, zoneName, mpdInstancePortNumber, mpdGateway.getPlayerStatus(mpdInstancePortNumber), mpdGateway.getZonePlaylist(mpdInstancePortNumber));
+        final Zone zone = new Zone(id,
+                zoneName,
+                mpdInstancePortNumber,
+                mpdGateway.getPlayerStatus(mpdInstancePortNumber),
+                mpdGateway.getZonePlaylist(mpdInstancePortNumber));
         mpdGateway.listenTo(zone);
         repository.save(zone, createZone.getOriginalVersion());
     }
-
-
 
 
 }

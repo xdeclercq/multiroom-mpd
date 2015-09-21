@@ -7,8 +7,8 @@ import rx.Observer;
 /**
  * Observer for the messages stream.
  *
-* @author xdeclercq
-*/
+ * @author xdeclercq
+ */
 class MessagesStreamObserver implements Observer<Message> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessagesStreamObserver.class);
@@ -34,6 +34,7 @@ class MessagesStreamObserver implements Observer<Message> {
         LOGGER.error("Error on stream", e);
     }
 
+    @SuppressWarnings("checkstyle:illegalcatch")
     @Override
     public void onNext(final Message message) {
         try {

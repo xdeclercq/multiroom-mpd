@@ -4,40 +4,45 @@ import com.autelhome.multiroom.errors.ResourceNotFoundException;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.ZoneDto;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
 import java.util.Objects;
 import java.util.Optional;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 /**
  * REST resource to control a player of a zone.
  *
  * @xdeclercq
  */
-@Produces({RepresentationFactory.HAL_JSON})
+@Produces({ RepresentationFactory.HAL_JSON })
 public class PlayerResource {
 
     private static final String RESOURCE_TYPE = "player";
     private final PlayerRepresentationFactory playerRepresentationFactory;
-	private final ZoneDto zoneDto;
+    private final ZoneDto zoneDto;
     private final EventBus eventBus;
     private final PlayerService playerService;
 
     /**
-	 * Constructor.
-	 *
-	 * @param zoneDto the zone to which the player is related
+     * Constructor.
+     *
+     * @param zoneDto the zone to which the player is related
      * @param playerService a {@link PlayerService} instance
-	 * @param playerRepresentationFactory a {@link PlayerRepresentationFactory} instance
+     * @param playerRepresentationFactory a {@link PlayerRepresentationFactory} instance
      * @param eventBus the event bus
-	 */
-	public PlayerResource(final ZoneDto zoneDto, final PlayerService playerService, final PlayerRepresentationFactory playerRepresentationFactory, final EventBus eventBus) {
+     */
+    public PlayerResource(final ZoneDto zoneDto,
+                          final PlayerService playerService,
+                          final PlayerRepresentationFactory playerRepresentationFactory,
+                          final EventBus eventBus) {
         this.zoneDto = zoneDto;
         this.playerService = playerService;
         this.playerRepresentationFactory = playerRepresentationFactory;
         this.eventBus = eventBus;
-	}
+    }
 
     /**
      * Sends a play command to the event bus and returns a representation of the player.
@@ -102,36 +107,36 @@ public class PlayerResource {
         return Response.status(202).entity(playerRepresentationFactory.newRepresentation(playerDto)).build();
     }
 
-	/**
-	 * Returns a representation of the player.
-	 *
-	 * @return a representation of the player
-	 */
-	@GET
-	public Response getPlayer() {
+    /**
+     * Returns a representation of the player.
+     *
+     * @return a representation of the player
+     */
+    @GET
+    public Response getPlayer() {
         final PlayerDto playerDto = getPlayerDto();
 
         return Response.ok(playerRepresentationFactory.newRepresentation(playerDto)).build();
-	}
-
-	@Override
-	public boolean equals(final Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-
-		final PlayerResource that = (PlayerResource) o;
-
-		return Objects.equals(zoneDto, that.zoneDto);
     }
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(zoneDto);
-	}
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final PlayerResource that = (PlayerResource) o;
+
+        return Objects.equals(zoneDto, that.zoneDto);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(zoneDto);
+    }
 
     private PlayerDto getPlayerDto() {
         final Optional<PlayerDto> playerDto = playerService.getPlayerByZoneName(zoneDto.getName());

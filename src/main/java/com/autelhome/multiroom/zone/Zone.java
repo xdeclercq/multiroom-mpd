@@ -1,19 +1,24 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.errors.InvalidOperationException;
-import com.autelhome.multiroom.player.*;
+import com.autelhome.multiroom.player.CurrentSong;
+import com.autelhome.multiroom.player.CurrentSongUpdated;
+import com.autelhome.multiroom.player.Paused;
+import com.autelhome.multiroom.player.Played;
+import com.autelhome.multiroom.player.PlayerStatus;
+import com.autelhome.multiroom.player.SongAtPositionPlayed;
+import com.autelhome.multiroom.player.Stopped;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.playlist.ZonePlaylistUpdated;
 import com.autelhome.multiroom.util.AbstractAggregateRoot;
 import com.autelhome.multiroom.util.Event;
 import com.google.common.base.MoreObjects;
-
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * Represents a zone.
- *
+ * <p>
  * A zone is a location in your house which is associated to its own player and playlist.
  *
  * @author xdeclercq
@@ -41,8 +46,7 @@ public class Zone extends AbstractAggregateRoot {
      * @param playerStatus the initial player status
      * @param playlist the initial playlist
      */
-    public Zone(final UUID id, final String name, final int mpdInstancePortNumber, final PlayerStatus playerStatus, final ZonePlaylist playlist)
-    {
+    public Zone(final UUID id, final String name, final int mpdInstancePortNumber, final PlayerStatus playerStatus, final ZonePlaylist playlist) {
         applyChange(new ZoneCreated(id, name, mpdInstancePortNumber, playerStatus, playlist));
     }
 
@@ -71,7 +75,7 @@ public class Zone extends AbstractAggregateRoot {
      * @throws InvalidOperationException if player is already playing
      */
     public void play() {
-        if (playerStatus==PlayerStatus.PLAYING) {
+        if (playerStatus == PlayerStatus.PLAYING) {
             throw new InvalidOperationException("Unable to play as player is already playing");
         }
         applyChange(new Played(id));
@@ -93,7 +97,7 @@ public class Zone extends AbstractAggregateRoot {
      * @throws InvalidOperationException if player is not playing
      */
     public void pause() {
-        if (playerStatus!=PlayerStatus.PLAYING) {
+        if (playerStatus != PlayerStatus.PLAYING) {
             throw new InvalidOperationException("Unable to pause as player is not playing");
         }
         applyChange(new Paused(id));
@@ -105,7 +109,7 @@ public class Zone extends AbstractAggregateRoot {
      * @throws InvalidOperationException if player is already stopped
      */
     public void stop() {
-        if (playerStatus==PlayerStatus.STOPPED) {
+        if (playerStatus == PlayerStatus.STOPPED) {
             throw new InvalidOperationException("Unable to stop as player is already stopped");
         }
         applyChange(new Stopped(id));
@@ -113,7 +117,7 @@ public class Zone extends AbstractAggregateRoot {
 
     @Override
     protected void apply(final Event event) {
-        if (event instanceof  ZoneCreated) {
+        if (event instanceof ZoneCreated) {
             applyZoneCreated((ZoneCreated) event);
         }
         if (event instanceof Played) {
@@ -179,23 +183,11 @@ public class Zone extends AbstractAggregateRoot {
         }
 
         final Zone zone = (Zone) o;
-
-        if (id == null ? zone.id != null : !id.equals(zone.id)) {
-            return false;
-        }
-        if (mpdInstancePortNumber != zone.mpdInstancePortNumber) {
-            return false;
-        }
-        if (name == null ? zone.name != null : !name.equals(zone.name)) {
-            return false;
-        }
-        if (playerStatus != zone.playerStatus) {
-            return false;
-        }
-        if (version != zone.version) {
-            return false;
-        }
-        return true;
+        return Objects.equals(id, zone.id)
+                && Objects.equals(mpdInstancePortNumber, zone.mpdInstancePortNumber)
+                && Objects.equals(name, zone.name)
+                && Objects.equals(playerStatus, zone.playerStatus)
+                && Objects.equals(version, zone.version);
     }
 
     @Override

@@ -37,16 +37,16 @@ public class MultiroomMPDApplication extends Application<ApplicationConfiguratio
 
     private static GuiceBundle<ApplicationConfiguration> getGuiceBundle(final GuiceBundle.Builder<ApplicationConfiguration> guiceBundleBuilder) {
         return guiceBundleBuilder
-                    .addModule(new ApplicationModule())
-                    .enableAutoConfig(
-                            "com.autelhome.multiroom.hal",
-                            "com.autelhome.multiroom.app",
-                            "com.autelhome.multiroom.zone",
-                            "com.autelhome.multiroom.player",
-                            "com.autelhome.multiroom.errors",
-                            "com.autelhome.multiroom.util")
-                    .setConfigClass(ApplicationConfiguration.class)
-                    .build();
+                .addModule(new ApplicationModule())
+                .enableAutoConfig(
+                        "com.autelhome.multiroom.hal",
+                        "com.autelhome.multiroom.app",
+                        "com.autelhome.multiroom.zone",
+                        "com.autelhome.multiroom.player",
+                        "com.autelhome.multiroom.errors",
+                        "com.autelhome.multiroom.util")
+                .setConfigClass(ApplicationConfiguration.class)
+                .build();
     }
 
     private static GuiceBundle.Builder<ApplicationConfiguration> getApplicationConfigurationBuilder() {
@@ -67,6 +67,7 @@ public class MultiroomMPDApplication extends Application<ApplicationConfiguratio
      * Constructor.
      *
      * @param guiceBundle a {@link GuiceBundle} instance
+     * @param websocketBundle a {@link WebsocketBundle} instance
      */
     public MultiroomMPDApplication(final GuiceBundle<ApplicationConfiguration> guiceBundle, final WebsocketBundle websocketBundle) {
         this.guiceBundle = guiceBundle;

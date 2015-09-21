@@ -3,18 +3,16 @@ package com.autelhome.multiroom.player;
 import com.autelhome.multiroom.hal.BaseRepresentationFactory;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
-
+import java.net.URI;
 import javax.websocket.server.ServerEndpoint;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 
 /**
  * {@link BaseRepresentationFactory} for a {@link PlayerStatus}.
  *
  * @author xdeclercq
  */
-public class PlayerStatusRepresentationFactory extends BaseRepresentationFactory
-{
+public class PlayerStatusRepresentationFactory extends BaseRepresentationFactory {
 
     /**
      * Constructor.
@@ -39,6 +37,7 @@ public class PlayerStatusRepresentationFactory extends BaseRepresentationFactory
      * Returns a new {@link Representation} of a player status.
      *
      * @param playerStatus a player status
+     * @param zoneName a zone name
      * @return a new {@link Representation} of the player status
      */
     public Representation newRepresentation(final PlayerStatus playerStatus, final String zoneName) {

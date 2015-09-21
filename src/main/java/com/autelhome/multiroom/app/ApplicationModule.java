@@ -11,7 +11,7 @@ import com.google.inject.AbstractModule;
  *
  * @author xdeclercq
  */
-public class ApplicationModule extends AbstractModule {
+public final class ApplicationModule extends AbstractModule {
 
     @Override
     protected void configure() {

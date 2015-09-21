@@ -8,12 +8,16 @@ import org.bff.javampd.events.PlayerBasicChangeEvent;
  *
  * @author xavier
  */
-public enum PlayerStatus
-{
+public enum PlayerStatus {
     PLAYING, PAUSED, STOPPED, UNKNOWN;
 
-    public static PlayerStatus fromMPDPlayerStatus(final Player.Status status)
-    {
+    /**
+     * Returns an PlayerStatus from an {@link Player.Status} instance.
+     *
+     * @param status an {@link Player.Status} instance
+     * @return the equivalent player status
+     */
+    public static PlayerStatus fromMPDPlayerStatus(final Player.Status status) {
         if (status == Player.Status.STATUS_PLAYING) {
             return PLAYING;
         }
@@ -23,8 +27,13 @@ public enum PlayerStatus
         return STOPPED;
     }
 
-    public static PlayerStatus fromMPDChangeEventStatus(final PlayerBasicChangeEvent.Status status)
-    {
+    /**
+     * Returns an PlayerStatus from an {@link PlayerBasicChangeEvent.Status} instance.
+     *
+     * @param status an {@link PlayerBasicChangeEvent.Status} instance
+     * @return the equivalent player status
+     */
+    public static PlayerStatus fromMPDChangeEventStatus(final PlayerBasicChangeEvent.Status status) {
         if (status == PlayerBasicChangeEvent.Status.PLAYER_STARTED || status == PlayerBasicChangeEvent.Status.PLAYER_UNPAUSED) {
             return PLAYING;
         }

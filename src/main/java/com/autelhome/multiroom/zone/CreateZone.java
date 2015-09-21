@@ -1,7 +1,6 @@
 package com.autelhome.multiroom.zone;
 
 import com.autelhome.multiroom.util.AbstractCreateCommand;
-
 import java.util.UUID;
 
 /**

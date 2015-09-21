@@ -2,18 +2,17 @@ package com.autelhome.multiroom.playlist;
 
 import com.autelhome.multiroom.mpd.MPDException;
 import com.google.common.base.MoreObjects;
-import org.bff.javampd.Playlist;
-import org.bff.javampd.exception.MPDPlaylistException;
-import org.bff.javampd.objects.MPDSong;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.bff.javampd.Playlist;
+import org.bff.javampd.exception.MPDPlaylistException;
+import org.bff.javampd.objects.MPDSong;
 
 /**
- * Represents a zone playlist
+ * Represents a zone playlist.
  *
  * @author xdeclercq
  */
@@ -41,16 +40,27 @@ public class ZonePlaylist {
         return playlistSongs;
     }
 
+    /**
+     * Returns the song by its posistion in the playlist.
+     *
+     * @param position a one-based position in the playlist
+     * @return the {@link PlaylistSong} at {@code position} in the playlist
+     */
     public PlaylistSong getSongAtPosition(final int position) {
         return playlistSongs.get(position - 1);
     }
 
+    /**
+     * Builds a {@link ZonePlaylist} instance from a {@link Playlist} instance.
+     *
+     * @param mpdPlaylist a {@link Playlist} instance
+     * @return a new {@link ZonePlaylist} instance
+     */
     public static ZonePlaylist fromMPDPlaylist(final Playlist mpdPlaylist) {
         try {
             final List<MPDSong> mpdSongs = mpdPlaylist.getSongList();
-            final List<PlaylistSong> playlistSongs = mpdSongs.stream().map( mpdSong -> PlaylistSong.fromMPDSong(mpdSong)).collect(Collectors.toList());
+            final List<PlaylistSong> playlistSongs = mpdSongs.stream().map(mpdSong -> PlaylistSong.fromMPDSong(mpdSong)).collect(Collectors.toList());
             return new ZonePlaylist(playlistSongs);
-
         } catch (MPDPlaylistException e) {
             throw new MPDException("Unable to fetch list of songs of MPD playlist", e);
         }

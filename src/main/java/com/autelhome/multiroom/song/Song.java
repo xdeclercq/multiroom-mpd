@@ -1,9 +1,8 @@
 package com.autelhome.multiroom.song;
 
 import com.google.common.base.MoreObjects;
-import org.bff.javampd.objects.MPDSong;
-
 import java.util.Objects;
+import org.bff.javampd.objects.MPDSong;
 
 /**
  * Represents a song.

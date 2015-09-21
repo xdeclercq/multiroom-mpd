@@ -1,13 +1,13 @@
 package com.autelhome.multiroom.socket;
 
 import com.google.inject.Inject;
-
 import java.util.List;
 
 /**
  * Broadcaster to send messages to web socket sessions.
  *
  * @author xdeclercq
+ *
  */
 public class SocketBroadcaster {
 
@@ -28,14 +28,13 @@ public class SocketBroadcaster {
      *
      * @param key a key
      * @param entity the entity to broadcast
+     * @param <T> the type of the entity to broadcast
      */
     public <T> void broadcast(final String key, final T entity) {
         final List<Object> endpoints = endpointRegistry.getEndpoints(key);
 
-        endpoints.forEach(endpoint -> {
-            if (endpoint instanceof SenderEndpoint) {
-                ((SenderEndpoint) endpoint).sendEntity(entity);
-            }
-        });
+        endpoints.stream()
+            .filter(endpoint -> endpoint instanceof  SenderEndpoint)
+            .forEach(endpoint -> ((SenderEndpoint) endpoint).sendEntity(entity));
     }
 }

@@ -9,8 +9,7 @@ import com.google.inject.Inject;
  *
  * @author xdeclercq
  */
-public class PlayerResourceFactory
-{
+public class PlayerResourceFactory {
 
     private final PlayerService playerService;
     private final PlayerRepresentationFactory playerRepresentationFactory;
@@ -24,8 +23,7 @@ public class PlayerResourceFactory
      * @param eventBus the event bus
      */
     @Inject
-    public PlayerResourceFactory(final PlayerService playerService, final PlayerRepresentationFactory playerRepresentationFactory, final EventBus eventBus)
-    {
+    public PlayerResourceFactory(final PlayerService playerService, final PlayerRepresentationFactory playerRepresentationFactory, final EventBus eventBus) {
         this.playerService = playerService;
         this.playerRepresentationFactory = playerRepresentationFactory;
         this.eventBus = eventBus;
@@ -37,8 +35,7 @@ public class PlayerResourceFactory
      * @param zoneDto the zone
      * @return a new {@link PlayerResource} instance for the player related to the provided {@code zone}
      */
-    public PlayerResource newInstance(final ZoneDto zoneDto)
-    {
+    public PlayerResource newInstance(final ZoneDto zoneDto) {
         return new PlayerResource(zoneDto, playerService, playerRepresentationFactory, eventBus);
     }
 }

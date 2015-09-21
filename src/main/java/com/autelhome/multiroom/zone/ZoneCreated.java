@@ -3,7 +3,6 @@ package com.autelhome.multiroom.zone;
 import com.autelhome.multiroom.player.PlayerStatus;
 import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.util.AbstractEvent;
-
 import java.util.Objects;
 import java.util.UUID;
 

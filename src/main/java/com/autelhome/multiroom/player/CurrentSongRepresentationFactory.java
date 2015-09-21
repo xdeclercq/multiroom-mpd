@@ -4,7 +4,6 @@ import com.autelhome.multiroom.hal.BaseRepresentationFactory;
 import com.autelhome.multiroom.song.SongRepresentationFactory;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
-
 import javax.ws.rs.core.UriInfo;
 
 /**
@@ -12,8 +11,7 @@ import javax.ws.rs.core.UriInfo;
  *
  * @author xavier
  */
-public class CurrentSongRepresentationFactory extends BaseRepresentationFactory
-{
+public class CurrentSongRepresentationFactory extends BaseRepresentationFactory {
 
     private final SongRepresentationFactory songRepresentationFactory;
 

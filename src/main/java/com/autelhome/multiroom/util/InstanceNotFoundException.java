@@ -5,8 +5,7 @@ package com.autelhome.multiroom.util;
  *
  * @author xdeclercq
  */
-public class InstanceNotFoundException extends RuntimeException
-{
+public class InstanceNotFoundException extends RuntimeException {
 
     /**
      * Constructs a new instance not found exception with the specified detail message.

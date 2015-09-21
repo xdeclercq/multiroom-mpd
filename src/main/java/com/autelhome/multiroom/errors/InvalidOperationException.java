@@ -5,8 +5,7 @@ package com.autelhome.multiroom.errors;
  *
  * @author xdeclercq
  */
-public class InvalidOperationException extends RuntimeException
-{
+public class InvalidOperationException extends RuntimeException {
 
     /**
      * Constructs a new invalid operation exception with the specifed detail message.

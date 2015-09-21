@@ -1,20 +1,18 @@
 package com.autelhome.multiroom.player;
 
 import com.google.common.base.MoreObjects;
-
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 /**
  * Represents a player data transfer object.
- *
+ * <p>
  * A player servers to play music in a zone.
  *
  * @author xdeclercq
  */
-public class PlayerDto
-{
+public class PlayerDto {
 
     private final UUID zoneId;
     private final String zoneName;
@@ -28,8 +26,7 @@ public class PlayerDto
      * @param zoneName the name of the zone
      * @param status the player status
      */
-    public PlayerDto(final UUID zoneId, final String zoneName, final PlayerStatus status)
-    {
+    public PlayerDto(final UUID zoneId, final String zoneName, final PlayerStatus status) {
         this(zoneId, zoneName, status, null);
     }
 
@@ -41,16 +38,14 @@ public class PlayerDto
      * @param status the player status
      * @param currentSong the current song
      */
-    public PlayerDto(final UUID zoneId, final String zoneName, final PlayerStatus status, final CurrentSong currentSong)
-    {
+    public PlayerDto(final UUID zoneId, final String zoneName, final PlayerStatus status, final CurrentSong currentSong) {
         this.zoneId = zoneId;
         this.zoneName = zoneName;
         this.status = status;
         this.currentSong = currentSong;
     }
 
-    public String getZoneName()
-    {
+    public String getZoneName() {
         return zoneName;
     }
 
@@ -67,8 +62,7 @@ public class PlayerDto
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(zoneId, zoneName, status, currentSong);
     }
 

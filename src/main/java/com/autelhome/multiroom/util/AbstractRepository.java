@@ -8,6 +8,8 @@ import java.util.UUID;
  * Abstract aggregate repository.
  *
  * @author xdeclercq
+ *
+ * @param <T> the aggregate root type
  */
 public abstract class AbstractRepository<T extends AggregateRoot> implements Repository<T> {
 
@@ -31,7 +33,7 @@ public abstract class AbstractRepository<T extends AggregateRoot> implements Rep
     @Override
     public T getById(final UUID id) {
         final Class<T> aggregateRootClass = (Class<T>)
-                ((ParameterizedType)getClass().getGenericSuperclass())
+                ((ParameterizedType) getClass().getGenericSuperclass())
                         .getActualTypeArguments()[0];
 
         final T aggregateRoot;

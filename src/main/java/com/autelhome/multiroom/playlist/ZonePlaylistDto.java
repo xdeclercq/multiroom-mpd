@@ -1,20 +1,18 @@
 package com.autelhome.multiroom.playlist;
 
 import com.google.common.base.MoreObjects;
-
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * Represents a zone playlist data transfer object.
- *
+ * <p>
  * A playlist contains the list of playlist being played in a zone.
  *
  * @author xdeclercq
  */
-public class ZonePlaylistDto
-{
+public class ZonePlaylistDto {
 
     private final UUID zoneId;
     private final String zoneName;
@@ -27,15 +25,13 @@ public class ZonePlaylistDto
      * @param zoneName the name of the zone
      * @param playlist the playlist
      */
-    public ZonePlaylistDto(final UUID zoneId, final String zoneName, final ZonePlaylist playlist)
-    {
+    public ZonePlaylistDto(final UUID zoneId, final String zoneName, final ZonePlaylist playlist) {
         this.zoneId = zoneId;
         this.zoneName = zoneName;
         this.playlist = playlist;
     }
 
-    public String getZoneName()
-    {
+    public String getZoneName() {
         return zoneName;
     }
 
@@ -48,8 +44,7 @@ public class ZonePlaylistDto
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(zoneId, zoneName, playlist);
     }
 

@@ -5,17 +5,15 @@ import com.autelhome.multiroom.song.SongRepresentationFactory;
 import com.autelhome.multiroom.zone.ZonesResource;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
-
-import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import javax.ws.rs.core.UriInfo;
 
 /**
  * {@link com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory} for a {@link com.autelhome.multiroom.zone.Zone}.
  *
  * @author xavier
  */
-public class PlaylistSongRepresentationFactory extends BaseRepresentationFactory
-{
+public class PlaylistSongRepresentationFactory extends BaseRepresentationFactory {
 
     private final SongRepresentationFactory songRepresentationFactory;
 
@@ -35,6 +33,7 @@ public class PlaylistSongRepresentationFactory extends BaseRepresentationFactory
      * Returns a new {@link Representation} of a playlist song.
      *
      * @param playlistSong a playlist song
+     * @param zoneName a zone name
      * @return a new {@link Representation} of the playlist song
      */
     public Representation newRepresentation(final String zoneName, final PlaylistSong playlistSong) {

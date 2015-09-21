@@ -2,10 +2,9 @@ package com.autelhome.multiroom.socket;
 
 import com.autelhome.multiroom.util.InjectorLookup;
 import com.google.inject.Injector;
+import javax.websocket.server.ServerEndpointConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.websocket.server.ServerEndpointConfig;
 
 /**
  * Configurator that uses Guice injector to get websocket endpoint instances.

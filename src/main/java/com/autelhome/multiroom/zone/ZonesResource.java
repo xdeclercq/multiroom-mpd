@@ -10,14 +10,17 @@ import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.ContentRepresentation;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.UUID;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 /**
  * REST resource to fetch zones.
@@ -25,9 +28,8 @@ import java.util.UUID;
  * @author xdeclercq
  */
 @Path("/zones/")
-@Produces({RepresentationFactory.HAL_JSON})
-public class ZonesResource
-{
+@Produces({ RepresentationFactory.HAL_JSON })
+public class ZonesResource {
 
     private static final String RESOURCE_TYPE = "zone";
     private static final String NAME = "name";
@@ -49,7 +51,12 @@ public class ZonesResource
      * @param eventBus the event bus
      */
     @Inject
-    public ZonesResource(final ZoneService zoneService, final ZonesRepresentationFactory zonesRepresentationFactory, final ZoneRepresentationFactory zoneRepresentationFactory, final PlayerResourceFactory playerResourceFactory, final ZonePlaylistResourceFactory zonePlaylistResourceFactory, final EventBus eventBus) {
+    public ZonesResource(final ZoneService zoneService,
+                         final ZonesRepresentationFactory zonesRepresentationFactory,
+                         final ZoneRepresentationFactory zoneRepresentationFactory,
+                         final PlayerResourceFactory playerResourceFactory,
+                         final ZonePlaylistResourceFactory zonePlaylistResourceFactory,
+                         final EventBus eventBus) {
         this.zoneService = zoneService;
         this.zonesRepresentationFactory = zonesRepresentationFactory;
         this.zoneRepresentationFactory = zoneRepresentationFactory;
@@ -67,7 +74,8 @@ public class ZonesResource
      */
     @POST
     public Response create(final String zoneRepresentation) {
-        final ContentRepresentation contentRepresentation = zoneRepresentationFactory.readRepresentation(RepresentationFactory.HAL_JSON, new StringReader(zoneRepresentation));
+        final ContentRepresentation contentRepresentation = zoneRepresentationFactory
+                .readRepresentation(RepresentationFactory.HAL_JSON, new StringReader(zoneRepresentation));
 
         final String name = contentRepresentation.getProperties().get(NAME).toString();
         final int mpdInstancePortNumber = Integer.parseInt(contentRepresentation.getProperties().get("mpdInstancePort").toString());

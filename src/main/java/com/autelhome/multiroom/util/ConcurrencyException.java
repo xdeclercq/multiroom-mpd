@@ -5,8 +5,7 @@ package com.autelhome.multiroom.util;
  *
  * @author xdeclercq
  */
-public class ConcurrencyException extends RuntimeException
-{
+public class ConcurrencyException extends RuntimeException {
 
     /**
      * Constructs a new concurrency exception with the specified detail message.

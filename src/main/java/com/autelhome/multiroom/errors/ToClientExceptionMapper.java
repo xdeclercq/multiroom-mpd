@@ -1,7 +1,6 @@
 package com.autelhome.multiroom.errors;
 
 import com.autelhome.multiroom.hal.HalJsonMessageBodyWriter;
-
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;

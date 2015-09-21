@@ -7,8 +7,7 @@ import javax.websocket.Session;
  *
  * @author xdeclercq
  */
-public class BroadcastException extends RuntimeException
-{
+public class BroadcastException extends RuntimeException {
 
     /**
      * Constructs a new broadcast exception for the session.

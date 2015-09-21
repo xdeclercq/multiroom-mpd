@@ -7,8 +7,7 @@ import java.util.UUID;
  *
  * @author xdeclercq
  */
-public class AggregateNotFoundException extends RuntimeException
-{
+public class AggregateNotFoundException extends RuntimeException {
 
     /**
      * Constructs a new aggregate not found exception for the specified aggregate id.

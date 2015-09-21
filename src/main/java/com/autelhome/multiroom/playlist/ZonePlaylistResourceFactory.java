@@ -9,8 +9,7 @@ import com.google.inject.Inject;
  *
  * @author xdeclercq
  */
-public class ZonePlaylistResourceFactory
-{
+public class ZonePlaylistResourceFactory {
 
     private final ZonePlaylistService zonePlaylistService;
     private final ZonePlaylistRepresentationFactory zonePlaylistRepresentationFactory;
@@ -24,8 +23,9 @@ public class ZonePlaylistResourceFactory
      * @param eventBus the event bus
      */
     @Inject
-    public ZonePlaylistResourceFactory(final ZonePlaylistService zonePlaylistService, final ZonePlaylistRepresentationFactory zonePlaylistRepresentationFactory, final EventBus eventBus)
-    {
+    public ZonePlaylistResourceFactory(final ZonePlaylistService zonePlaylistService,
+                                       final ZonePlaylistRepresentationFactory zonePlaylistRepresentationFactory,
+                                       final EventBus eventBus) {
         this.zonePlaylistService = zonePlaylistService;
         this.zonePlaylistRepresentationFactory = zonePlaylistRepresentationFactory;
         this.eventBus = eventBus;
@@ -37,8 +37,7 @@ public class ZonePlaylistResourceFactory
      * @param zoneDto the zone
      * @return a new {@link ZonePlaylistResource} instance for the playliwt related to the provided {@code zoneDto}
      */
-    public ZonePlaylistResource newInstance(final ZoneDto zoneDto)
-    {
+    public ZonePlaylistResource newInstance(final ZoneDto zoneDto) {
         return new ZonePlaylistResource(zoneDto, zonePlaylistService, zonePlaylistRepresentationFactory, eventBus);
     }
 }

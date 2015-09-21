@@ -12,6 +12,7 @@ public interface EventBus extends CommandSender, EventPublisher {
      *
      * @param handler a handler
      * @param messageClass the message class
+     * @param <M> the message type
      */
     <M extends Message> void register(final MessageHandler<M> handler, final Class<M> messageClass);
 

@@ -3,7 +3,6 @@ package com.autelhome.multiroom.song;
 import com.autelhome.multiroom.hal.BaseRepresentationFactory;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
-
 import javax.ws.rs.core.UriInfo;
 
 /**
@@ -11,8 +10,7 @@ import javax.ws.rs.core.UriInfo;
  *
  * @author xavier
  */
-public class SongRepresentationFactory extends BaseRepresentationFactory
-{
+public class SongRepresentationFactory extends BaseRepresentationFactory {
 
     /**
      * Constructor.
@@ -31,7 +29,6 @@ public class SongRepresentationFactory extends BaseRepresentationFactory
      * @return a new {@link Representation} of the song
      */
     public Representation newRepresentation(final Song song) {
-
         return newRepresentation()
                 .withProperty("title", song.getTitle());
     }

@@ -1,19 +1,17 @@
 package com.autelhome.multiroom.zone;
 
 import com.google.common.base.MoreObjects;
-
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * Represents a zone data transfer object.
- *
+ * <p>
  * A zone is a location in your house which is associated to its own player and playlist.
  *
  * @author xdeclercq
  */
-public class ZoneDto implements Comparable<ZoneDto>
-{
+public class ZoneDto implements Comparable<ZoneDto> {
 
     private final String name;
     private final UUID id;
@@ -28,16 +26,14 @@ public class ZoneDto implements Comparable<ZoneDto>
      * @param mpdInstancePortNumber MPD instance port number
      * @param version the zone version
      */
-    public ZoneDto(final UUID id, final String name, final int mpdInstancePortNumber, final int version)
-    {
+    public ZoneDto(final UUID id, final String name, final int mpdInstancePortNumber, final int version) {
         this.id = id;
         this.name = name;
         this.mpdInstancePortNumber = mpdInstancePortNumber;
         this.version = version;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -87,7 +83,7 @@ public class ZoneDto implements Comparable<ZoneDto>
     @Override
     public int compareTo(final ZoneDto other) {
         final int nameComparison = name.compareTo(other.name);
-        if (nameComparison!=0) {
+        if (nameComparison != 0) {
             return nameComparison;
         }
 

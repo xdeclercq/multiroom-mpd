@@ -5,8 +5,7 @@ package com.autelhome.multiroom.util;
  *
  * @author xdeclercq
  */
-public class InstanceAlreadyPresentException extends RuntimeException
-{
+public class InstanceAlreadyPresentException extends RuntimeException {
 
     /**
      * Constructs a new instance already present exception with the specified detail message.

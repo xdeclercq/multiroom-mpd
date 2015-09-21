@@ -20,6 +20,12 @@ public class PlayerCommandHandlers {
     private final MPDGateway mpdGateway;
     private final ZoneRepository zoneRepository;
 
+    /**
+     * Constructor.
+     *
+     * @param mpdGateway an {@link MPDGateway} instance
+     * @param zoneRepository a {link ZoneRepository} instance
+     */
     @Inject
     public PlayerCommandHandlers(final MPDGateway mpdGateway, final ZoneRepository zoneRepository) {
         this.mpdGateway = mpdGateway;

@@ -1,6 +1,10 @@
 package com.autelhome.multiroom.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -49,13 +53,7 @@ public class InMemoryEventStore implements EventStore {
         }
 
         IntStream.range(0, events.size())
-                .forEach(i -> {
-                    final Event event = events.get(i);
-                    final int version = expectedVersion + i + 1;
-                    event.setVersion(version);
-                    eventDescriptors.add(new EventDescriptor(event, version));
-                    publisher.publish(event);
-                });
+                .forEach(i -> publishEvent(events, expectedVersion, eventDescriptors, i));
 
     }
 
@@ -68,5 +66,13 @@ public class InMemoryEventStore implements EventStore {
         }
 
         return eventDescriptors.stream().map(eventDescriptor -> eventDescriptor.eventData).collect(Collectors.toList());
+    }
+
+    private void publishEvent(final List<Event> events, final int expectedVersion, final List<EventDescriptor> eventDescriptors, final int i) {
+        final Event event = events.get(i);
+        final int version = expectedVersion + i + 1;
+        event.setVersion(version);
+        eventDescriptors.add(new EventDescriptor(event, version));
+        publisher.publish(event);
     }
 }

@@ -3,9 +3,8 @@ package com.autelhome.multiroom.errors;
 import com.autelhome.multiroom.hal.BaseRepresentationFactory;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
-
-import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import javax.ws.rs.core.UriInfo;
 
 /**
  * Representation factory for errors.
@@ -20,8 +19,7 @@ public class ErrorRepresentationFactory extends BaseRepresentationFactory {
      * @param uriInfo the {@link UriInfo} related to the request
      */
     @Inject
-    public ErrorRepresentationFactory(final UriInfo uriInfo)
-    {
+    public ErrorRepresentationFactory(final UriInfo uriInfo) {
         super(uriInfo);
     }
 

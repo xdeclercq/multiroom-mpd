@@ -5,8 +5,7 @@ package com.autelhome.multiroom.errors;
  *
  * @author xdeclercq
  */
-public class ResourceNotFoundException extends ToClientException
-{
+public class ResourceNotFoundException extends ToClientException {
 
     public static final String MESSAGE_FORMAT = "The '%s' %s was not found";
 

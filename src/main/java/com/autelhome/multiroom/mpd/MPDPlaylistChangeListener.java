@@ -7,14 +7,13 @@ import com.autelhome.multiroom.playlist.ZonePlaylist;
 import com.autelhome.multiroom.util.EventBus;
 import com.autelhome.multiroom.zone.Zone;
 import com.autelhome.multiroom.zone.ZoneRepository;
+import java.util.Optional;
+import java.util.UUID;
 import org.bff.javampd.events.PlayerBasicChangeListener;
 import org.bff.javampd.events.PlaylistBasicChangeEvent;
 import org.bff.javampd.events.PlaylistBasicChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * @author xdeclercq

@@ -4,20 +4,19 @@ import com.autelhome.multiroom.hal.BaseRepresentationFactory;
 import com.autelhome.multiroom.zone.ZonesResource;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
-
-import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Collection;
+import javax.ws.rs.core.UriInfo;
 
 /**
  * {@link BaseRepresentationFactory} for a {@link ZonePlaylistDto}.
  *
  * @author xdeclercq
  */
-public class ZonePlaylistRepresentationFactory extends BaseRepresentationFactory
-{
+public class ZonePlaylistRepresentationFactory extends BaseRepresentationFactory {
 
     private final PlaylistSongRepresentationFactory playlistSongRepresentationFactory;
+
     /**
      * Constructor.
      *
@@ -48,7 +47,9 @@ public class ZonePlaylistRepresentationFactory extends BaseRepresentationFactory
                 .withNamespace("mr", getMRNamespace());
 
         final Collection<PlaylistSong> playlistSongs = zonePlaylistDto.getSongs();
-        playlistSongs.forEach(song -> representation.withRepresentation("mr:playlist-song", playlistSongRepresentationFactory.newRepresentation(zoneName, song)));
+        playlistSongs.forEach(song -> representation
+                .withRepresentation("mr:playlist-song",
+                        playlistSongRepresentationFactory.newRepresentation(zoneName, song)));
         return representation;
     }
 

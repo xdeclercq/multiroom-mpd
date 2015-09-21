@@ -3,18 +3,15 @@ package com.autelhome.multiroom.zone;
 import com.autelhome.multiroom.hal.BaseRepresentationFactory;
 import com.google.inject.Inject;
 import com.theoryinpractise.halbuilder.api.Representation;
-import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
-
-import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import javax.ws.rs.core.UriInfo;
 
 /**
- * {@link StandardRepresentationFactory} for a {@link Zone}.
+ * {@link BaseRepresentationFactory} for a {@link Zone}.
  *
  * @author xavier
  */
-public class ZoneRepresentationFactory extends BaseRepresentationFactory
-{
+public class ZoneRepresentationFactory extends BaseRepresentationFactory {
 
     /**
      * Constructor.

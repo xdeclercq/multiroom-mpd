@@ -1,7 +1,6 @@
 package com.autelhome.multiroom.zone;
 
 import com.google.inject.Inject;
-
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;

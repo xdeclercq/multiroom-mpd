@@ -4,7 +4,6 @@ import com.autelhome.multiroom.util.Event;
 import com.autelhome.multiroom.util.InstanceNotFoundException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-
 import java.util.Optional;
 import java.util.UUID;
 

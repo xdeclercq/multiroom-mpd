@@ -3,6 +3,7 @@ apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'pmd'
 apply plugin: 'findbugs'
+apply plugin: 'checkstyle'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -67,3 +68,9 @@ tasks.withType(FindBugs) {
 pmd {
     ruleSetFiles = files("config/pmd/ruleset.xml")
 }
+
+checkstyle {
+    toolVersion = "6.0"
+    sourceSets = [sourceSets.main]
+}
+

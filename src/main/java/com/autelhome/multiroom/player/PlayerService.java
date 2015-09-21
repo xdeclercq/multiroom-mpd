@@ -1,7 +1,6 @@
 package com.autelhome.multiroom.player;
 
 import com.google.inject.Inject;
-
 import java.util.Optional;
 
 /**
